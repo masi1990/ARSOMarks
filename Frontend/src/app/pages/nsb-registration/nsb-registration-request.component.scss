@@ -1,0 +1,66 @@
+.page-container {
+  @apply max-w-4xl mx-auto p-4;
+}
+
+.form-group {
+  @apply space-y-2;
+}
+
+.form-group label {
+  @apply block text-sm font-medium text-slate-700;
+}
+
+.form-group label.required::after {
+  content: ' *';
+  @apply text-red-500;
+}
+
+.form-control {
+  @apply w-full px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  @apply disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed;
+}
+
+.form-control.invalid {
+  @apply border-red-500;
+}
+
+.form-control:read-only {
+  @apply bg-slate-50 cursor-default;
+}
+
+.form-checkbox {
+  @apply w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500;
+}
+
+.error-message {
+  @apply text-sm text-red-600;
+}
+
+.alert {
+  @apply p-4 rounded-lg;
+}
+
+.alert-success {
+  @apply bg-emerald-50 text-emerald-800 border border-emerald-200;
+}
+
+.alert-error {
+  @apply bg-red-50 text-red-800 border border-red-200;
+}
+
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium text-sm transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  @apply disabled:bg-slate-400 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply bg-slate-200 text-slate-800 hover:bg-slate-300 focus:ring-slate-500;
+  @apply disabled:bg-slate-100 disabled:cursor-not-allowed;
+}
+

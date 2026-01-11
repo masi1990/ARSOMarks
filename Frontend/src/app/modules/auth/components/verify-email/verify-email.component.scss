@@ -1,0 +1,66 @@
+@import '../login/login.component.scss';
+
+.verify-container {
+  @extend .login-container;
+}
+
+.verify-card {
+  @extend .login-card;
+}
+
+.verify-header {
+  @extend .login-header;
+}
+
+.alert-info {
+  background: #e8f4fd;
+  color: #3178c6;
+  border: 1px solid #cbe5ff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.verify-footer {
+  margin-top: 20px;
+  text-align: center;
+  .link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+  }
+}
+@import '../login/login.component.scss';
+
+.verify-container {
+  @extend .login-container;
+}
+
+.verify-card {
+  @extend .login-card;
+}
+
+.verify-header {
+  @extend .login-header;
+}
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+
+  &.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  &.alert-error {
+    background-color: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+  }
+}
+

@@ -1,0 +1,297 @@
+<div class="w-full max-w-5xl mx-auto">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+      <h1 class="text-2xl font-bold text-slate-900">NSB Registration Request</h1>
+      <p class="mt-1 text-sm font-medium text-slate-600">Form NSB-001: Initial Registration Request</p>
+      <p class="mt-1 text-sm text-slate-500">Complete all required fields and upload verification documents</p>
+    </div>
+
+    <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
+      <p class="font-semibold">Request saved successfully!</p>
+      <p *ngIf="existingRequest?.status === 'SUBMITTED'" class="text-sm mt-1">
+        Your request has been submitted for review. You will be notified once reviewed.
+      </p>
+      <p *ngIf="existingRequest?.status === 'DRAFT'" class="text-sm mt-1">Your request has been saved as draft.</p>
+    </div>
+
+    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-8 space-y-10" *ngIf="!success || existingRequest?.status === 'DRAFT'">
+      <!-- Section A: Country Information -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Country Information</h2>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label for="countryId" class="block text-sm font-semibold text-slate-700">Country Name <span class="text-red-500">*</span></label>
+            <select
+              id="countryId"
+              formControlName="countryId"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              [class.border-red-300]="form.get('countryId')?.invalid && form.get('countryId')?.touched"
+              [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
+            >
+              <option value="" disabled>Select country</option>
+              <option *ngFor="let country of countries" [value]="country.id">
+                {{ country.name }}
+              </option>
+            </select>
+            <p *ngIf="form.get('countryId')?.invalid && form.get('countryId')?.touched" class="text-xs text-red-500 mt-1">
+              Country is required
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <label for="isoCode" class="block text-sm font-semibold text-slate-700">ISO Alpha-2 Code <span class="text-red-500">*</span></label>
+            <input
+              type="text"
+              id="isoCode"
+              formControlName="isoCode"
+              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none cursor-default"
+              readonly
+            />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="nsbOfficialName" class="block text-sm font-semibold text-slate-700">National Standards Body Official Name <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            id="nsbOfficialName"
+            formControlName="nsbOfficialName"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="Enter official NSB name"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label for="nsbAcronym" class="block text-sm font-semibold text-slate-700">NSB Acronym (Optional)</label>
+          <input
+            type="text"
+            id="nsbAcronym"
+            formControlName="nsbAcronym"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="e.g., KEBS"
+          />
+        </div>
+      </section>
+
+      <!-- Section B: Primary Contact Information -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Primary Contact Information</h2>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label for="contactPersonName" class="block text-sm font-semibold text-slate-700">Contact Person Name <span class="text-red-500">*</span></label>
+            <input
+              type="text"
+              id="contactPersonName"
+              formControlName="contactPersonName"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              placeholder="Enter contact person name"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label for="contactPersonTitle" class="block text-sm font-semibold text-slate-700">Official Title/Position</label>
+            <input
+              type="text"
+              id="contactPersonTitle"
+              formControlName="contactPersonTitle"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              placeholder="e.g., Director General"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="contactEmail" class="block text-sm font-semibold text-slate-700">Government Email Address <span class="text-red-500">*</span></label>
+          <input
+            type="email"
+            id="contactEmail"
+            formControlName="contactEmail"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="name@domain.gov.xx"
+          />
+          <p class="text-xs text-slate-500">Must be a .gov/.go.xx domain</p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label for="contactPhone" class="block text-sm font-semibold text-slate-700">Office Phone Number</label>
+            <input
+              type="tel"
+              id="contactPhone"
+              formControlName="contactPhone"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              placeholder="+254 20 1234567"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label for="contactMobile" class="block text-sm font-semibold text-slate-700">Mobile Phone Number</label>
+            <input
+              type="tel"
+              id="contactMobile"
+              formControlName="contactMobile"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              placeholder="+254 712 345678"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section C: Verification Documents Upload -->
+      <section class="space-y-6">
+        <div class="border-b border-slate-200 pb-3">
+          <h2 class="text-lg font-bold text-slate-900">Verification Documents Upload</h2>
+          <p class="text-sm text-slate-600 mt-1">Please upload the following required documents:</p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div *ngFor="let docType of documentTypes" class="bg-slate-50 rounded-lg border border-slate-200 p-5 hover:border-blue-300 transition-colors">
+            <div class="flex flex-col h-full justify-between gap-4">
+              <div>
+                <label class="block text-sm font-bold text-slate-900 mb-1">{{ docType.label }}</label>
+                <p class="text-xs text-slate-500 mb-3">Accepted formats: PDF, DOC, DOCX (Max 10MB)</p>
+
+                <!-- Uploaded State -->
+                <div *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)" class="bg-white border border-emerald-200 rounded p-3 mb-2 flex items-center gap-2">
+                  <div class="h-6 w-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">✓</div>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-xs font-semibold text-emerald-800 truncate">Uploaded</p>
+                    <p class="text-xs text-slate-600 truncate" [title]="getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName">
+                      {{ getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex items-center gap-3">
+                <!-- Upload Input (Hidden) -->
+                <input
+                  type="file"
+                  [id]="docType.value"
+                  class="hidden"
+                  (change)="onFileSelected($event, docType.value)"
+                  accept=".pdf,.doc,.docx"
+                  [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
+                  #fileInput
+                />
+
+                <!-- Upload Button (Shown if nothing uploaded) -->
+                <button
+                  type="button"
+                  (click)="fileInput.click()"
+                  class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline"
+                  *ngIf="!selectedFiles[docType.value] && !getUploadedDocument(docType.value)"
+                  [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
+                >
+                  Upload Document
+                </button>
+
+                <!-- View / Remove (Shown if uploaded) -->
+                <ng-container *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)">
+                  <button
+                    type="button"
+                    class="text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-300 bg-white px-3 py-1.5 rounded hover:bg-slate-50"
+                    (click)="viewDocument(docType.value); $event.stopPropagation()"
+                    *ngIf="getUploadedDocument(docType.value)"
+                  >
+                    View
+                  </button>
+                  <button
+                    type="button"
+                    class="text-xs font-semibold text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1.5 rounded hover:bg-red-100"
+                    (click)="removeFile(docType.value); fileInput.value = ''"
+                    [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
+                  >
+                    Remove
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section D: Designation of NSB Roles -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Designation of NSB Roles</h2>
+        <div class="space-y-2">
+          <label for="additionalUserSlotsRequested" class="block text-sm font-semibold text-slate-700">Additional User Slots Requested</label>
+          <input
+            type="number"
+            id="additionalUserSlotsRequested"
+            formControlName="additionalUserSlotsRequested"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            min="0"
+            placeholder="0"
+          />
+          <p class="text-xs text-slate-500">Number of additional user accounts needed</p>
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-semibold text-slate-700">Proposed User Roles Needed</label>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <label *ngFor="let role of requestedRolesOptions" class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors">
+              <input
+                type="checkbox"
+                [value]="role.value"
+                [checked]="form.get('requestedRoles')?.value?.includes(role.value)"
+                (change)="toggleRole(role.value)"
+                class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span class="text-sm text-slate-700 font-medium">{{ role.label }}</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Form Actions -->
+      <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-200 bg-slate-50 -mx-8 px-8 -mb-8 py-6 rounded-b-xl">
+        <button
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="saving"
+          class="px-6 py-2.5 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm"
+        >
+          {{ saving ? 'Saving...' : existingRequest ? 'Save Changes' : 'Save as Draft' }}
+        </button>
+        <button
+          type="button"
+          (click)="onSubmitForReview()"
+          [disabled]="saving"
+          class="px-6 py-2.5 rounded-lg font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm"
+        >
+          Submit for Review
+        </button>
+        <button
+          type="button"
+          (click)="router.navigate(['/dashboard'])"
+          class="ml-auto px-6 py-2.5 rounded-lg font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="success && existingRequest?.status !== 'DRAFT'" class="p-8 space-y-6 text-center">
+      <div class="mx-auto h-16 w-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl">✓</div>
+      <div>
+        <h3 class="text-xl font-bold text-slate-900">Request Submitted Successfully!</h3>
+        <p class="text-slate-600 mt-2">Your NSB registration request has been submitted for review by ARSO Central Secretariat.</p>
+        <p class="text-slate-500 mt-1">You will be notified once your request has been reviewed.</p>
+      </div>
+      <button
+        type="button"
+        (click)="router.navigate(['/dashboard'])"
+        class="inline-flex px-6 py-2.5 rounded-lg font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm"
+      >
+        Return to Dashboard
+      </button>
+    </div>
+  </div>
+</div>

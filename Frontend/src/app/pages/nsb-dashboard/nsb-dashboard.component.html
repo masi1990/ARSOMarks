@@ -1,0 +1,223 @@
+<div class="space-y-8">
+  <!-- Header -->
+  <section class="card-surface px-6 py-6">
+    <div class="flex flex-col gap-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">NSB Portal</p>
+      <h1 class="text-2xl font-semibold text-slate-900">NSB Onboarding Dashboard</h1>
+      <p class="max-w-3xl text-sm text-slate-600">
+        Welcome to the ARSO ACAP National Standards Body Portal. Complete your registration and profile setup to activate your NSB portal access.
+      </p>
+    </div>
+  </section>
+
+  <!-- Status Overview -->
+  <section class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <!-- Registration Status -->
+    <div class="card-surface p-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Registration Status</p>
+      <div class="mt-2">
+        <span *ngIf="registrationRequest" [class]="'chip ' + getStatusColor(registrationRequest.status)">
+          {{ getStatusLabel(registrationRequest.status) }}
+        </span>
+        <span *ngIf="!registrationRequest" class="chip bg-slate-100 text-slate-700">Not Started</span>
+      </div>
+      <p class="mt-1 text-sm text-slate-500">
+        <span *ngIf="registrationRequest">Form NSB-001</span>
+        <span *ngIf="!registrationRequest">Start registration process</span>
+      </p>
+    </div>
+
+    <!-- Profile Status -->
+    <div class="card-surface p-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Profile Status</p>
+      <div class="mt-2">
+        <span *ngIf="nsb" class="chip bg-emerald-100 text-emerald-700">Complete</span>
+        <span *ngIf="!nsb && registrationRequest?.status === 'APPROVED'" class="chip bg-amber-100 text-amber-700">Pending Setup</span>
+        <span *ngIf="!nsb && registrationRequest?.status !== 'APPROVED'" class="chip bg-slate-100 text-slate-700">Not Available</span>
+      </div>
+      <p class="mt-1 text-sm text-slate-500">
+        <span *ngIf="nsb">Form NSB-002 Complete</span>
+        <span *ngIf="!nsb && registrationRequest?.status === 'APPROVED'">Complete profile setup</span>
+        <span *ngIf="!nsb && registrationRequest?.status !== 'APPROVED'">Awaiting approval</span>
+      </p>
+    </div>
+
+    <!-- NSB Name -->
+    <div class="card-surface p-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">NSB Name</p>
+      <p class="mt-2 text-xl font-semibold text-slate-900 break-words">
+        {{ registrationRequest?.nsbOfficialName || nsb?.name || 'Not specified' }}
+      </p>
+      <p class="mt-1 text-sm text-slate-500">{{ registrationRequest?.countryName || nsb?.country?.name || '' }}</p>
+    </div>
+
+    <!-- Contact Email -->
+    <div class="card-surface p-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Primary Contact</p>
+      <p class="mt-2 text-xl font-semibold text-slate-900 break-words">
+        {{ registrationRequest?.contactEmail || nsb?.contacts?.[0]?.email || 'Not specified' }}
+      </p>
+      <p class="mt-1 text-sm text-slate-500">{{ registrationRequest?.contactPersonName || nsb?.contacts?.[0]?.name || '' }}</p>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="card-surface px-6 py-6">
+    <h2 class="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Registration Request -->
+      <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+        <h3 class="font-semibold text-slate-900 mb-2">Registration Request</h3>
+        <p class="text-sm text-slate-600 mb-4">Complete Form NSB-001 to register your NSB with ARSO</p>
+        <button
+          *ngIf="!registrationRequest || canEditRegistrationRequest()"
+          (click)="goToRegistrationRequest()"
+          class="btn btn-primary w-full"
+        >
+          {{ registrationRequest ? 'Edit Request' : 'Start Registration' }}
+        </button>
+        <div *ngIf="registrationRequest && !canEditRegistrationRequest()" class="text-sm text-slate-500">
+          Request {{ getStatusLabel(registrationRequest.status).toLowerCase() }}
+        </div>
+      </div>
+
+      <!-- Profile Setup -->
+      <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+        <h3 class="font-semibold text-slate-900 mb-2">Profile Setup</h3>
+        <p class="text-sm text-slate-600 mb-4">Complete Form NSB-002 to set up your NSB profile</p>
+        <button
+          *ngIf="canCompleteProfile()"
+          (click)="goToProfileSetup()"
+          class="btn btn-primary w-full"
+        >
+          Complete Profile
+        </button>
+        <button
+          *ngIf="nsb"
+          (click)="goToProfileSetup()"
+          class="btn btn-secondary w-full"
+        >
+          View/Edit Profile
+        </button>
+        <div *ngIf="!canCompleteProfile() && !nsb" class="text-sm text-slate-500">
+          Awaiting registration approval
+        </div>
+      </div>
+
+      <!-- Stakeholder Registry -->
+      <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+        <h3 class="font-semibold text-slate-900 mb-2">Stakeholder Registry</h3>
+        <p class="text-sm text-slate-600 mb-4">Complete Form NSB-003 to register national stakeholders</p>
+        <button
+          *ngIf="nsb"
+          (click)="goToStakeholderRegistry()"
+          class="btn btn-primary w-full"
+        >
+          Manage Stakeholders
+        </button>
+        <div *ngIf="!nsb" class="text-sm text-slate-500">
+          Complete profile setup first
+        </div>
+      </div>
+
+      <!-- View Documents -->
+      <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+        <h3 class="font-semibold text-slate-900 mb-2">Documents</h3>
+        <p class="text-sm text-slate-600 mb-4">View uploaded verification documents</p>
+        <button
+          *ngIf="registrationRequest"
+          (click)="goToRegistrationRequest()"
+          class="btn btn-secondary w-full"
+        >
+          View Documents
+        </button>
+        <div *ngIf="!registrationRequest" class="text-sm text-slate-500">
+          No documents uploaded
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Request Details -->
+  <section *ngIf="registrationRequest" class="card-surface px-6 py-6">
+    <h2 class="text-lg font-semibold text-slate-900 mb-4">Registration Request Details</h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <p class="text-sm font-medium text-slate-700">NSB Official Name</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.nsbOfficialName }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">NSB Acronym</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.nsbAcronym || 'Not provided' }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">Country</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.countryName }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">ISO Alpha-2 Code</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.isoCode }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">Contact Person</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.contactPersonName }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">Contact Email</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.contactEmail }}</p>
+      </div>
+      <div *ngIf="registrationRequest.createdAt">
+        <p class="text-sm font-medium text-slate-700">Submitted Date</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.createdAt | date: 'medium' }}</p>
+      </div>
+      <div *ngIf="registrationRequest.reviewedAt">
+        <p class="text-sm font-medium text-slate-700">Reviewed Date</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.reviewedAt | date: 'medium' }}</p>
+      </div>
+      <div *ngIf="registrationRequest.remarks" class="md:col-span-2">
+        <p class="text-sm font-medium text-slate-700">Review Remarks</p>
+        <p class="text-base text-slate-900">{{ registrationRequest.remarks }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NSB Profile Summary -->
+  <section *ngIf="nsb" class="card-surface px-6 py-6">
+    <h2 class="text-lg font-semibold text-slate-900 mb-4">NSB Profile Summary</h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <p class="text-sm font-medium text-slate-700">NSB Name</p>
+        <p class="text-base text-slate-900">{{ nsb.name }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">Short Name</p>
+        <p class="text-base text-slate-900">{{ nsb.shortName || 'Not provided' }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">Country</p>
+        <p class="text-base text-slate-900">{{ nsb.country?.name || 'Not specified' }}</p>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-700">Status</p>
+        <span [class]="'chip ' + (nsb.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700')">
+          {{ nsb.status }}
+        </span>
+      </div>
+      <div *ngIf="nsb.websiteUrl" class="md:col-span-2">
+        <p class="text-sm font-medium text-slate-700">Website</p>
+        <a [href]="nsb.websiteUrl" target="_blank" class="text-blue-600 hover:underline">{{ nsb.websiteUrl }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-8">
+    <p class="text-slate-500">Loading...</p>
+  </div>
+</div>
+

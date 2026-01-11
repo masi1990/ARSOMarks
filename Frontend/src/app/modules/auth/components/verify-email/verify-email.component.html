@@ -1,0 +1,33 @@
+<div class="verify-container">
+  <div class="verify-card">
+    <div class="verify-header">
+      <h1>Email Verification</h1>
+      <p>Please wait while we verify your email...</p>
+    </div>
+
+    <div *ngIf="loading" class="alert alert-info">Verifying your email...</div>
+    <div *ngIf="message && !loading" class="alert alert-success">{{ message }}</div>
+    <div *ngIf="error && !loading" class="alert alert-error">{{ error }}</div>
+
+    <div class="verify-footer" *ngIf="!loading">
+      <a routerLink="/auth/login" class="link">Return to login</a>
+    </div>
+  </div>
+</div>
+<div class="verify-container">
+  <div class="verify-card">
+    <div class="verify-header">
+      <h1>Email Verification</h1>
+      <p *ngIf="loading">Verifying your email...</p>
+    </div>
+
+    <div *ngIf="message && !loading" class="alert alert-success">
+      {{ message }} Redirecting to login...
+    </div>
+
+    <div *ngIf="error && !loading" class="alert alert-error">
+      {{ error }}
+    </div>
+  </div>
+</div>
+

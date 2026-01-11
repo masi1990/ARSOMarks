@@ -1,0 +1,68 @@
+<div class="page">
+  <h2>Countries</h2>
+
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="row">
+        <label>ISO Code</label>
+        <input formControlName="isoCode" />
+      </div>
+      <div class="row">
+        <label>Name</label>
+        <input formControlName="name" />
+      </div>
+      <div class="row">
+        <label>Region</label>
+        <select formControlName="regionId">
+          <option value="" disabled>Select region</option>
+          <option *ngFor="let region of regions" [value]="region.id">{{ region.name }}</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>RECs (multi-select)</label>
+        <select multiple formControlName="recIds">
+          <option *ngFor="let rec of recs" [value]="rec.id">{{ rec.name }}</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Continent</label>
+        <input formControlName="continent" />
+      </div>
+      <div class="actions">
+        <button type="submit" [disabled]="loading || form.invalid">{{ editingId ? 'Update' : 'Create' }}</button>
+        <button type="button" (click)="cancelEdit()" *ngIf="editingId">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ISO</th>
+        <th>Name</th>
+        <th>Region</th>
+        <th>RECs</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let country of countries">
+        <td>{{ country.isoCode }}</td>
+        <td>{{ country.name }}</td>
+        <td>{{ getRegionName(country.regionId) }}</td>
+        <td>
+          <span *ngFor="let rec of recs">
+            <ng-container *ngIf="hasRec(country, rec.id)">{{ rec.name }} </ng-container>
+          </span>
+        </td>
+        <td>
+          <button (click)="startEdit(country)">Edit</button>
+          <button (click)="delete(country)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

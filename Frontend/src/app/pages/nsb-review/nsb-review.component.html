@@ -1,0 +1,570 @@
+<div class="space-y-8">
+  <!-- Header -->
+  <section class="card-surface px-6 py-6">
+    <div class="flex flex-col gap-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">ARSO Secretariat</p>
+      <h1 class="text-2xl font-semibold text-slate-900">NSB Registration Requests Review</h1>
+      <p class="max-w-3xl text-sm text-slate-600">
+        Review and approve/reject NSB registration requests from National Standards Bodies.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="card-surface px-6 py-6">
+    <form [formGroup]="filterForm" class="grid gap-4 md:grid-cols-2">
+      <div class="form-group">
+        <label for="status">Status Filter</label>
+        <select id="status" formControlName="status" class="form-control">
+          <option value="">All Statuses</option>
+          <option value="DRAFT">Draft</option>
+          <option value="SUBMITTED">Submitted</option>
+          <option value="UNDER_REVIEW">Under Review</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="search">Search</label>
+        <input
+          type="text"
+          id="search"
+          formControlName="search"
+          class="form-control"
+          placeholder="Search by NSB name, acronym, or email"
+        />
+      </div>
+    </form>
+  </section>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <!-- Requests List -->
+  <section class="card-surface px-6 py-6">
+    <h2 class="text-lg font-semibold text-slate-900 mb-4">Registration Requests</h2>
+
+    <div *ngIf="loading" class="text-center py-8">
+      <p class="text-slate-500">Loading requests...</p>
+    </div>
+
+    <div *ngIf="!loading && requests.length === 0" class="text-center py-8">
+      <p class="text-slate-500">No registration requests found.</p>
+    </div>
+
+    <div *ngIf="!loading && requests.length > 0" class="space-y-4">
+      <div *ngFor="let request of requests" class="border border-slate-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 class="text-lg font-semibold text-slate-900">{{ request.nsbOfficialName }}</h3>
+              <span *ngIf="!canEditStatus()" [class]="'chip ' + getStatusColor(request.status)">
+                {{ getStatusLabel(request.status) }}
+              </span>
+              <div *ngIf="canEditStatus()" class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">Status:</span>
+                <span [class]="'chip ' + getStatusColor(request.status)">
+                  {{ getStatusLabel(request.status) }}
+                </span>
+                <select
+                  [value]="request.status"
+                  (change)="updateStatus(request, $any($event.target).value)"
+                  class="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                >
+                  <option *ngFor="let option of getStatusOptions()" [value]="option.value" [disabled]="option.value === request.status">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="grid gap-2 md:grid-cols-2 text-sm text-slate-600">
+              <div>
+                <span class="font-medium">Country:</span> {{ request.countryName }} ({{ request.isoCode }})
+              </div>
+              <div>
+                <span class="font-medium">Acronym:</span> {{ request.nsbAcronym || 'Not provided' }}
+              </div>
+              <div>
+                <span class="font-medium">Contact:</span> {{ request.contactPersonName }}
+              </div>
+              <div>
+                <span class="font-medium">Email:</span> {{ request.contactEmail }}
+              </div>
+              <div *ngIf="request.createdAt">
+                <span class="font-medium">Submitted:</span> {{ request.createdAt | date: 'medium' }}
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2 ml-4">
+            <button (click)="viewRequest(request)" class="btn btn-secondary">View Details</button>
+            <button
+              *ngIf="canApprove(request)"
+              (click)="openReviewModal(request, 'approve')"
+              class="btn btn-primary"
+            >
+              Approve
+            </button>
+            <button
+              *ngIf="canReject(request)"
+              (click)="openReviewModal(request, 'reject')"
+              class="btn btn-secondary"
+            >
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Details Modal -->
+  <div *ngIf="showDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold text-slate-900">Registration Request Details</h2>
+          <button (click)="closeDetailsModal()" class="text-slate-500 hover:text-slate-700">
+            <span class="text-2xl">&times;</span>
+          </button>
+        </div>
+
+        <div *ngIf="selectedRequest" class="space-y-6">
+          <!-- Basic Information -->
+          <div class="border border-slate-200 rounded-lg p-4">
+            <h3 class="font-semibold text-slate-900 mb-4">Basic Information</h3>
+            <div class="grid gap-4 md:grid-cols-2 text-sm">
+              <div>
+                <span class="font-medium text-slate-700">NSB Official Name:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.nsbOfficialName }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">NSB Acronym:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.nsbAcronym || 'Not provided' }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Country:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.countryName }} ({{ selectedRequest.isoCode }})</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Status:</span>
+                <p class="mt-1" *ngIf="!canEditStatus()">
+                  <span [class]="'chip ' + getStatusColor(selectedRequest.status)">
+                    {{ getStatusLabel(selectedRequest.status) }}
+                  </span>
+                </p>
+                <div *ngIf="canEditStatus()" class="mt-1 flex items-center gap-2">
+                  <span [class]="'chip ' + getStatusColor(selectedRequest.status)">
+                    {{ getStatusLabel(selectedRequest.status) }}
+                  </span>
+                  <select
+                    [value]="selectedRequest.status"
+                    (change)="updateStatus(selectedRequest, $any($event.target).value)"
+                    class="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                  >
+                    <option *ngFor="let option of getStatusOptions()" [value]="option.value" [disabled]="option.value === selectedRequest.status">
+                      Change to: {{ option.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="border border-slate-200 rounded-lg p-4">
+            <h3 class="font-semibold text-slate-900 mb-4">Contact Information</h3>
+            <div class="grid gap-4 md:grid-cols-2 text-sm">
+              <div>
+                <span class="font-medium text-slate-700">Contact Person:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.contactPersonName }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Title/Position:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.contactPersonTitle || 'Not provided' }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Email:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.contactEmail }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Phone:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.contactPhone || 'Not provided' }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Mobile:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.contactMobile || 'Not provided' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role Designation -->
+          <div class="border border-slate-200 rounded-lg p-4">
+            <h3 class="font-semibold text-slate-900 mb-4">Role Designation</h3>
+            <div class="grid gap-4 md:grid-cols-2 text-sm">
+              <div>
+                <span class="font-medium text-slate-700">Additional User Slots Requested:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.additionalUserSlotsRequested || 0 }}</p>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Requested Roles:</span>
+                <p class="text-slate-900 mt-1">
+                  <span *ngIf="selectedRequest.requestedRoles && selectedRequest.requestedRoles.length > 0">
+                    {{ selectedRequest.requestedRoles.join(', ') }}
+                  </span>
+                  <span *ngIf="!selectedRequest.requestedRoles || selectedRequest.requestedRoles.length === 0">
+                    Not specified
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents -->
+          <div class="border border-slate-200 rounded-lg p-4">
+            <h3 class="font-semibold text-slate-900 mb-4">Uploaded Documents</h3>
+            <div *ngIf="selectedRequest.documents && selectedRequest.documents.length > 0" class="space-y-2">
+              <div *ngFor="let doc of selectedRequest.documents" class="flex items-center justify-between p-3 bg-slate-50 rounded border border-slate-200">
+                <div>
+                  <p class="font-medium text-slate-900">{{ doc.fileName }}</p>
+                  <p class="text-xs text-slate-500 mt-1">{{ doc.documentType }}</p>
+                  <p class="text-xs text-slate-500" *ngIf="doc.fileSize">Size: {{ (doc.fileSize / 1024 / 1024).toFixed(2) }} MB</p>
+                </div>
+                <button
+                  *ngIf="doc.id"
+                  type="button"
+                  (click)="viewDocument(doc)"
+                  class="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  View
+                </button>
+              </div>
+            </div>
+            <p *ngIf="!selectedRequest.documents || selectedRequest.documents.length === 0" class="text-slate-500 text-sm">
+              No documents uploaded
+            </p>
+          </div>
+
+          <!-- Review Information -->
+          <div *ngIf="selectedRequest.reviewedAt || selectedRequest.remarks" class="border border-slate-200 rounded-lg p-4">
+            <h3 class="font-semibold text-slate-900 mb-4">Review Information</h3>
+            <div class="grid gap-4 md:grid-cols-2 text-sm">
+              <div *ngIf="selectedRequest.reviewedAt">
+                <span class="font-medium text-slate-700">Reviewed At:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.reviewedAt | date: 'medium' }}</p>
+              </div>
+              <div *ngIf="selectedRequest.remarks">
+                <span class="font-medium text-slate-700">Remarks:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.remarks }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timestamps -->
+          <div class="border border-slate-200 rounded-lg p-4">
+            <h3 class="font-semibold text-slate-900 mb-4">Timestamps</h3>
+            <div class="grid gap-4 md:grid-cols-2 text-sm">
+              <div>
+                <span class="font-medium text-slate-700">Created At:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.createdAt | date: 'medium' }}</p>
+              </div>
+              <div *ngIf="selectedRequest.updatedAt">
+                <span class="font-medium text-slate-700">Last Updated:</span>
+                <p class="text-slate-900 mt-1">{{ selectedRequest.updatedAt | date: 'medium' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-4 pt-4 border-t border-slate-200">
+            <button
+              *ngIf="canApprove(selectedRequest)"
+              (click)="closeDetailsModal(); openReviewModal(selectedRequest, 'approve')"
+              class="btn btn-primary"
+            >
+              Approve Request
+            </button>
+            <button
+              *ngIf="canReject(selectedRequest)"
+              (click)="closeDetailsModal(); openReviewModal(selectedRequest, 'reject')"
+              class="btn btn-secondary"
+            >
+              Reject Request
+            </button>
+            <button type="button" (click)="closeDetailsModal()" class="btn btn-secondary ml-auto">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <div *ngIf="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white"
+           [ngClass]="reviewAction === 'approve' ? 'from-emerald-50 to-white' : 'from-rose-50 to-white'">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">
+              {{ reviewAction === 'approve' ? 'Approve' : 'Reject' }} Registration Request
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">
+              {{ reviewAction === 'approve' ? 'Confirm approval of this NSB registration request' : 'Confirm rejection of this NSB registration request' }}
+            </p>
+          </div>
+          <button 
+            (click)="closeReviewModal()" 
+            class="text-slate-400 hover:text-slate-600 transition-colors p-2 hover:bg-slate-100 rounded-lg"
+            aria-label="Close modal"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 max-h-[calc(90vh-140px)] overflow-y-auto">
+        <div *ngIf="selectedRequest" class="space-y-6">
+          <!-- Request Info Card -->
+          <div class="border-2 border-slate-200 rounded-xl p-5 bg-gradient-to-br from-slate-50 to-white">
+            <h3 class="text-lg font-bold text-slate-900 mb-3">{{ selectedRequest.nsbOfficialName }}</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700">Country:</span>
+                <span class="text-slate-600">{{ selectedRequest.countryName }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700">Contact:</span>
+                <span class="text-slate-600">{{ selectedRequest.contactPersonName }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700">Email:</span>
+                <span class="text-slate-600">{{ selectedRequest.contactEmail }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents Section -->
+          <div *ngIf="selectedRequest.documents && selectedRequest.documents.length > 0" 
+               class="border-2 border-slate-200 rounded-xl p-5 bg-slate-50">
+            <h4 class="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              Uploaded Documents
+            </h4>
+            <ul class="space-y-2">
+              <li *ngFor="let doc of selectedRequest.documents" 
+                  class="flex items-center justify-between p-2 bg-white rounded-lg border border-slate-200">
+                <div class="flex-1">
+                  <span class="text-sm font-medium text-slate-900">{{ doc.fileName }}</span>
+                  <span class="text-xs text-slate-500 ml-2">({{ doc.documentType }})</span>
+                </div>
+                <button
+                  *ngIf="doc.id"
+                  type="button"
+                  (click)="viewDocument(doc)"
+                  class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+                >
+                  View
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Review Form -->
+          <form [formGroup]="reviewForm" class="space-y-5">
+            <div class="form-group">
+              <label for="remarks" class="block text-sm font-semibold text-slate-700 mb-2">
+                Remarks
+                <span *ngIf="reviewAction === 'reject'" class="text-red-500">*</span>
+                <span *ngIf="reviewAction === 'approve'" class="text-slate-400 font-normal">(Optional)</span>
+              </label>
+              <textarea
+                id="remarks"
+                formControlName="remarks"
+                class="form-control border-2 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 resize-none"
+                rows="5"
+                [placeholder]="reviewAction === 'approve' ? 'Add optional remarks or notes about this approval...' : 'Enter the reason for rejection (required). This will be sent to the requester...'"
+              ></textarea>
+              <p class="text-xs text-slate-500 mt-1.5">
+                {{ reviewAction === 'approve' ? 'Optional notes about this approval' : 'Required: Please provide a clear reason for rejection' }}
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          (click)="closeReviewModal()" 
+          class="px-5 py-2.5 text-sm font-semibold text-slate-700 bg-white border-2 border-slate-300 rounded-lg hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="submitReview()"
+          [disabled]="saving || (reviewAction === 'reject' && !reviewForm.get('remarks')?.value?.trim())"
+          [class]="reviewAction === 'approve' ? 'px-5 py-2.5 text-sm font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm' : 'px-5 py-2.5 text-sm font-semibold text-white bg-rose-600 rounded-lg hover:bg-rose-700 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm'"
+        >
+          <span *ngIf="!saving">
+            {{ reviewAction === 'approve' ? 'Approve Request' : 'Reject Request' }}
+          </span>
+          <span *ngIf="saving" class="flex items-center gap-2">
+            <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Change Modal -->
+  <div *ngIf="showStatusChangeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Change Request Status</h2>
+            <p class="text-sm text-slate-500 mt-1">Update the status of this NSB registration request</p>
+          </div>
+          <button 
+            (click)="closeStatusChangeModal()" 
+            class="text-slate-400 hover:text-slate-600 transition-colors p-2 hover:bg-slate-100 rounded-lg"
+            aria-label="Close modal"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 max-h-[calc(90vh-140px)] overflow-y-auto">
+        <div *ngIf="selectedRequestForStatusChange" class="space-y-6">
+          <!-- Request Info Card -->
+          <div class="border-2 border-slate-200 rounded-xl p-5 bg-gradient-to-br from-slate-50 to-white">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">{{ selectedRequestForStatusChange.nsbOfficialName }}</h3>
+                <div class="space-y-2 text-sm">
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-slate-700">Country:</span>
+                    <span class="text-slate-600">{{ selectedRequestForStatusChange.countryName }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-slate-700">Contact:</span>
+                    <span class="text-slate-600">{{ selectedRequestForStatusChange.contactPersonName }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Current Status Display -->
+            <div class="pt-4 border-t border-slate-200">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-slate-700">Current Status:</span>
+                <span [class]="'chip ' + getStatusColor(selectedRequestForStatusChange.status)">
+                  {{ getStatusLabel(selectedRequestForStatusChange.status) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Change Form -->
+          <form [formGroup]="statusChangeForm" class="space-y-5">
+            <!-- Status Selection -->
+            <div class="form-group">
+              <label for="statusSelect" class="block text-sm font-semibold text-slate-700 mb-2">
+                Select New Status <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="statusSelect"
+                [value]="newStatus || selectedRequestForStatusChange.status"
+                (change)="onStatusSelectChange($event)"
+                class="form-control border-2 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              >
+                <option *ngFor="let option of getStatusOptions()" 
+                        [value]="option.value"
+                        [disabled]="option.value === selectedRequestForStatusChange.status">
+                  {{ option.value === selectedRequestForStatusChange.status ? 'Current: ' + option.label : option.label }}
+                </option>
+              </select>
+              <p class="text-xs text-slate-500 mt-1.5">Choose the new status for this registration request</p>
+            </div>
+
+            <!-- Preview New Status -->
+            <div *ngIf="newStatus && newStatus !== selectedRequestForStatusChange.status" 
+                 class="border-2 border-blue-200 rounded-lg p-4 bg-blue-50">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <span class="text-sm font-semibold text-blue-900">New Status:</span>
+                  <span [class]="'chip ' + getStatusColor(newStatus)" class="ml-2">
+                    {{ getStatusLabelForChange(newStatus) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comments/Reason -->
+            <div class="form-group">
+              <label for="statusChangeComments" class="block text-sm font-semibold text-slate-700 mb-2">
+                Comments / Reason
+                <span class="text-slate-400 font-normal">(Optional)</span>
+              </label>
+              <textarea
+                id="statusChangeComments"
+                formControlName="comments"
+                class="form-control border-2 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 resize-none"
+                rows="5"
+                placeholder="Enter any comments or reason for this status change. This will be visible to the requester..."
+              ></textarea>
+              <p class="text-xs text-slate-500 mt-1.5">Add context or notes about why the status is being changed</p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          (click)="closeStatusChangeModal()" 
+          class="px-5 py-2.5 text-sm font-semibold text-slate-700 bg-white border-2 border-slate-300 rounded-lg hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="confirmStatusChange()"
+          [disabled]="saving || !newStatus || newStatus === selectedRequestForStatusChange?.status"
+          class="px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+        >
+          <span *ngIf="!saving">Confirm Status Change</span>
+          <span *ngIf="saving" class="flex items-center gap-2">
+            <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Updating...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

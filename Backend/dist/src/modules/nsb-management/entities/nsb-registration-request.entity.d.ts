@@ -1,0 +1,31 @@
+import { Country } from '../../reference-data/entities/country.entity';
+import { SystemUser } from '../../system-user/system-user.entity';
+import { NsbRegistrationRequestStatus } from '../../../shared/enums';
+import { NsbRegistrationRequestDocument } from './nsb-registration-request-document.entity';
+export declare class NsbRegistrationRequest {
+    id: string;
+    countryId?: string;
+    country?: Country;
+    countryName?: string;
+    nsbOfficialName?: string;
+    nsbAcronym?: string;
+    isoCode?: string;
+    contactPersonName?: string;
+    contactPersonTitle?: string;
+    contactEmail?: string;
+    contactPhone?: string;
+    contactMobile?: string;
+    additionalUserSlotsRequested: number;
+    requestedRoles: string[];
+    status: NsbRegistrationRequestStatus;
+    remarks?: string;
+    reviewedBy?: string;
+    reviewedByUser?: SystemUser;
+    reviewedAt?: Date;
+    createdBy?: string;
+    createdByUser?: SystemUser;
+    createdAt: Date;
+    updatedAt: Date;
+    documents?: NsbRegistrationRequestDocument[];
+    nsbId?: string;
+}

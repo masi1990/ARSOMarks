@@ -1,0 +1,34 @@
+import { LicenseApplication } from './license-application.entity';
+import { Nsb } from '../../nsb-management/entities/nsb.entity';
+import { LicenseStatus, LicenseType } from '../../../shared/enums';
+import { LicenseCompliance } from './license-compliance.entity';
+import { SystemUser } from '../../system-user/system-user.entity';
+export declare class License {
+    id: string;
+    licenseNumber: string;
+    applicationId: string;
+    application: LicenseApplication;
+    nsbId: string;
+    nsb: Nsb;
+    licenseType: LicenseType;
+    status: LicenseStatus;
+    validFrom: string;
+    validUntil: string;
+    authorizedSchemes: Record<string, any>;
+    authorizedMarks?: Record<string, any>;
+    scopeDescription?: string;
+    conditions?: Record<string, any>;
+    annualFee?: string;
+    royaltyPercentage?: string;
+    certificateUrl?: string;
+    qrCodeHash?: string;
+    issuedAt: Date;
+    issuedBy?: string;
+    issuedByUser?: SystemUser;
+    renewedAt?: Date;
+    suspendedAt?: Date;
+    suspensionReason?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    complianceItems?: LicenseCompliance[];
+}

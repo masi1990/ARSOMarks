@@ -1,0 +1,262 @@
+<div class="space-y-6">
+  <section class="card-surface px-6 py-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div class="space-y-2">
+        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Super Admin</p>
+        <h1 class="text-2xl font-semibold text-slate-900">User Management</h1>
+        <p class="max-w-3xl text-sm text-slate-600">
+          Manage system users, view assigned roles, and approve role requests.
+        </p>
+      </div>
+      <button
+        class="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-60"
+        (click)="activeTab === 'requests' ? loadRequests() : loadUsers()"
+        [disabled]="loadingRequests || loadingUsers"
+      >
+        {{ (loadingRequests || loadingUsers) ? 'Refreshing…' : 'Refresh' }}
+      </button>
+    </div>
+    <!-- Tabs -->
+    <div class="mt-6 border-b border-slate-200">
+      <div class="flex gap-6">
+        <button
+          class="pb-3 text-sm font-semibold transition border-b-2"
+          [ngClass]="activeTab === 'requests' ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'"
+          (click)="setActiveTab('requests')"
+        >
+          Role Requests
+          <span *ngIf="requests.length" class="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+            {{ requests.length }}
+          </span>
+        </button>
+        <button
+          class="pb-3 text-sm font-semibold transition border-b-2"
+          [ngClass]="activeTab === 'users' ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'"
+          (click)="setActiveTab('users')"
+        >
+          All Users
+          <span *ngIf="users.length" class="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+            {{ users.length }}
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Requests Tab -->
+  <section class="card-surface p-6" *ngIf="activeTab === 'requests'">
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <h3 class="text-lg font-semibold text-slate-900">Pending & History</h3>
+      <span *ngIf="loadingRequests" class="text-xs text-slate-500">Loading…</span>
+    </div>
+    <div class="space-y-3" *ngIf="requests?.length; else emptyQueue">
+      <div
+        *ngFor="let req of requests"
+        class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 shadow-sm"
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="space-y-1">
+            <p class="font-semibold">{{ formatRolesList(req.requestedRoles) }}</p>
+            <p class="text-xs text-slate-500">
+              User: {{ req.user?.fullName || req.userId }}
+              <span *ngIf="req.user?.email">· {{ req.user?.email }}</span>
+            </p>
+            <p class="text-xs text-slate-500">
+              Created: {{ req.createdAt | date: 'medium' }}
+              <span *ngIf="req.reviewedAt">· Reviewed: {{ req.reviewedAt | date: 'medium' }}</span>
+            </p>
+            <p *ngIf="req.decisionNote" class="text-xs text-slate-500">Note: {{ req.decisionNote }}</p>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <span class="chip" [ngClass]="statusBadgeClasses(req.status)">{{ req.status }}</span>
+            <div class="flex flex-wrap justify-end gap-2" *ngIf="req.status === 'PENDING'">
+              <input
+                [(ngModel)]="decisionNotes[req.id]"
+                placeholder="Decision note (optional)"
+                class="w-full min-w-[180px] rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs text-slate-800 focus:border-slate-400 focus:outline-none"
+              />
+              <div class="flex gap-2">
+                <button
+                  class="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700 disabled:opacity-60"
+                  (click)="decide(req, 'APPROVED')"
+                  [disabled]="decidingId === req.id"
+                >
+                  {{ decidingId === req.id ? 'Saving…' : 'Approve' }}
+                </button>
+                <button
+                  class="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-rose-700 disabled:opacity-60"
+                  (click)="decide(req, 'REJECTED')"
+                  [disabled]="decidingId === req.id"
+                >
+                  {{ decidingId === req.id ? 'Saving…' : 'Reject' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-3 text-xs">
+        <span *ngIf="decisionError" class="text-rose-600">{{ decisionError }}</span>
+        <span *ngIf="decisionSuccess" class="text-emerald-600">{{ decisionSuccess }}</span>
+      </div>
+    </div>
+    <ng-template #emptyQueue>
+      <p class="text-sm text-slate-500">No role requests found.</p>
+    </ng-template>
+  </section>
+
+  <!-- Users Tab -->
+  <section class="card-surface p-6" *ngIf="activeTab === 'users'">
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <h3 class="text-lg font-semibold text-slate-900">System Users</h3>
+      <span *ngIf="loadingUsers" class="text-xs text-slate-500">Loading…</span>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200" *ngIf="users.length; else emptyUsers">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-50 text-slate-500">
+          <tr>
+            <th class="px-4 py-3 font-semibold">Name / Email</th>
+            <th class="px-4 py-3 font-semibold">Roles</th>
+            <th class="px-4 py-3 font-semibold">Organization</th>
+            <th class="px-4 py-3 font-semibold">Status</th>
+            <th class="px-4 py-3 font-semibold">Joined</th>
+            <th class="px-4 py-3 font-semibold">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr *ngFor="let u of users" class="hover:bg-slate-50/50">
+            <td class="px-4 py-3">
+              <div class="font-medium text-slate-900">{{ u.fullName }}</div>
+              <div class="text-xs text-slate-500">{{ u.email }}</div>
+            </td>
+            <td class="px-4 py-3">
+              <div class="max-w-[200px] break-words text-slate-700">
+                <ng-container *ngIf="u.roles?.length; else singleRole">
+                  {{ formatRolesList(u.roles) }}
+                </ng-container>
+                <ng-template #singleRole>
+                  {{ formatRole(u.role || 'PUBLIC') }}
+                </ng-template>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-slate-600">
+              {{ u.organizationType || 'N/A' }}
+            </td>
+            <td class="px-4 py-3">
+              <span class="chip" [ngClass]="u.isActive ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'">
+                {{ u.isActive ? 'Active' : 'Inactive' }}
+              </span>
+              <span *ngIf="!u.emailVerified" class="ml-1 text-[10px] text-amber-600">Unverified</span>
+            </td>
+            <td class="px-4 py-3 text-slate-500">
+              {{ u.createdAt | date:'shortDate' }}
+            </td>
+            <td class="px-4 py-3">
+              <button
+                class="rounded-lg bg-slate-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-slate-700 transition"
+                (click)="openAssignRolesModal(u)"
+              >
+                Assign Roles
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyUsers>
+      <div *ngIf="usersError" class="mb-4 text-sm text-rose-600">{{ usersError }}</div>
+      <p class="text-sm text-slate-500">No users found.</p>
+    </ng-template>
+  </section>
+
+  <!-- Assign Roles Modal -->
+  <div
+    *ngIf="assigningRolesUserId"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    (click)="closeAssignRolesModal()"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-slate-900">Assign Roles</h3>
+          <button
+            class="text-slate-400 hover:text-slate-600 transition"
+            (click)="closeAssignRolesModal()"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="mb-4">
+          <p class="text-sm text-slate-600 mb-2">
+            Select roles to assign to this user. Selected roles will be added to their existing roles.
+          </p>
+          <div class="text-xs text-slate-500 mb-4">
+            Current roles: 
+            <span class="font-semibold">
+              {{ getCurrentEditingUserRoles() }}
+            </span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Select Roles</label>
+          <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border border-slate-200 rounded-lg p-3">
+            <label
+              *ngFor="let role of allRoleOptions"
+              class="flex items-center space-x-2 p-2 rounded hover:bg-slate-50 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                [checked]="isRoleSelected(role.value)"
+                (change)="toggleRoleSelection(role.value)"
+                class="rounded border-slate-300 text-slate-600 focus:ring-slate-500"
+              />
+              <span class="text-sm text-slate-700">{{ role.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Note (Optional)</label>
+          <textarea
+            [(ngModel)]="assignRolesNote"
+            placeholder="Add a note about this role assignment..."
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-slate-400 focus:outline-none resize-none"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div *ngIf="assignRolesError" class="mb-4 text-sm text-rose-600 bg-rose-50 p-3 rounded-lg">
+          {{ assignRolesError }}
+        </div>
+        <div *ngIf="assignRolesSuccess" class="mb-4 text-sm text-emerald-600 bg-emerald-50 p-3 rounded-lg">
+          {{ assignRolesSuccess }}
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+            (click)="closeAssignRolesModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition disabled:opacity-60"
+            (click)="assignRoles()"
+            [disabled]="selectedRolesToAssign.length === 0 || !!assignRolesSuccess"
+          >
+            Assign Roles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

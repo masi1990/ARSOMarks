@@ -1,0 +1,49 @@
+<div class="page">
+  <h2>Regional Economic Communities</h2>
+
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="row">
+        <label>Code</label>
+        <input formControlName="code" />
+      </div>
+      <div class="row">
+        <label>Name</label>
+        <input formControlName="name" />
+      </div>
+      <div class="row">
+        <label>Description</label>
+        <textarea formControlName="description"></textarea>
+      </div>
+      <div class="actions">
+        <button type="submit" [disabled]="loading || form.invalid">{{ editingId ? 'Update' : 'Create' }}</button>
+        <button type="button" (click)="cancelEdit()" *ngIf="editingId">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rec of recs">
+        <td>{{ rec.code }}</td>
+        <td>{{ rec.name }}</td>
+        <td>{{ rec.description }}</td>
+        <td>
+          <button (click)="startEdit(rec)">Edit</button>
+          <button (click)="delete(rec)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

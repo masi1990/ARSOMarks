@@ -1,0 +1,175 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <section class="card-surface px-6 py-6">
+    <div class="flex flex-col gap-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Approver Console</p>
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-semibold text-slate-900">Approvals & Requests</h1>
+        <button (click)="loadData()" class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+          <span [class.animate-spin]="loading">↻</span> Refresh
+        </button>
+      </div>
+      <p class="max-w-3xl text-sm text-slate-600">
+        Consolidated view of all pending role assignments and NSB registration requests requiring your attention.
+      </p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mt-8 border-b border-slate-200">
+      <div class="flex gap-8">
+        <button
+          class="pb-3 text-sm font-semibold transition border-b-2"
+          [ngClass]="activeTab === 'pending' ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'"
+          (click)="setActiveTab('pending')"
+        >
+          Pending Review
+        </button>
+        <button
+          class="pb-3 text-sm font-semibold transition border-b-2"
+          [ngClass]="activeTab === 'history' ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'"
+          (click)="setActiveTab('history')"
+        >
+          History & Logs
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="card-surface px-6 py-4">
+    <form [formGroup]="filterForm" class="flex flex-wrap gap-4 items-center">
+      <div class="relative flex-1 min-w-[240px]">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+        <input
+          type="text"
+          formControlName="search"
+          placeholder="Search by name, email, or request details..."
+          class="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 text-sm focus:border-slate-900 focus:outline-none"
+        />
+      </div>
+      <div class="w-48">
+        <select formControlName="type" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-slate-900 focus:outline-none bg-white">
+          <option value="">All Request Types</option>
+          <option value="ROLE_REQUEST">Role Requests</option>
+          <option value="NSB_REGISTRATION">NSB Registrations</option>
+        </select>
+      </div>
+    </form>
+  </section>
+
+  <!-- List -->
+  <section class="space-y-4">
+    <div *ngIf="loading" class="text-center py-12">
+      <p class="text-slate-500">Loading requests...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredItems.length === 0" class="card-surface p-8 text-center">
+      <p class="text-slate-500">No requests found matching your filters.</p>
+    </div>
+
+    <div *ngFor="let item of filteredItems" class="card-surface p-5 hover:border-blue-300 transition-colors border border-transparent">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <!-- Main Info -->
+        <div class="flex gap-4">
+          <div class="h-10 w-10 rounded-full flex items-center justify-center shrink-0"
+            [ngClass]="item.type === 'ROLE_REQUEST' ? 'bg-purple-100 text-purple-600' : 'bg-orange-100 text-orange-600'">
+            <span class="text-lg">{{ item.type === 'ROLE_REQUEST' ? '👤' : '🏢' }}</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ getTypeLabel(item.type) }}</span>
+              <span class="text-xs text-slate-400">• {{ item.submittedAt | date:'mediumDate' }}</span>
+            </div>
+            <h3 class="font-semibold text-slate-900">{{ item.title }} <span class="text-slate-400 font-normal">from</span> {{ item.requesterName }}</h3>
+            <p class="text-sm text-slate-600 mt-1">{{ item.subtitle }}</p>
+            <p class="text-xs text-slate-500 mt-1">{{ item.requesterEmail }}</p>
+            
+            <!-- History Info -->
+            <div *ngIf="activeTab === 'history'" class="mt-3 pt-3 border-t border-slate-100 text-sm">
+              <p class="text-slate-700"><span class="font-medium">Action by:</span> {{ item.reviewedBy || 'System' }}</p>
+              <p *ngIf="item.notes" class="text-slate-700 mt-1"><span class="font-medium">Note:</span> "{{ item.notes }}"</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status & Actions -->
+        <div class="flex flex-col items-end gap-3">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [class]="getStatusClass(item.status)">
+            {{ item.status }}
+          </span>
+
+          <div class="flex gap-2" *ngIf="activeTab === 'pending'">
+            <button
+              (click)="openDecisionModal(item, 'approve')"
+              class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition shadow-sm"
+            >
+              Approve
+            </button>
+            <button
+              (click)="openDecisionModal(item, 'reject')"
+              class="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 text-xs font-semibold rounded-lg transition"
+            >
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Decision Modal -->
+  <div *ngIf="selectedItem" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+        <h3 class="font-semibold text-slate-900">
+          {{ actionType === 'approve' ? 'Approve Request' : 'Reject Request' }}
+        </h3>
+        <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+      </div>
+      
+      <div class="p-6 space-y-4">
+        <div class="bg-slate-50 p-3 rounded-lg text-sm">
+          <p class="font-medium text-slate-900">{{ selectedItem.title }}</p>
+          <p class="text-slate-600">{{ selectedItem.subtitle }}</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">
+            Comments / Reason <span class="text-slate-400 font-normal">(Optional)</span>
+          </label>
+          <textarea
+            [(ngModel)]="decisionNote"
+            rows="3"
+            class="w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-900 focus:outline-none"
+            placeholder="Add a note to the requester..."
+          ></textarea>
+        </div>
+
+        <div *ngIf="modalError" class="text-sm text-rose-600 bg-rose-50 p-2 rounded">
+          {{ modalError }}
+        </div>
+        <div *ngIf="modalSuccess" class="text-sm text-emerald-600 bg-emerald-50 p-2 rounded">
+          {{ modalSuccess }}
+        </div>
+      </div>
+
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+        <button
+          (click)="closeModal()"
+          class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="submitDecision()"
+          [disabled]="processing"
+          [class]="actionType === 'approve' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'"
+          class="px-4 py-2 text-sm font-medium text-white rounded-lg transition disabled:opacity-50"
+        >
+          {{ processing ? 'Processing...' : 'Confirm' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,421 @@
+<div class="w-full max-w-5xl mx-auto">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+      <h1 class="text-2xl font-bold text-slate-900">NSB Profile Setup</h1>
+      <p class="mt-1 text-sm font-medium text-slate-600">Form NSB-002: Complete NSB Profile</p>
+      <p class="mt-1 text-sm text-slate-500">Complete your NSB profile to activate your portal access</p>
+    </div>
+
+    <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
+      <p class="font-semibold">{{ successMessage || 'Profile saved successfully!' }}</p>
+    </div>
+
+    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="text-center py-12">
+      <p class="text-slate-500">Loading...</p>
+    </div>
+
+    <form [formGroup]="form" class="p-8 space-y-10" *ngIf="!loading && nsb">
+      <!-- Auto-populated Information -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">
+          Auto-populated from Registration Request
+        </h2>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Country Name</label>
+            <input
+              type="text"
+              formControlName="countryName"
+              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 cursor-default focus:outline-none"
+              readonly
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">NSB Official Name</label>
+            <input
+              type="text"
+              formControlName="name"
+              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 cursor-default focus:outline-none"
+              readonly
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">NSB Acronym</label>
+            <input
+              type="text"
+              formControlName="shortName"
+              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 cursor-default focus:outline-none"
+              readonly
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Official Address Details -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Official Address Details</h2>
+
+        <div class="space-y-2">
+          <label for="headquartersAddress" class="block text-sm font-semibold text-slate-700">Headquarters Physical Address</label>
+          <textarea
+            id="headquartersAddress"
+            formControlName="headquartersAddress"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            rows="3"
+            placeholder="Enter headquarters address"
+          ></textarea>
+        </div>
+
+        <div class="space-y-2">
+          <label for="mailingAddress" class="block text-sm font-semibold text-slate-700">Mailing Address (if different)</label>
+          <textarea
+            id="mailingAddress"
+            formControlName="mailingAddress"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            rows="3"
+            placeholder="Enter mailing address"
+          ></textarea>
+        </div>
+
+        <div class="space-y-2">
+          <label for="gpsCoordinates" class="block text-sm font-semibold text-slate-700">GPS Coordinates (optional)</label>
+          <input
+            type="text"
+            id="gpsCoordinates"
+            formControlName="gpsCoordinates"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="e.g., -1.2921, 36.8219"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label for="regionalOffices" class="block text-sm font-semibold text-slate-700">Regional Office Locations (if any)</label>
+          <textarea
+            id="regionalOffices"
+            formControlName="regionalOffices"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            rows="3"
+            placeholder="List regional offices"
+          ></textarea>
+        </div>
+      </section>
+
+      <!-- Organizational Structure -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Organizational Structure</h2>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label for="totalStaff" class="block text-sm font-semibold text-slate-700">Total Number of Staff</label>
+            <input
+              type="number"
+              id="totalStaff"
+              formControlName="totalStaff"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              min="0"
+              placeholder="0"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label for="websiteUrl" class="block text-sm font-semibold text-slate-700">Website URL</label>
+            <input
+              type="url"
+              id="websiteUrl"
+              formControlName="websiteUrl"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              placeholder="https://www.example.gov.xx"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="keyDepartments" class="block text-sm font-semibold text-slate-700">Key Departments/Divisions</label>
+          <input
+            type="text"
+            id="keyDepartments"
+            formControlName="keyDepartments"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="Enter departments separated by commas"
+          />
+          <p class="text-xs text-slate-500">Separate multiple departments with commas</p>
+        </div>
+
+        <div class="space-y-4">
+          <label class="block text-sm font-semibold text-slate-700">Social Media Handles</label>
+          <div class="grid gap-6 md:grid-cols-3">
+            <div class="space-y-2">
+              <label for="socialMediaTwitter" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Twitter/X</label>
+              <input
+                type="text"
+                id="socialMediaTwitter"
+                formControlName="socialMediaTwitter"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                placeholder="@username"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="socialMediaLinkedIn" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">LinkedIn</label>
+              <input
+                type="text"
+                id="socialMediaLinkedIn"
+                formControlName="socialMediaLinkedIn"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                placeholder="company/org-name"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="socialMediaFacebook" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Facebook</label>
+              <input
+                type="text"
+                id="socialMediaFacebook"
+                formControlName="socialMediaFacebook"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                placeholder="page-name"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- National Legal Framework -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">National Legal Framework</h2>
+
+        <div class="space-y-2">
+          <label for="nationalStandardsActLink" class="block text-sm font-semibold text-slate-700">Link to National Standards Act/Regulation</label>
+          <input
+            type="url"
+            id="nationalStandardsActLink"
+            formControlName="nationalStandardsActLink"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="https://www.example.gov.xx/act"
+          />
+          <p class="text-xs text-slate-500">Or upload document below</p>
+        </div>
+
+        <div class="space-y-2">
+          <label for="nationalConformityAssessmentPolicyLink" class="block text-sm font-semibold text-slate-700">Link to National Conformity Assessment Policy</label>
+          <input
+            type="url"
+            id="nationalConformityAssessmentPolicyLink"
+            formControlName="nationalConformityAssessmentPolicyLink"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="https://www.example.gov.xx/policy"
+          />
+          <p class="text-xs text-slate-500">Or upload document below</p>
+        </div>
+
+        <div class="space-y-2">
+          <label for="nationalQualityPolicyLink" class="block text-sm font-semibold text-slate-700">Link to National Quality Policy</label>
+          <input
+            type="url"
+            id="nationalQualityPolicyLink"
+            formControlName="nationalQualityPolicyLink"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="https://www.example.gov.xx/quality-policy"
+          />
+          <p class="text-xs text-slate-500">Or upload document below</p>
+        </div>
+
+        <!-- Document Uploads for National Legal Framework -->
+        <div class="space-y-4 mt-6 pt-6 border-t border-slate-200">
+          <p class="text-sm font-semibold text-slate-700">Upload Documents (Optional)</p>
+          <div class="grid gap-4 md:grid-cols-2">
+            <div *ngFor="let docType of documentTypes" class="bg-slate-50 rounded-lg border border-slate-200 p-5 hover:border-blue-300 transition-colors">
+              <div class="flex flex-col h-full justify-between gap-4">
+                <div>
+                  <label class="block text-sm font-bold text-slate-900 mb-1">{{ docType.label }}</label>
+                  <p class="text-xs text-slate-500 mb-3">Accepted formats: PDF, DOC, DOCX (Max 10MB)</p>
+
+                  <!-- Uploaded State -->
+                  <div *ngIf="selectedDocuments[docType.value] || getUploadedDocument(docType.value)" class="bg-white border border-emerald-200 rounded p-3 mb-2 flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">✓</div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-xs font-semibold text-emerald-800 truncate">Uploaded</p>
+                      <p class="text-xs text-slate-600 truncate" [title]="getSelectedFileName(docType.value) || getUploadedDocument(docType.value)?.fileName">
+                        {{ getSelectedFileName(docType.value) || getUploadedDocument(docType.value)?.fileName }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                  <!-- Upload Input (Hidden) -->
+                  <input
+                    type="file"
+                    [id]="docType.value"
+                    class="hidden"
+                    (change)="onDocumentSelected($event, docType.value)"
+                    accept=".pdf,.doc,.docx"
+                    #fileInput
+                  />
+
+                  <!-- Upload Button (Shown if nothing uploaded) -->
+                  <button
+                    type="button"
+                    (click)="fileInput.click()"
+                    class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline"
+                    *ngIf="!selectedDocuments[docType.value] && !getUploadedDocument(docType.value)"
+                  >
+                    Upload Document
+                  </button>
+
+                  <!-- View / Remove (Shown if uploaded) -->
+                  <ng-container *ngIf="selectedDocuments[docType.value] || getUploadedDocument(docType.value)">
+                    <button
+                      type="button"
+                      class="text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-300 bg-white px-3 py-1.5 rounded hover:bg-slate-50"
+                      (click)="viewDocument(getUploadedDocument(docType.value)?.id || '')"
+                      *ngIf="getUploadedDocument(docType.value)?.id && !selectedDocuments[docType.value]"
+                    >
+                      View
+                    </button>
+                    <button
+                      type="button"
+                      class="text-xs font-semibold text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1.5 rounded hover:bg-red-100"
+                      (click)="removeDocument(getUploadedDocument(docType.value)?.id || '', docType.value, fileInput)"
+                      *ngIf="getUploadedDocument(docType.value)?.id"
+                    >
+                      Remove
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACAP National Focal Points -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">ACAP National Focal Points</h2>
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Loop through focal point types -->
+          <div *ngFor="let focalPoint of focalPointTypes" class="p-6 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-200 transition-colors">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
+              <h3 class="font-bold text-slate-900">{{ focalPoint.label }}</h3>
+              <button
+                type="button"
+                (click)="addContact(focalPoint.type)"
+                class="text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded"
+              >
+                + Add Contact
+              </button>
+            </div>
+
+            <!-- Dynamic contacts using FormArray -->
+            <div [formArrayName]="focalPoint.formArrayName" class="space-y-4">
+              <div
+                *ngFor="let contactGroup of getFormArray(focalPoint.formArrayName).controls; let i = index"
+                [formGroupName]="i"
+                class="p-4 bg-white border border-slate-200 rounded-lg space-y-3"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-semibold text-slate-500">Contact {{ i + 1 }}</span>
+                  <button
+                    type="button"
+                    (click)="removeContact(focalPoint.type, i)"
+                    class="text-xs text-red-600 hover:text-red-800"
+                    *ngIf="getFormArray(focalPoint.formArrayName).length > 1"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-xs font-semibold text-slate-700">Name <span class="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    formControlName="name"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="Enter name"
+                  />
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-xs font-semibold text-slate-700">Email <span class="text-red-500">*</span></label>
+                  <input
+                    type="email"
+                    formControlName="email"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="email@example.com"
+                  />
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-slate-700">Phone</label>
+                    <input
+                      type="tel"
+                      formControlName="phone"
+                      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                      placeholder="+254 20 1234567"
+                    />
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-slate-700">Mobile</label>
+                    <input
+                      type="tel"
+                      formControlName="mobile"
+                      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                      placeholder="+254 712 345678"
+                    />
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-xs font-semibold text-slate-700">Designation</label>
+                  <input
+                    type="text"
+                    formControlName="designation"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="e.g., Director"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Form Actions -->
+      <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-200 bg-slate-50 -mx-8 px-8 -mb-8 py-6 rounded-b-xl">
+        <button
+          type="button"
+          (click)="saveDraft()"
+          [disabled]="saving"
+          class="px-6 py-2.5 rounded-lg font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm"
+        >
+          {{ saving ? 'Saving...' : 'Save Draft' }}
+        </button>
+        <button
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="saving"
+          class="px-6 py-2.5 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm"
+        >
+          {{ saving ? 'Saving...' : 'Save & Submit' }}
+        </button>
+        <button
+          type="button"
+          (click)="goToDashboard()"
+          class="ml-auto px-6 py-2.5 rounded-lg font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
