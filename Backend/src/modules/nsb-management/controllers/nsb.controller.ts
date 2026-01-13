@@ -13,6 +13,8 @@ import {
   UseGuards,
   UseInterceptors,
   BadRequestException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
@@ -230,6 +232,51 @@ export class NsbController {
     }
 
     return this.stakeholderRegistryService.updateStakeholderRegistry(id, dto);
+  }
+
+  // Save draft - no validation
+  @Post(':id/stakeholder-registry/draft')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.NSB_ADMIN)
+  @UsePipes(new ValidationPipe({ skipMissingProperties: true, skipNullProperties: true, skipUndefinedProperties: true, whitelist: false, forbidNonWhitelisted: false }))
+  async saveDraft(
+    @Param('id') id: string,
+    @Body() dto: any, // Use any to skip validation
+    @CurrentUser() user: SystemUser,
+  ) {
+    const userRoles = user.roles || (user.role ? [user.role] : []);
+    const isAdmin = userRoles.includes(UserRole.SUPER_ADMIN) || userRoles.includes(UserRole.ARSO_SECRETARIAT);
+    
+    // NSB_ADMIN can only save draft for their own NSB
+    if (!isAdmin && userRoles.includes(UserRole.NSB_ADMIN)) {
+      const myNsb = await this.nsbService.findByUser(user);
+      if (myNsb?.id !== id) {
+        throw new ForbiddenException('You can only save draft stakeholder registry for your own NSB');
+      }
+    }
+
+    return this.stakeholderRegistryService.saveDraft(id, dto, user.id);
+  }
+
+  // Submit - with validation
+  @Post(':id/stakeholder-registry/submit')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.NSB_ADMIN)
+  async submitRegistry(
+    @Param('id') id: string,
+    @Body() dto: StakeholderRegistryDto,
+    @CurrentUser() user: SystemUser,
+  ) {
+    const userRoles = user.roles || (user.role ? [user.role] : []);
+    const isAdmin = userRoles.includes(UserRole.SUPER_ADMIN) || userRoles.includes(UserRole.ARSO_SECRETARIAT);
+    
+    // NSB_ADMIN can only submit their own NSB
+    if (!isAdmin && userRoles.includes(UserRole.NSB_ADMIN)) {
+      const myNsb = await this.nsbService.findByUser(user);
+      if (myNsb?.id !== id) {
+        throw new ForbiddenException('You can only submit stakeholder registry for your own NSB');
+      }
+    }
+
+    return this.stakeholderRegistryService.submitRegistry(id, dto, user.id);
   }
 }
 

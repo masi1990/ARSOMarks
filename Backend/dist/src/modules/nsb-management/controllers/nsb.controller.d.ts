@@ -27,4 +27,6 @@ export declare class NsbController {
     }>;
     getStakeholderRegistry(id: string, user: SystemUser): Promise<StakeholderRegistryDto>;
     updateStakeholderRegistry(id: string, dto: StakeholderRegistryDto, user: SystemUser): Promise<StakeholderRegistryDto>;
+    saveDraft(id: string, dto: any, user: SystemUser): Promise<StakeholderRegistryDto>;
+    submitRegistry(id: string, dto: StakeholderRegistryDto, user: SystemUser): Promise<StakeholderRegistryDto>;
 }

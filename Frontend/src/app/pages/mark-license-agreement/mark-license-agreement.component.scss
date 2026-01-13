@@ -1,0 +1,57 @@
+// Component-specific styles
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Agreement status badge
+.status-badge {
+  transition: all 0.2s ease;
+}
+
+// Signature section
+.signature-section {
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+}
+
+// Asset request form
+.asset-request-form {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Agreement terms display
+.terms-display {
+  max-height: 400px;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+

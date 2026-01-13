@@ -33,25 +33,33 @@ __decorate([
     __metadata("design:type", String)
 ], NsbCustomsBorderAgency.prototype, "agencyName", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'key_border_posts', type: 'text', array: true, default: [] }),
-    __metadata("design:type", Array)
-], NsbCustomsBorderAgency.prototype, "keyBorderPosts", void 0);
+    (0, typeorm_1.Column)({ name: 'parent_ministry', length: 255, nullable: true }),
+    __metadata("design:type", String)
+], NsbCustomsBorderAgency.prototype, "parentMinistry", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'acap_verification_contact_name', length: 255, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'primary_contact_name', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], NsbCustomsBorderAgency.prototype, "acapVerificationContactName", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'acap_verification_contact_email', length: 255, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'coordinator_email', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], NsbCustomsBorderAgency.prototype, "acapVerificationContactEmail", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'acap_verification_contact_phone', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'coordinator_phone', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], NsbCustomsBorderAgency.prototype, "acapVerificationContactPhone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'integration_with_national_single_window', default: false }),
-    __metadata("design:type", Boolean)
-], NsbCustomsBorderAgency.prototype, "integrationWithNationalSingleWindow", void 0);
+    (0, typeorm_1.Column)({ name: 'integration_status', type: 'varchar', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], NsbCustomsBorderAgency.prototype, "integrationStatus", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'integration_details', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbCustomsBorderAgency.prototype, "integrationDetails", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'api_available', type: 'varchar', length: 20, nullable: true }),
+    __metadata("design:type", String)
+], NsbCustomsBorderAgency.prototype, "apiAvailable", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'is_active', default: true }),
     __metadata("design:type", Boolean)

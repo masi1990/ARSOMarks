@@ -1,0 +1,333 @@
+<div class="w-full max-w-6xl mx-auto">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">ARSO Mark License Agreement</h1>
+          <p class="mt-1 text-sm font-medium text-slate-600">Form NSB-004-2: License Agreement & Execution</p>
+          <p *ngIf="agreement" class="mt-1 text-sm text-slate-500">Agreement ID: {{ agreement.agreementId }}</p>
+        </div>
+        <div *ngIf="agreement" class="px-3 py-1 rounded-full text-sm font-semibold" [ngClass]="getStatusBadgeClass()">
+          {{ getStatusLabel() }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
+      <p class="font-semibold">{{ successMessage }}</p>
+    </div>
+
+    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="p-8 text-center">
+      <p class="text-slate-600">Loading agreement...</p>
+    </div>
+
+    <div *ngIf="agreement && !loading" class="p-8 space-y-8">
+      <!-- Agreement Details -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Agreement Details</h2>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">License Type</label>
+            <p class="text-sm text-slate-900">{{ agreement.licenseTypeDisplay }}</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Agreement Status</label>
+            <p class="text-sm text-slate-900">{{ getStatusLabel() }}</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">License Start Date</label>
+            <p class="text-sm text-slate-900">{{ formatDate(agreement.licenseStartDate) }}</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">License End Date</label>
+            <p class="text-sm text-slate-900">
+              {{ formatDate(agreement.licenseEndDate) }}
+              <span *ngIf="calculateDaysRemaining() > 0" class="text-blue-600 ml-2">
+                ({{ calculateDaysRemaining() }} days remaining)
+              </span>
+              <span *ngIf="calculateDaysRemaining() <= 0" class="text-red-600 ml-2">
+                (Expired)
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="agreement.licenseTermsDisplay" class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">License Terms & Conditions</label>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm text-slate-700 whitespace-pre-wrap">
+            {{ agreement.licenseTermsDisplay }}
+          </div>
+        </div>
+
+        <div *ngIf="agreement.royaltyFeeStructure" class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Royalty/Fee Structure</label>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <pre class="text-sm text-slate-700">{{ agreement.royaltyFeeStructure | json }}</pre>
+          </div>
+        </div>
+
+        <div *ngIf="agreement.paymentSchedule" class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Payment Schedule</label>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <pre class="text-sm text-slate-700">{{ agreement.paymentSchedule | json }}</pre>
+          </div>
+        </div>
+
+        <div *ngIf="agreement.usageRestrictions" class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Usage Restrictions</label>
+          <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 text-sm text-slate-700 whitespace-pre-wrap">
+            {{ agreement.usageRestrictions }}
+          </div>
+        </div>
+
+        <div *ngIf="agreement.terminationClauses" class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Termination Clauses</label>
+          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm text-slate-700 whitespace-pre-wrap">
+            {{ agreement.terminationClauses }}
+          </div>
+        </div>
+      </section>
+
+      <!-- Signatory Information -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Signatory Information</h2>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 class="font-semibold text-slate-900 mb-3">NSB Signatory</h3>
+            <div class="space-y-2 text-sm">
+              <p><span class="font-semibold">Name:</span> {{ agreement.nsbSignerName }}</p>
+              <p><span class="font-semibold">Title:</span> {{ agreement.nsbSignerTitle }}</p>
+              <p><span class="font-semibold">Email:</span> {{ agreement.nsbSignerEmail }}</p>
+              <p *ngIf="agreement.nsbSignerTimestamp">
+                <span class="font-semibold">Signed:</span> {{ formatDate(agreement.nsbSignerTimestamp) }}
+              </p>
+              <p *ngIf="!agreement.nsbSignerTimestamp" class="text-amber-600 font-semibold">Pending Signature</p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-green-50 rounded-lg border border-green-200">
+            <h3 class="font-semibold text-slate-900 mb-3">ARSO Signatory</h3>
+            <div class="space-y-2 text-sm">
+              <p *ngIf="agreement.arsoSignerName">
+                <span class="font-semibold">Name:</span> {{ agreement.arsoSignerName }}
+              </p>
+              <p *ngIf="agreement.arsoSignerTitle">
+                <span class="font-semibold">Title:</span> {{ agreement.arsoSignerTitle }}
+              </p>
+              <p *ngIf="agreement.arsoSignerTimestamp">
+                <span class="font-semibold">Signed:</span> {{ formatDate(agreement.arsoSignerTimestamp) }}
+              </p>
+              <p *ngIf="!agreement.arsoSignerTimestamp" class="text-amber-600 font-semibold">Pending Signature</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NSB Signature Form -->
+      <section *ngIf="canSign()" class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Sign Agreement</h2>
+        
+        <form [formGroup]="signForm" class="space-y-4">
+          <div class="p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <p class="text-sm text-slate-700 mb-3">
+              By signing this agreement, you acknowledge that you have read and understood all terms and conditions, 
+              and that your electronic signature is legally binding.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-2">
+              <label for="nsbSignerName" class="block text-sm font-semibold text-slate-700">Signatory Name <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                id="nsbSignerName"
+                formControlName="nsbSignerName"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="nsbSignerTitle" class="block text-sm font-semibold text-slate-700">Signatory Title <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                id="nsbSignerTitle"
+                formControlName="nsbSignerTitle"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label for="nsbSignerEmail" class="block text-sm font-semibold text-slate-700">Signatory Email <span class="text-red-500">*</span></label>
+            <input
+              type="email"
+              id="nsbSignerEmail"
+              formControlName="nsbSignerEmail"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                formControlName="nsbSignerConsent"
+                class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+              />
+              <span class="text-sm text-slate-700">
+                I consent to use electronic signature as legally binding <span class="text-red-500">*</span>
+              </span>
+            </label>
+          </div>
+
+          <div class="flex gap-4">
+            <button
+              type="button"
+              (click)="signAgreement()"
+              [disabled]="signing || signForm.invalid"
+              class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <span *ngIf="!signing">Sign Agreement</span>
+              <span *ngIf="signing">Signing...</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Asset Request Section -->
+      <section *ngIf="isExecuted()" class="space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3 flex-1">Digital Asset Access</h2>
+          <button
+            type="button"
+            (click)="toggleAssetRequest()"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+          >
+            {{ showAssetRequest ? 'Cancel Request' : 'Request Assets' }}
+          </button>
+        </div>
+
+        <div *ngIf="showAssetRequest" class="p-6 bg-slate-50 rounded-lg border border-slate-200">
+          <form [formGroup]="assetRequestForm" class="space-y-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Digital Assets Requested <span class="text-red-500">*</span></label>
+              <div class="space-y-2">
+                <label *ngFor="let option of assetOptions" class="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [value]="option.value"
+                    formControlName="requestedAssets"
+                    class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+                  />
+                  <span class="text-sm text-slate-700">{{ option.label }}</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label for="assetDeliveryMethod" class="block text-sm font-semibold text-slate-700">Preferred Delivery Method <span class="text-red-500">*</span></label>
+              <select
+                id="assetDeliveryMethod"
+                formControlName="assetDeliveryMethod"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+              >
+                <option value="" disabled>Select delivery method</option>
+                <option *ngFor="let option of deliveryMethodOptions" [value]="option.value">{{ option.label }}</option>
+              </select>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="space-y-2">
+                <label for="assetRecipientName" class="block text-sm font-semibold text-slate-700">Recipient Name <span class="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  id="assetRecipientName"
+                  formControlName="assetRecipientName"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label for="assetRecipientEmail" class="block text-sm font-semibold text-slate-700">Recipient Email <span class="text-red-500">*</span></label>
+                <input
+                  type="email"
+                  id="assetRecipientEmail"
+                  formControlName="assetRecipientEmail"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="assetUseConfirmation"
+                  class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+                />
+                <span class="text-sm text-slate-700">
+                  I confirm that assets will be used only as authorized <span class="text-red-500">*</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="flex gap-4">
+              <button
+                type="button"
+                (click)="requestAssets()"
+                [disabled]="requestingAssets || assetRequestForm.invalid"
+                class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <span *ngIf="!requestingAssets">Submit Request</span>
+                <span *ngIf="requestingAssets">Submitting...</span>
+              </button>
+              <button
+                type="button"
+                (click)="toggleAssetRequest()"
+                class="px-6 py-2.5 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div *ngIf="!showAssetRequest" class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <p class="text-sm text-slate-700">
+            Once your agreement is executed, you can request digital assets (logos, brand guidelines, etc.) for use in your campaigns.
+          </p>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="flex gap-4 justify-end pt-6 border-t border-slate-200">
+        <button
+          type="button"
+          (click)="downloadAgreement()"
+          *ngIf="agreement.agreementDocumentPath"
+          class="px-6 py-2.5 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors"
+        >
+          Download Agreement PDF
+        </button>
+        <button
+          type="button"
+          (click)="navigateToDashboard()"
+          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Back to Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

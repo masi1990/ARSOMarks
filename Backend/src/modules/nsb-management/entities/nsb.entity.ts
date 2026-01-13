@@ -3,7 +3,7 @@ import { Country } from '../../reference-data/entities/country.entity';
 import { NsbContact } from './nsb-contact.entity';
 import { NsbLocation } from './nsb-location.entity';
 import { NsbDocument } from './nsb-document.entity';
-import { NsbClassification, NsbStatus } from '../../../shared/enums';
+import { NsbClassification, NsbStatus, StakeholderRegistryStatus } from '../../../shared/enums';
 import { LicenseApplication } from '../../licensing/entities/license-application.entity';
 import { License } from '../../licensing/entities/license.entity';
 import { SystemUser } from '../../system-user/system-user.entity';
@@ -103,6 +103,20 @@ export class Nsb {
   @ManyToOne(() => SystemUser, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'updated_by' })
   updatedByUser?: SystemUser;
+
+  // Stakeholder Registry Status
+  @Column({ name: 'stakeholder_registry_status', type: 'varchar', length: 50, nullable: true, default: 'DRAFT' })
+  stakeholderRegistryStatus?: StakeholderRegistryStatus;
+
+  @Column({ name: 'stakeholder_registry_submitted_at', type: 'timestamp', nullable: true })
+  stakeholderRegistrySubmittedAt?: Date;
+
+  @Column({ name: 'stakeholder_registry_submitted_by', type: 'uuid', nullable: true })
+  stakeholderRegistrySubmittedBy?: string;
+
+  @ManyToOne(() => SystemUser, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'stakeholder_registry_submitted_by' })
+  stakeholderRegistrySubmittedByUser?: SystemUser;
 
   @OneToMany(() => NsbContact, (contact) => contact.nsb, { cascade: true })
   contacts?: NsbContact[];

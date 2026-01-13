@@ -1,0 +1,47 @@
+// Component-specific styles
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Status badge styling
+.status-badge {
+  transition: all 0.2s ease;
+}
+
+// Modification details section
+.modification-details {
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+}
+
+// File upload area
+.file-upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+  }
+}
+
+// Review status section
+.review-status {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

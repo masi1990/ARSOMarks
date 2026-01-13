@@ -46,15 +46,15 @@ __decorate([
     __metadata("design:type", String)
 ], NsbTestingLaboratory.prototype, "scopeOfAccreditation", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_for_acap_referrals_name', length: 255, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'acap_contact_name', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], NsbTestingLaboratory.prototype, "contactForAcapReferralsName", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_for_acap_referrals_email', length: 255, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'contact_email', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], NsbTestingLaboratory.prototype, "contactForAcapReferralsEmail", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_for_acap_referrals_phone', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'contact_phone', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], NsbTestingLaboratory.prototype, "contactForAcapReferralsPhone", void 0);
 __decorate([

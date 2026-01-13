@@ -41,7 +41,7 @@ export class NsbMarketSurveillanceAuthority {
   @Column({ name: 'mou_document_hash', length: 64, nullable: true })
   mouDocumentHash?: string;
 
-  @Column({ name: 'system_access_level_requested', type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'access_level', type: 'varchar', length: 50, nullable: true })
   systemAccessLevelRequested?: SystemAccessLevel;
 
   @Column({ name: 'is_active', default: true })

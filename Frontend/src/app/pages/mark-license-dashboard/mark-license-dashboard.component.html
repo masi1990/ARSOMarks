@@ -1,0 +1,321 @@
+<div class="w-full max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-slate-900">Mark License Management Dashboard</h1>
+    <p class="mt-1 text-sm text-slate-600">Form NSB-004-DASH: License Management Dashboard</p>
+  </div>
+
+  <div *ngIf="error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+    {{ error }}
+  </div>
+
+  <!-- View Tabs -->
+  <div class="mb-6 border-b border-slate-200">
+    <nav class="flex space-x-4">
+      <button
+        (click)="setActiveView('overview')"
+        [class.border-b-2]="activeView === 'overview'"
+        [class.border-blue-600]="activeView === 'overview'"
+        [class.text-blue-600]="activeView === 'overview'"
+        class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+      >
+        Overview
+      </button>
+      <button
+        (click)="setActiveView('analytics')"
+        [class.border-b-2]="activeView === 'analytics'"
+        [class.border-blue-600]="activeView === 'analytics'"
+        [class.text-blue-600]="activeView === 'analytics'"
+        class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+      >
+        Analytics
+      </button>
+      <button
+        (click)="setActiveView('calendar')"
+        [class.border-b-2]="activeView === 'calendar'"
+        [class.border-blue-600]="activeView === 'calendar'"
+        [class.text-blue-600]="activeView === 'calendar'"
+        class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+      >
+        Compliance Calendar
+      </button>
+    </nav>
+  </div>
+
+  <!-- Overview View -->
+  <div *ngIf="activeView === 'overview' && !loading">
+    <!-- Quick Stats -->
+    <div class="grid gap-6 md:grid-cols-4 mb-8">
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+        <div class="text-2xl font-bold text-slate-900">{{ overview?.activeLicenses || 0 }}</div>
+        <div class="text-sm text-slate-600 mt-1">Active Licenses</div>
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+        <div class="text-2xl font-bold text-slate-900">{{ overview?.totalApplications || 0 }}</div>
+        <div class="text-sm text-slate-600 mt-1">Total Applications</div>
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+        <div class="text-2xl font-bold text-amber-600">{{ overview?.expiringSoon || 0 }}</div>
+        <div class="text-sm text-slate-600 mt-1">Expiring Soon</div>
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+        <button
+          (click)="createApplication()"
+          class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold"
+        >
+          + New Application
+        </button>
+      </div>
+    </div>
+
+    <!-- Widget 1: License Status Overview -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6">
+      <div class="px-6 py-4 border-b border-slate-200">
+        <h2 class="text-lg font-bold text-slate-900">License Status Overview</h2>
+      </div>
+      <div class="p-6">
+        <div *ngIf="overview?.licenses && overview.licenses.length > 0" class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-slate-200">
+                <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">License ID</th>
+                <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">Type</th>
+                <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">Status</th>
+                <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">Expiry Date</th>
+                <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">Days Remaining</th>
+                <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let license of overview.licenses" class="border-b border-slate-100 hover:bg-slate-50">
+                <td class="py-3 px-4 text-sm">
+                  <button (click)="viewAgreement(license.agreementId)" class="text-blue-600 hover:text-blue-800 font-medium">
+                    {{ license.agreementId }}
+                  </button>
+                </td>
+                <td class="py-3 px-4 text-sm text-slate-700">{{ license.licenseType }}</td>
+                <td class="py-3 px-4 text-sm">
+                  <span class="px-2 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusBadgeClass(license.status)">
+                    {{ license.status }}
+                  </span>
+                </td>
+                <td class="py-3 px-4 text-sm text-slate-700">{{ formatDate(license.endDate) }}</td>
+                <td class="py-3 px-4 text-sm" [ngClass]="getUrgencyClass(license.daysUntilExpiry)">
+                  {{ license.daysUntilExpiry }} days
+                </td>
+                <td class="py-3 px-4 text-sm">
+                  <div class="flex gap-2">
+                    <button
+                      (click)="createReport(license.agreementId)"
+                      class="text-blue-600 hover:text-blue-800 text-xs"
+                    >
+                      Report
+                    </button>
+                    <button
+                      (click)="requestModification(license.agreementId)"
+                      class="text-blue-600 hover:text-blue-800 text-xs"
+                    >
+                      Modify
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!overview?.licenses || overview.licenses.length === 0" class="text-center py-8 text-slate-500">
+          <p>No active licenses found.</p>
+          <button (click)="createApplication()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+            Create New Application
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget 2: Recent Applications -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6">
+      <div class="px-6 py-4 border-b border-slate-200">
+        <h2 class="text-lg font-bold text-slate-900">Recent Applications</h2>
+      </div>
+      <div class="p-6">
+        <div *ngIf="overview?.applications && overview.applications.length > 0" class="space-y-3">
+          <div *ngFor="let app of overview.applications" class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+            <div class="flex-1">
+              <button (click)="viewApplication(app.id)" class="text-blue-600 hover:text-blue-800 font-medium">
+                {{ app.applicationNumber }}
+              </button>
+              <span class="ml-3 px-2 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusBadgeClass(app.status)">
+                {{ app.status }}
+              </span>
+            </div>
+            <div class="text-sm text-slate-600">{{ formatDate(app.createdAt) }}</div>
+          </div>
+        </div>
+        <div *ngIf="!overview?.applications || overview.applications.length === 0" class="text-center py-8 text-slate-500">
+          <p>No applications found.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget 3: Expiring Agreements Alert -->
+    <div *ngIf="overview?.expiringAgreements && overview.expiringAgreements.length > 0" class="bg-amber-50 rounded-xl shadow-sm border border-amber-200 mb-6">
+      <div class="px-6 py-4 border-b border-amber-200">
+        <h2 class="text-lg font-bold text-amber-900">⚠️ Expiring Soon</h2>
+      </div>
+      <div class="p-6">
+        <div class="space-y-3">
+          <div *ngFor="let agreement of overview.expiringAgreements" class="flex items-center justify-between p-3 bg-white rounded-lg">
+            <div>
+              <p class="font-semibold text-slate-900">{{ agreement.agreementId }}</p>
+              <p class="text-sm text-slate-600">Expires: {{ formatDate(agreement.endDate) }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold text-amber-600">{{ agreement.daysUntilExpiry }} days</p>
+              <button
+                (click)="requestModification(agreement.agreementId)"
+                class="mt-2 px-3 py-1 bg-amber-600 text-white rounded text-xs hover:bg-amber-700"
+              >
+                Request Renewal
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics View -->
+  <div *ngIf="activeView === 'analytics' && !loading">
+    <div class="grid gap-6 md:grid-cols-2 mb-6">
+      <!-- Total Impressions -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">Total Impressions</h3>
+        <div class="text-3xl font-bold text-slate-900">{{ analytics?.totalImpressions || 0 | number }}</div>
+        <p class="text-xs text-slate-500 mt-1">Across all campaigns</p>
+      </div>
+
+      <!-- Total Reports -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">Total Reports Submitted</h3>
+        <div class="text-3xl font-bold text-slate-900">{{ analytics?.totalReports || 0 }}</div>
+        <p class="text-xs text-slate-500 mt-1">Annual usage reports</p>
+      </div>
+    </div>
+
+    <!-- Media Type Breakdown -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6">
+      <div class="px-6 py-4 border-b border-slate-200">
+        <h2 class="text-lg font-bold text-slate-900">Media Type Breakdown</h2>
+      </div>
+      <div class="p-6">
+        <div *ngIf="analytics?.mediaTypeBreakdown" class="space-y-3">
+          <div *ngFor="let item of analytics.mediaTypeBreakdown | keyvalue" class="flex items-center">
+            <div class="w-32 text-sm text-slate-700">{{ item.key }}</div>
+            <div class="flex-1 bg-slate-200 rounded-full h-4 mr-4">
+              <div
+                class="bg-blue-600 h-4 rounded-full"
+                [style.width.%]="(item.value / getMaxMediaValue()) * 100"
+              ></div>
+            </div>
+            <div class="w-16 text-sm font-semibold text-slate-900 text-right">{{ item.value }}</div>
+          </div>
+        </div>
+        <div *ngIf="!analytics?.mediaTypeBreakdown || Object.keys(analytics.mediaTypeBreakdown).length === 0" class="text-center py-8 text-slate-500">
+          <p>No media usage data available.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mark Usage Ratio -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6">
+      <div class="px-6 py-4 border-b border-slate-200">
+        <h2 class="text-lg font-bold text-slate-900">Mark Usage Ratio</h2>
+      </div>
+      <div class="p-6">
+        <div *ngIf="analytics?.markUsageRatio" class="grid gap-4 md:grid-cols-3">
+          <div *ngFor="let item of analytics.markUsageRatio | keyvalue" class="text-center p-4 bg-slate-50 rounded-lg">
+            <div class="text-2xl font-bold text-slate-900">{{ item.value }}</div>
+            <div class="text-sm text-slate-600 mt-1">{{ item.key }}</div>
+          </div>
+        </div>
+        <div *ngIf="!analytics?.markUsageRatio || Object.keys(analytics.markUsageRatio).length === 0" class="text-center py-8 text-slate-500">
+          <p>No mark usage data available.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports by Year -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+      <div class="px-6 py-4 border-b border-slate-200">
+        <h2 class="text-lg font-bold text-slate-900">Reports by Year</h2>
+      </div>
+      <div class="p-6">
+        <div *ngIf="analytics?.reportsByYear" class="space-y-3">
+          <div *ngFor="let item of analytics.reportsByYear | keyvalue" class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+            <span class="font-semibold text-slate-900">{{ item.key }}</span>
+            <span class="text-sm text-slate-600">{{ item.value }} report(s)</span>
+          </div>
+        </div>
+        <div *ngIf="!analytics?.reportsByYear || Object.keys(analytics.reportsByYear).length === 0" class="text-center py-8 text-slate-500">
+          <p>No reports submitted yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar View -->
+  <div *ngIf="activeView === 'calendar' && !loading">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+      <div class="px-6 py-4 border-b border-slate-200">
+        <h2 class="text-lg font-bold text-slate-900">Compliance Calendar</h2>
+        <p class="text-sm text-slate-600 mt-1">Upcoming deadlines and important dates</p>
+      </div>
+      <div class="p-6">
+        <div *ngIf="calendar?.deadlines && calendar.deadlines.length > 0" class="space-y-4">
+          <div *ngFor="let deadline of calendar.deadlines" class="p-4 rounded-lg border" [ngClass]="deadline.status === 'URGENT' ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200'">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="px-2 py-1 rounded text-xs font-semibold" [ngClass]="deadline.status === 'URGENT' ? 'bg-red-100 text-red-800' : 'bg-slate-100 text-slate-800'">
+                    {{ deadline.status }}
+                  </span>
+                  <span class="px-2 py-1 rounded text-xs font-semibold bg-blue-100 text-blue-800">
+                    {{ deadline.type }}
+                  </span>
+                </div>
+                <p class="font-semibold text-slate-900">{{ deadline.description }}</p>
+                <p class="text-sm text-slate-600 mt-1">Due: {{ formatDate(deadline.dueDate) }}</p>
+                <p class="text-sm text-slate-600">Days remaining: {{ calculateDaysUntil(deadline.dueDate) }}</p>
+              </div>
+              <div class="ml-4">
+                <button
+                  *ngIf="deadline.type === 'ANNUAL_REPORT' && overview?.licenses && overview.licenses.length > 0"
+                  (click)="createReport(overview.licenses[0].agreementId)"
+                  class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                >
+                  Submit Report
+                </button>
+                <button
+                  *ngIf="deadline.type === 'LICENSE_RENEWAL' && overview?.licenses && overview.licenses.length > 0"
+                  (click)="requestModification(overview.licenses[0].agreementId)"
+                  class="px-3 py-1 bg-amber-600 text-white rounded text-xs hover:bg-amber-700"
+                >
+                  Renew License
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!calendar?.deadlines || calendar.deadlines.length === 0" class="text-center py-8 text-slate-500">
+          <p>No upcoming deadlines.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-12">
+    <p class="text-slate-600">Loading dashboard data...</p>
+  </div>
+</div>
+

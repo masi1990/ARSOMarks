@@ -1,0 +1,611 @@
+<div class="product-certification-container max-w-7xl mx-auto p-6">
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Product Certification Application</h1>
+      <p class="text-gray-600">Apply for ARSO Mark Certification for your products</p>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="success" class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+      <p class="font-semibold">Application submitted successfully!</p>
+      <p>Redirecting to dashboard...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+      {{ error }}
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between">
+        <div *ngFor="let step of [1, 2, 3, 4, 5, 6]; let i = index" class="flex items-center flex-1" [class.flex-1]="i < 5">
+          <div class="flex flex-col items-center flex-1">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors text-sm"
+              [class.bg-blue-600]="currentStep === step"
+              [class.bg-gray-300]="currentStep > step"
+              [class.bg-gray-200]="currentStep < step"
+              [class.text-white]="currentStep >= step"
+              [class.text-gray-600]="currentStep < step"
+              (click)="goToStep(step)"
+              [class.cursor-pointer]="currentStep >= step"
+            >
+              {{ step }}
+            </div>
+            <span class="mt-2 text-xs text-center text-gray-600">{{ getStepTitle(step) }}</span>
+          </div>
+          <div *ngIf="i < 5" class="flex-1 h-1 mx-2" [class.bg-blue-600]="currentStep > step" [class.bg-gray-300]="currentStep <= step"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="certificationForm" (ngSubmit)="onSubmit()" *ngIf="!success && operator">
+      <!-- Step 1: Application Type Selection -->
+      <div *ngIf="currentStep === 1" class="space-y-6">
+        <h2 class="text-2xl font-semibold mb-4">Section A: Application Type Selection</h2>
+
+        <!-- A1: Mark Selection -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <h3 class="text-lg font-semibold mb-4">A1: Mark Selection</h3>
+          <div formGroupName="markSelection" class="space-y-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Select ARSO Mark(s) to Apply For *</label>
+              <div class="space-y-2">
+                <label *ngFor="let mark of markRequestedTypes" class="flex items-center">
+                  <input
+                    type="checkbox"
+                    [value]="mark.value"
+                    (change)="onMarkSelectionChange($event, mark.value)"
+                    [checked]="isMarkSelected(mark.value)"
+                    class="mr-2"
+                  />
+                  <span>{{ mark.label }}</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="certificationForm.get('markSelection.markRequested')?.value?.length > 1">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Mark Combination Preference</label>
+              <select formControlName="markCombination" class="form-control">
+                <option value="">Select...</option>
+                <option *ngFor="let pref of markCombinationPreferences" [value]="pref.value">{{ pref.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- A2: Certification Scheme Details -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <h3 class="text-lg font-semibold mb-4">A2: Certification Scheme Details</h3>
+          <div formGroupName="certificationScheme" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Certification Scheme Type *</label>
+              <select formControlName="schemeType" class="form-control" [class.invalid]="certificationForm.get('certificationScheme.schemeType')?.invalid && certificationForm.get('certificationScheme.schemeType')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let scheme of certificationSchemeTypes" [value]="scheme.value">{{ scheme.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Application Scope *</label>
+              <select formControlName="applicationScope" class="form-control" [class.invalid]="certificationForm.get('certificationScheme.applicationScope')?.invalid && certificationForm.get('certificationScheme.applicationScope')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let scope of applicationScopes" [value]="scope.value">{{ scope.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Type of Certification Requested *</label>
+              <select formControlName="certificationType" class="form-control" [class.invalid]="certificationForm.get('certificationScheme.certificationType')?.invalid && certificationForm.get('certificationScheme.certificationType')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let type of certificationTypes" [value]="type.value">{{ type.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- A3: Volume & Priority -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <h3 class="text-lg font-semibold mb-4">A3: Volume & Priority</h3>
+          <div formGroupName="volumePriority" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Estimated Annual Production/Import Volume *</label>
+              <input type="number" formControlName="estimatedVolume" class="form-control" min="0" [class.invalid]="certificationForm.get('volumePriority.estimatedVolume')?.invalid && certificationForm.get('volumePriority.estimatedVolume')?.touched" />
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Volume Unit *</label>
+              <select formControlName="volumeUnit" class="form-control" [class.invalid]="certificationForm.get('volumePriority.volumeUnit')?.invalid && certificationForm.get('volumePriority.volumeUnit')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let unit of volumeUnits" [value]="unit.value">{{ unit.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Peak Production Month</label>
+              <select formControlName="peakMonth" class="form-control">
+                <option value="">Select...</option>
+                <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Need Priority Processing? *</label>
+              <select formControlName="priorityProcessing" class="form-control" [class.invalid]="certificationForm.get('volumePriority.priorityProcessing')?.invalid && certificationForm.get('volumePriority.priorityProcessing')?.touched">
+                <option *ngFor="let priority of priorityProcessings" [value]="priority.value">{{ priority.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group md:col-span-2" *ngIf="certificationForm.get('volumePriority.priorityProcessing')?.value === 'YES'">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Reason for Priority Request *</label>
+              <textarea formControlName="priorityReason" rows="3" class="form-control" [class.invalid]="certificationForm.get('volumePriority.priorityReason')?.invalid && certificationForm.get('volumePriority.priorityReason')?.touched"></textarea>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Expected Certification Timeline *</label>
+              <select formControlName="expectedTimeline" class="form-control" [class.invalid]="certificationForm.get('volumePriority.expectedTimeline')?.invalid && certificationForm.get('volumePriority.expectedTimeline')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let timeline of expectedTimelines" [value]="timeline.value">{{ timeline.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Product Information (Array) -->
+      <div *ngIf="currentStep === 2" class="space-y-6">
+        <h2 class="text-2xl font-semibold mb-4">Section B: Product Information</h2>
+        <p class="text-gray-600 mb-4">Add one or more products to certify. You can add multiple products in this application.</p>
+
+        <div formArrayName="products">
+          <div *ngFor="let product of productsFormArray.controls; let i = index" [formGroupName]="i" class="mb-8 p-6 border rounded-lg bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold">Product {{ i + 1 }}</h3>
+              <button type="button" *ngIf="productsFormArray.length > 1" (click)="removeProduct(i)" class="text-red-600 hover:text-red-800">Remove Product</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- B1: Basic Product Details -->
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Product Common/Trade Name *</label>
+                <input type="text" formControlName="productName" class="form-control" [class.invalid]="product.get('productName')?.invalid && product.get('productName')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Brand Name *</label>
+                <input type="text" formControlName="brandName" class="form-control" [class.invalid]="product.get('brandName')?.invalid && product.get('brandName')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Model/Variant/Type *</label>
+                <input type="text" formControlName="modelVariant" class="form-control" [class.invalid]="product.get('modelVariant')?.invalid && product.get('modelVariant')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">HS Code (6-8 digit) *</label>
+                <input type="text" formControlName="hsCode" class="form-control" [class.invalid]="product.get('hsCode')?.invalid && product.get('hsCode')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Product Category *</label>
+                <select formControlName="productCategory" class="form-control" [class.invalid]="product.get('productCategory')?.invalid && product.get('productCategory')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let category of productCategories" [value]="category.value">{{ category.label }}</option>
+                </select>
+              </div>
+
+              <!-- B2: Product Description & Use -->
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Detailed Product Description *</label>
+                <textarea formControlName="productDescription" rows="4" class="form-control" [class.invalid]="product.get('productDescription')?.invalid && product.get('productDescription')?.touched"></textarea>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Intended Use/Application *</label>
+                <textarea formControlName="intendedUse" rows="3" class="form-control" [class.invalid]="product.get('intendedUse')?.invalid && product.get('intendedUse')?.touched"></textarea>
+              </div>
+
+              <!-- B3: Target Market & Consumers -->
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Target Consumer Groups *</label>
+                <select multiple formControlName="targetConsumers" class="form-control" [class.invalid]="product.get('targetConsumers')?.invalid && product.get('targetConsumers')?.touched">
+                  <option *ngFor="let group of targetConsumerGroups" [value]="group.value">{{ group.label }}</option>
+                </select>
+              </div>
+
+              <!-- B4: Physical Specifications -->
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Packaging Type *</label>
+                <select formControlName="packagingType" class="form-control" [class.invalid]="product.get('packagingType')?.invalid && product.get('packagingType')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let type of packagingTypes" [value]="type.value">{{ type.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Packaging Material *</label>
+                <input type="text" formControlName="packagingMaterial" class="form-control" [class.invalid]="product.get('packagingMaterial')?.invalid && product.get('packagingMaterial')?.touched" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" (click)="addProduct()" class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">+ Add Another Product</button>
+      </div>
+
+      <!-- Step 3: Technical Specifications -->
+      <div *ngIf="currentStep === 3" class="space-y-6">
+        <h2 class="text-2xl font-semibold mb-4">Section C: Technical Specifications & Compliance</h2>
+        <p class="text-gray-600 mb-4">Provide technical specifications for each product. Complete one section per product.</p>
+
+        <div formArrayName="technicalSpecs">
+          <div *ngFor="let spec of technicalSpecsFormArray.controls; let i = index" [formGroupName]="i" class="mb-8 p-6 border rounded-lg bg-gray-50">
+            <h3 class="text-lg font-semibold mb-4">Technical Specs for Product {{ i + 1 }}</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Applicable Standards & Regulations *</label>
+                <input type="text" formControlName="applicableStandards" class="form-control" placeholder="Enter standards separated by commas" [class.invalid]="spec.get('applicableStandards')?.invalid && spec.get('applicableStandards')?.touched" (blur)="onStandardsBlur($event, spec, 'applicableStandards')" />
+                <small class="text-gray-500">Enter standard codes separated by commas (e.g., ISO 9001, ISO 14001)</small>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mandatory Standards *</label>
+                <input type="text" formControlName="mandatoryStandards" class="form-control" placeholder="Enter mandatory standards" [class.invalid]="spec.get('mandatoryStandards')?.invalid && spec.get('mandatoryStandards')?.touched" (blur)="onStandardsBlur($event, spec, 'mandatoryStandards')" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Regulatory Body for Product Category *</label>
+                <input type="text" formControlName="regulatoryBody" class="form-control" [class.invalid]="spec.get('regulatoryBody')?.invalid && spec.get('regulatoryBody')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Technical Documentation Available? *</label>
+                <select formControlName="technicalDocsAvailable" class="form-control" [class.invalid]="spec.get('technicalDocsAvailable')?.invalid && spec.get('technicalDocsAvailable')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let status of technicalDocsStatuses" [value]="status.value">{{ status.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Test Reports Available? *</label>
+                <select formControlName="testReportsAvailable" class="form-control" [class.invalid]="spec.get('testReportsAvailable')?.invalid && spec.get('testReportsAvailable')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let availability of testReportsAvailabilities" [value]="availability.value">{{ availability.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Brief Manufacturing Process Description *</label>
+                <textarea formControlName="manufacturingProcess" rows="5" class="form-control" [class.invalid]="spec.get('manufacturingProcess')?.invalid && spec.get('manufacturingProcess')?.touched"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Traceability System *</label>
+                <select formControlName="traceabilitySystem" class="form-control" [class.invalid]="spec.get('traceabilitySystem')?.invalid && spec.get('traceabilitySystem')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let status of traceabilityStatuses" [value]="status.value">{{ status.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Batch/Lot Traceability *</label>
+                <select formControlName="batchTraceability" class="form-control" [class.invalid]="spec.get('batchTraceability')?.invalid && spec.get('batchTraceability')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let status of traceabilityStatuses" [value]="status.value">{{ status.label }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Environmental Claims (EMA Only - Conditional) -->
+      <div *ngIf="currentStep === 4 && hasEmaMark()" class="space-y-6">
+        <h2 class="text-2xl font-semibold mb-4">Section D: Environmental Claims (For EMA Only)</h2>
+        <p class="text-gray-600 mb-4">Complete environmental information for Eco Mark Africa certification.</p>
+
+        <div formArrayName="environmentalClaims">
+          <div *ngFor="let claim of environmentalClaimsFormArray.controls; let i = index" [formGroupName]="i" class="mb-8 p-6 border rounded-lg bg-gray-50">
+            <h3 class="text-lg font-semibold mb-4">Environmental Claims for Product {{ i + 1 }}</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Environmental Benefits Claimed *</label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  <label *ngFor="let benefit of environmentalBenefits" class="flex items-center">
+                    <input type="checkbox" [value]="benefit.value" formControlName="environmentalBenefits" class="mr-2" />
+                    <span class="text-sm">{{ benefit.label }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Supporting Evidence for Environmental Claims *</label>
+                <textarea formControlName="ecoClaimsSupporting" rows="5" class="form-control" [class.invalid]="claim.get('ecoClaimsSupporting')?.invalid && claim.get('ecoClaimsSupporting')?.touched"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Third-party Verification? *</label>
+                <select formControlName="thirdPartyVerification" class="form-control" [class.invalid]="claim.get('thirdPartyVerification')?.invalid && claim.get('thirdPartyVerification')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let status of thirdPartyVerificationStatuses" [value]="status.value">{{ status.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group" *ngIf="claim.get('thirdPartyVerification')?.value === 'YES'">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name of Verifying Organization *</label>
+                <input type="text" formControlName="verifierName" class="form-control" [class.invalid]="claim.get('verifierName')?.invalid && claim.get('verifierName')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Lifecycle Assessment Conducted? *</label>
+                <select formControlName="lifecycleAssessment" class="form-control" [class.invalid]="claim.get('lifecycleAssessment')?.invalid && claim.get('lifecycleAssessment')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let type of lifecycleAssessmentTypes" [value]="type.value">{{ type.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Carbon Footprint Calculated? *</label>
+                <select formControlName="carbonFootprint" class="form-control" [class.invalid]="claim.get('carbonFootprint')?.invalid && claim.get('carbonFootprint')?.touched">
+                  <option [value]="false">No</option>
+                  <option [value]="true">Yes</option>
+                </select>
+              </div>
+
+              <div class="form-group" *ngIf="claim.get('carbonFootprint')?.value === true">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Carbon Footprint Value (kg CO₂e/unit)</label>
+                <input type="number" formControlName="carbonValue" class="form-control" min="0" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Environmental Management System *</label>
+                <select formControlName="environmentalManagement" class="form-control" [class.invalid]="claim.get('environmentalManagement')?.invalid && claim.get('environmentalManagement')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let system of environmentalManagementSystems" [value]="system.value">{{ system.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Waste Management System *</label>
+                <textarea formControlName="wasteManagement" rows="3" class="form-control" [class.invalid]="claim.get('wasteManagement')?.invalid && claim.get('wasteManagement')?.touched"></textarea>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Recycling/Disposal Information for Consumers *</label>
+                <textarea formControlName="recyclingInfo" rows="3" class="form-control" [class.invalid]="claim.get('recyclingInfo')?.invalid && claim.get('recyclingInfo')?.touched"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skip Step 4 if no EMA mark -->
+      <div *ngIf="currentStep === 4 && !hasEmaMark()" class="text-center py-8">
+        <p class="text-gray-600">Environmental Claims section is only required for Eco Mark Africa (EMA) certification.</p>
+        <p class="text-gray-600 mt-2">Since you have not selected EMA mark, you can proceed to the next step.</p>
+        <button type="button" (click)="nextStep()" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Continue to CB Selection</button>
+      </div>
+
+      <!-- Step 5: Certification Body Selection -->
+      <div *ngIf="currentStep === 5" class="space-y-6">
+        <h2 class="text-2xl font-semibold mb-4">Section E: Certification Body Selection</h2>
+
+        <div formGroupName="cbSelection" class="bg-gray-50 p-6 rounded-lg space-y-4">
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Certification Body</label>
+            <input type="text" formControlName="preferredCb" class="form-control" placeholder="Enter CB name or select from list" />
+          </div>
+
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Reason for CB Selection *</label>
+            <textarea formControlName="cbSelectionReason" rows="4" class="form-control" [class.invalid]="certificationForm.get('cbSelection.cbSelectionReason')?.invalid && certificationForm.get('cbSelection.cbSelectionReason')?.touched"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Previously Certified by Another CB? *</label>
+            <select formControlName="previousCb" class="form-control" [class.invalid]="certificationForm.get('cbSelection.previousCb')?.invalid && certificationForm.get('cbSelection.previousCb')?.touched">
+              <option [value]="false">No</option>
+              <option [value]="true">Yes</option>
+            </select>
+          </div>
+
+          <div *ngIf="certificationForm.get('cbSelection.previousCb')?.value === true" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name of Previous Certification Body *</label>
+              <input type="text" formControlName="previousCbName" class="form-control" [class.invalid]="certificationForm.get('cbSelection.previousCbName')?.invalid && certificationForm.get('cbSelection.previousCbName')?.touched" />
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Previous Certificate Number *</label>
+              <input type="text" formControlName="previousCertificateNumber" class="form-control" [class.invalid]="certificationForm.get('cbSelection.previousCertificateNumber')?.invalid && certificationForm.get('cbSelection.previousCertificateNumber')?.touched" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Audit Language *</label>
+              <select formControlName="auditLanguage" class="form-control" [class.invalid]="certificationForm.get('cbSelection.auditLanguage')?.invalid && certificationForm.get('cbSelection.auditLanguage')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let lang of auditLanguages" [value]="lang.value">{{ lang.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Audit Team Size *</label>
+              <select formControlName="auditTeamSize" class="form-control" [class.invalid]="certificationForm.get('cbSelection.auditTeamSize')?.invalid && certificationForm.get('cbSelection.auditTeamSize')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let size of auditTeamSizes" [value]="size.value">{{ size.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Audit Timing/Constraints *</label>
+              <textarea formControlName="auditTiming" rows="3" class="form-control" [class.invalid]="certificationForm.get('cbSelection.auditTiming')?.invalid && certificationForm.get('cbSelection.auditTiming')?.touched"></textarea>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Peak Periods to Avoid *</label>
+              <textarea formControlName="peakPeriods" rows="3" class="form-control" [class.invalid]="certificationForm.get('cbSelection.peakPeriods')?.invalid && certificationForm.get('cbSelection.peakPeriods')?.touched"></textarea>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Special Audit Requirements</label>
+              <textarea formControlName="specialRequirements" rows="3" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Declarations & Fees -->
+      <div *ngIf="currentStep === 6" class="space-y-6">
+        <h2 class="text-2xl font-semibold mb-4">Section F: Declaration & Fees</h2>
+
+        <div formGroupName="declaration" class="bg-gray-50 p-6 rounded-lg space-y-6">
+          <!-- F1: Applicant Declarations -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">F1: Applicant Declarations</h3>
+            <div class="space-y-3">
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="truthDeclaration" id="truthDeclaration" class="mt-1 mr-2" />
+                <label for="truthDeclaration" class="text-sm">
+                  I declare that all information provided in this application is true, accurate and complete to the best of my knowledge *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="complianceCommitment" id="complianceCommitment" class="mt-1 mr-2" />
+                <label for="complianceCommitment" class="text-sm">
+                  I commit to maintain compliance with all applicable ACAP requirements and standards throughout the certification period *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="surveillanceAcceptance" id="surveillanceAcceptance" class="mt-1 mr-2" />
+                <label for="surveillanceAcceptance" class="text-sm">
+                  I accept that surveillance audits will be conducted as per ACAP requirements and agree to provide necessary access *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="correctiveActionCommitment" id="correctiveActionCommitment" class="mt-1 mr-2" />
+                <label for="correctiveActionCommitment" class="text-sm">
+                  I commit to implement corrective actions for any non-conformities identified during audits or surveillance *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="marketSurveillanceAcceptance" id="marketSurveillanceAcceptance" class="mt-1 mr-2" />
+                <label for="marketSurveillanceAcceptance" class="text-sm">
+                  I accept market surveillance activities as per ACAP 2-1 and agree to cooperate with authorities *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="markUsageCommitment" id="markUsageCommitment" class="mt-1 mr-2" />
+                <label for="markUsageCommitment" class="text-sm">
+                  I commit to use ARSO marks only as authorized and in compliance with ACAP 1-1 Annex B *
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- F2: Fee Acceptance -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">F2: Fee Acceptance</h3>
+            <div class="space-y-3">
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="feesAcceptance" id="feesAcceptance" class="mt-1 mr-2" />
+                <label for="feesAcceptance" class="text-sm">
+                  I accept the fee structure and payment terms as specified in the ACAP fee schedule *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="feeBreakdownAcknowledged" id="feeBreakdownAcknowledged" class="mt-1 mr-2" />
+                <label for="feeBreakdownAcknowledged" class="text-sm">
+                  I acknowledge the fee breakdown provided and understand all charges *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="paymentTermsAccepted" id="paymentTermsAccepted" class="mt-1 mr-2" />
+                <label for="paymentTermsAccepted" class="text-sm">
+                  I accept the payment terms and deadlines specified *
+                </label>
+              </div>
+
+              <div class="flex items-start">
+                <input type="checkbox" formControlName="additionalCostsUnderstood" id="additionalCostsUnderstood" class="mt-1 mr-2" />
+                <label for="additionalCostsUnderstood" class="text-sm">
+                  I understand that additional costs may arise for corrective actions, additional audits, or scope changes *
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- F3: Final Submission -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">F3: Final Submission</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name of Applicant *</label>
+                <input type="text" formControlName="applicantName" class="form-control" [class.invalid]="certificationForm.get('declaration.applicantName')?.invalid && certificationForm.get('declaration.applicantName')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Position/Title of Applicant *</label>
+                <input type="text" formControlName="applicantPosition" class="form-control" [class.invalid]="certificationForm.get('declaration.applicantPosition')?.invalid && certificationForm.get('declaration.applicantPosition')?.touched" />
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Digital Signature (Full Name) *</label>
+                <input type="text" formControlName="applicantSignature" class="form-control" placeholder="Enter your full name as digital signature" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between mt-8 pt-6 border-t">
+        <button type="button" *ngIf="currentStep > 1" (click)="previousStep()" class="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+          Previous
+        </button>
+        <div *ngIf="currentStep === 1" class="flex-1"></div>
+
+        <div class="flex gap-4">
+          <button type="button" *ngIf="existingApplication" (click)="saveDraft()" [disabled]="saving" class="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 disabled:opacity-50">
+            {{ saving ? 'Saving...' : 'Save Draft' }}
+          </button>
+
+          <button type="button" *ngIf="currentStep < totalSteps && !(currentStep === 4 && !hasEmaMark())" (click)="nextStep()" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Next
+          </button>
+
+          <button type="button" *ngIf="currentStep === 4 && !hasEmaMark()" (click)="goToStep(5)" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Skip to CB Selection
+          </button>
+
+          <button type="submit" *ngIf="currentStep === totalSteps" [disabled]="loading" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50">
+            {{ loading ? 'Submitting...' : 'Submit Application' }}
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- No Operator Message -->
+    <div *ngIf="!operator && !loading" class="text-center py-12">
+      <p class="text-red-600 text-lg font-semibold mb-4">Operator Registration Required</p>
+      <p class="text-gray-600 mb-6">Please complete your operator registration before applying for product certification.</p>
+      <button (click)="navigateToOperatorRegistration()" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Go to Operator Registration
+      </button>
+    </div>
+  </div>
+</div>
+

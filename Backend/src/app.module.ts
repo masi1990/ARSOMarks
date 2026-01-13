@@ -21,6 +21,11 @@ import { NsbLocation } from './modules/nsb-management/entities/nsb-location.enti
 import { NsbRegistrationRequest } from './modules/nsb-management/entities/nsb-registration-request.entity';
 import { NsbRegistrationRequestDocument } from './modules/nsb-management/entities/nsb-registration-request-document.entity';
 import { NsbDocument } from './modules/nsb-management/entities/nsb-document.entity';
+import { NsbMarketSurveillanceAuthority } from './modules/nsb-management/entities/nsb-market-surveillance-authority.entity';
+import { NsbCustomsBorderAgency } from './modules/nsb-management/entities/nsb-customs-border-agency.entity';
+import { NsbRegulatoryAgency } from './modules/nsb-management/entities/nsb-regulatory-agency.entity';
+import { NsbIndustryAssociation } from './modules/nsb-management/entities/nsb-industry-association.entity';
+import { NsbTestingLaboratory } from './modules/nsb-management/entities/nsb-testing-laboratory.entity';
 import { LicenseApplication } from './modules/licensing/entities/license-application.entity';
 import { ApplicationDocument } from './modules/licensing/entities/application-document.entity';
 import { WorkflowHistory } from './modules/licensing/entities/workflow-history.entity';
@@ -28,6 +33,34 @@ import { License } from './modules/licensing/entities/license.entity';
 import { LicenseCompliance } from './modules/licensing/entities/license-compliance.entity';
 import { SystemUser } from './modules/system-user/system-user.entity';
 import { RoleRequest } from './modules/auth/entities/role-request.entity';
+import { MarkLicenseApplication } from './modules/mark-licensing/entities/mark-license-application.entity';
+import { MarkLicensePlacement } from './modules/mark-licensing/entities/mark-license-placement.entity';
+import { MarkLicenseAgreement } from './modules/mark-licensing/entities/mark-license-agreement.entity';
+import { MarkLicenseAsset } from './modules/mark-licensing/entities/mark-license-asset.entity';
+import { MarkLicenseAssetDownload } from './modules/mark-licensing/entities/mark-license-asset-download.entity';
+import { MarkLicenseUsageReport } from './modules/mark-licensing/entities/mark-license-usage-report.entity';
+import { MarkLicenseModification } from './modules/mark-licensing/entities/mark-license-modification.entity';
+import { MarkLicenseCompliance } from './modules/mark-licensing/entities/mark-license-compliance.entity';
+import { MarkLicensingModule } from './modules/mark-licensing/mark-licensing.module';
+import { OperatorModule } from './modules/operator/operator.module';
+import { ProductCertificationModule } from './modules/product-certification/product-certification.module';
+import { ApplicationRegistrationModule } from './modules/application-registration/application-registration.module';
+import { Operator } from './modules/operator/entities/operator.entity';
+import { OperatorContact } from './modules/operator/entities/operator-contact.entity';
+import { OperatorLocation } from './modules/operator/entities/operator-location.entity';
+import { OperatorBusinessSector } from './modules/operator/entities/operator-business-sector.entity';
+import { OperatorMarket } from './modules/operator/entities/operator-market.entity';
+import { OperatorProductionCapacity } from './modules/operator/entities/operator-production-capacity.entity';
+import { OperatorPreference } from './modules/operator/entities/operator-preference.entity';
+import { OperatorAccessibility } from './modules/operator/entities/operator-accessibility.entity';
+import { OperatorConsent } from './modules/operator/entities/operator-consent.entity';
+import { ProductCertificationApplication } from './modules/product-certification/entities/product-certification-application.entity';
+import { Product } from './modules/product-certification/entities/product.entity';
+import { ProductTechnicalSpec } from './modules/product-certification/entities/product-technical-spec.entity';
+import { ProductEnvironmentalClaim } from './modules/product-certification/entities/product-environmental-claim.entity';
+import { ProductCertificationCbSelection } from './modules/product-certification/entities/product-certification-cb-selection.entity';
+import { ProductCertificationDeclaration } from './modules/product-certification/entities/product-certification-declaration.entity';
+import { ApplicationRegistration } from './modules/application-registration/entities/application-registration.entity';
 
 @Module({
   imports: [
@@ -68,6 +101,11 @@ import { RoleRequest } from './modules/auth/entities/role-request.entity';
             NsbRegistrationRequest,
             NsbRegistrationRequestDocument,
             NsbDocument,
+            NsbMarketSurveillanceAuthority,
+            NsbCustomsBorderAgency,
+            NsbRegulatoryAgency,
+            NsbIndustryAssociation,
+            NsbTestingLaboratory,
             LicenseApplication,
             ApplicationDocument,
             WorkflowHistory,
@@ -75,6 +113,30 @@ import { RoleRequest } from './modules/auth/entities/role-request.entity';
             LicenseCompliance,
             SystemUser,
             RoleRequest,
+            MarkLicenseApplication,
+            MarkLicensePlacement,
+            MarkLicenseAgreement,
+            MarkLicenseAsset,
+            MarkLicenseAssetDownload,
+            MarkLicenseUsageReport,
+            MarkLicenseModification,
+            MarkLicenseCompliance,
+            Operator,
+            OperatorContact,
+            OperatorLocation,
+            OperatorBusinessSector,
+            OperatorMarket,
+            OperatorProductionCapacity,
+            OperatorPreference,
+            OperatorAccessibility,
+            OperatorConsent,
+            ProductCertificationApplication,
+            Product,
+            ProductTechnicalSpec,
+            ProductEnvironmentalClaim,
+            ProductCertificationCbSelection,
+            ProductCertificationDeclaration,
+            ApplicationRegistration,
           ],
           synchronize: false,
           autoLoadEntities: false,
@@ -85,6 +147,10 @@ import { RoleRequest } from './modules/auth/entities/role-request.entity';
     SystemUserModule,
     NsbManagementModule,
     LicensingModule,
+    MarkLicensingModule,
+    OperatorModule,
+    ProductCertificationModule,
+    ApplicationRegistrationModule,
     ReferenceDataModule,
     DocumentManagementModule,
   ],

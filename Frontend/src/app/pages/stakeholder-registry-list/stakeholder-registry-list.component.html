@@ -1,0 +1,80 @@
+<div class="w-full max-w-7xl mx-auto">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Stakeholder Registry Status</h1>
+          <p class="mt-1 text-sm text-slate-500">View and manage stakeholder registry submissions</p>
+        </div>
+        <div class="flex gap-3">
+          <select
+            [(ngModel)]="filterStatus"
+            (ngModelChange)="loadRegistries()"
+            class="px-4 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="DRAFT">Draft</option>
+            <option value="SUBMITTED">Submitted</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="text-center py-12">
+      <p class="text-slate-500">Loading...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredNsbs.length === 0" class="text-center py-12">
+      <p class="text-slate-500">No stakeholder registries found.</p>
+    </div>
+
+    <div *ngIf="!loading && filteredNsbs.length > 0" class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">NSB Name</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Country</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Submitted At</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-slate-200">
+          <tr *ngFor="let nsb of filteredNsbs" class="hover:bg-slate-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-slate-900">{{ nsb.name }}</div>
+              <div *ngIf="nsb.shortName" class="text-sm text-slate-500">{{ nsb.shortName }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-slate-900">{{ nsb.country?.name || '-' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span
+                class="px-2 py-1 text-xs font-semibold rounded-full {{ getStatusBadgeClass(nsb.stakeholderRegistryStatus) }}"
+              >
+                {{ getStatusLabel(nsb.stakeholderRegistryStatus) }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+              {{ formatDate(nsb.stakeholderRegistrySubmittedAt) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button
+                (click)="viewRegistry(nsb)"
+                class="text-blue-600 hover:text-blue-900 font-semibold"
+              >
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,70 @@
+// Component-specific styles
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Dashboard widgets
+.dashboard-widget {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Tab navigation
+.tab-nav {
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-button {
+  transition: all 0.2s ease;
+  
+  &.active {
+    border-bottom-color: #2563eb;
+    color: #2563eb;
+  }
+  
+  &:hover {
+    color: #1e293b;
+  }
+}
+
+// Stats cards
+.stat-card {
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Progress bars
+.progress-bar {
+  transition: width 0.3s ease;
+}
+
+// Calendar deadline items
+.deadline-item {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateX(4px);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
+

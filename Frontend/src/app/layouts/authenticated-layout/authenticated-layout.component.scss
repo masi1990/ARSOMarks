@@ -2,3 +2,65 @@
   display: block;
   min-height: 100vh;
 }
+
+// Smooth sidebar transitions
+aside {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 3px;
+    
+    &:hover {
+      background-color: rgb(148 163 184);
+    }
+  }
+}
+
+// Navigation item hover effects
+nav a {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background-color: rgb(30 41 59);
+    border-radius: 0 2px 2px 0;
+    transition: height 0.2s ease-in-out;
+  }
+  
+  &.router-link-active::before {
+    height: 60%;
+  }
+  
+  &:hover::before {
+    height: 40%;
+  }
+}
+
+// Collapsible section animation
+.space-y-0\.5 {
+  transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+  
+  &[class*="max-h-0"] {
+    opacity: 0;
+  }
+  
+  &[class*="max-h-\[1000px\]"] {
+    opacity: 1;
+  }
+}

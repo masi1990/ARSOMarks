@@ -1,0 +1,552 @@
+<div class="w-full max-w-6xl mx-auto">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+      <h1 class="text-2xl font-bold text-slate-900">ARSO Mark License Application</h1>
+      <p class="mt-1 text-sm font-medium text-slate-600">Form NSB-004-1: Application for ARSO Mark License - NSB Institutional Use</p>
+      <p class="mt-1 text-sm text-slate-500">Complete all required fields and upload supporting documents</p>
+    </div>
+
+    <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
+      <p class="font-semibold">{{ successMessage }}</p>
+    </div>
+
+    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="form" class="p-8 space-y-10" *ngIf="!loading">
+      <!-- Section A: Applicant & License Type Information -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section A: Applicant & License Type Information</h2>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">NSB Name</label>
+            <input
+              type="text"
+              [value]="nsb?.name || ''"
+              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none cursor-default"
+              readonly
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label for="applicationReference" class="block text-sm font-semibold text-slate-700">Internal Reference Number</label>
+            <input
+              type="text"
+              id="applicationReference"
+              formControlName="applicationReference"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+              placeholder="NSB's internal tracking number"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">License Type(s) Requested <span class="text-red-500">*</span></label>
+          <div class="space-y-2">
+            <label *ngFor="let option of licenseTypeOptions" class="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                [value]="option.value"
+                formControlName="licenseTypes"
+                class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+              />
+              <span class="text-sm text-slate-700">{{ option.label }}</span>
+            </label>
+          </div>
+          <p *ngIf="form.get('licenseTypes')?.invalid && form.get('licenseTypes')?.touched" class="text-xs text-red-500 mt-1">
+            At least one license type must be selected
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <label for="licenseDuration" class="block text-sm font-semibold text-slate-700">Requested License Duration <span class="text-red-500">*</span></label>
+          <select
+            id="licenseDuration"
+            formControlName="licenseDuration"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+          >
+            <option value="" disabled>Select duration</option>
+            <option *ngFor="let option of durationOptions" [value]="option.value">{{ option.label }}</option>
+          </select>
+          <p *ngIf="form.get('licenseDuration')?.invalid && form.get('licenseDuration')?.touched" class="text-xs text-red-500 mt-1">
+            License duration is required
+          </p>
+        </div>
+
+        <div *ngIf="isDurationOther()" class="space-y-2">
+          <label for="licenseDurationOther" class="block text-sm font-semibold text-slate-700">Specify Duration <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            id="licenseDurationOther"
+            formControlName="licenseDurationOther"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            placeholder="e.g., 6 months, Project-specific"
+          />
+        </div>
+
+        <!-- Promotional License Details -->
+        <div *ngIf="hasLicenseType('PROMOTIONAL_INSTITUTIONAL')" formGroupName="promotionalLicenseDetails" class="p-4 bg-blue-50 rounded-lg border border-blue-200 space-y-4">
+          <h3 class="font-semibold text-slate-900">Promotional/Institutional License Details</h3>
+          
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Primary Purpose <span class="text-red-500">*</span></label>
+            <select formControlName="primaryPurpose" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
+              <option value="" disabled>Select purpose</option>
+              <option *ngFor="let option of promotionalPurposeOptions" [value]="option.value">{{ option.label }}</option>
+            </select>
+          </div>
+
+          <div *ngIf="isPromotionalPurposeOther()" class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Specify Other Purpose <span class="text-red-500">*</span></label>
+            <input type="text" formControlName="promoPurposeOther" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Target Audience(s) <span class="text-red-500">*</span></label>
+            <div class="space-y-2">
+              <label *ngFor="let option of targetAudienceOptions" class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" [value]="option.value" formControlName="targetAudience" class="rounded border-slate-300 text-blue-600" />
+                <span class="text-sm text-slate-700">{{ option.label }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Geographic Scope <span class="text-red-500">*</span></label>
+            <select formControlName="geographicScope" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
+              <option value="" disabled>Select scope</option>
+              <option *ngFor="let option of geographicScopeOptions" [value]="option.value">{{ option.label }}</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Estimated Campaign Budget</label>
+            <input type="text" formControlName="budgetEstimate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="In local currency" />
+          </div>
+        </div>
+
+        <!-- Certification Body License Details -->
+        <div *ngIf="hasLicenseType('CERTIFICATION_BODY')" formGroupName="certificationBodyDetails" class="p-4 bg-green-50 rounded-lg border border-green-200 space-y-4">
+          <h3 class="font-semibold text-slate-900">Certification Body License Details</h3>
+          
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">CB Unit/Department Name <span class="text-red-500">*</span></label>
+            <input type="text" formControlName="cbUnitName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Accreditation Certificate Number <span class="text-red-500">*</span></label>
+              <input type="text" formControlName="cbAccreditationNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Accreditation Body <span class="text-red-500">*</span></label>
+              <input type="text" formControlName="cbAccreditationBody" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Scope of Accreditation <span class="text-red-500">*</span></label>
+            <textarea formControlName="cbAccreditationScope" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Accreditation Expiry Date <span class="text-red-500">*</span></label>
+              <input type="date" formControlName="cbAccreditationExpiry" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Expected Annual Certifications</label>
+              <input type="text" formControlName="cbExpectedVolume" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">ACAP Scheme(s) Applying For <span class="text-red-500">*</span></label>
+            <input type="text" formControlName="cbSchemesApplying" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="Enter scheme codes separated by commas" />
+          </div>
+        </div>
+
+        <!-- Special Project License Details -->
+        <div *ngIf="hasLicenseType('SPECIAL_PROJECT')" formGroupName="specialProjectDetails" class="p-4 bg-purple-50 rounded-lg border border-purple-200 space-y-4">
+          <h3 class="font-semibold text-slate-900">Special Project License Details</h3>
+          
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Project Name <span class="text-red-500">*</span></label>
+            <input type="text" formControlName="projectName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Project Funder/Donor</label>
+            <input type="text" formControlName="projectFunder" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Project Start Date <span class="text-red-500">*</span></label>
+              <input type="date" formControlName="projectDurationStart" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Project End Date <span class="text-red-500">*</span></label>
+              <input type="date" formControlName="projectDurationEnd" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Project Description <span class="text-red-500">*</span></label>
+            <textarea formControlName="projectDescription" rows="4" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Key Deliverables <span class="text-red-500">*</span></label>
+            <div formArrayName="projectDeliverables" class="space-y-2">
+              <div *ngFor="let deliverable of projectDeliverablesArray.controls; let i = index" class="flex gap-2">
+                <input [formControlName]="i" class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                <button type="button" (click)="removeProjectDeliverable(i)" class="px-3 py-2 text-red-600 hover:text-red-800">Remove</button>
+              </div>
+            </div>
+            <button type="button" (click)="addProjectDeliverable()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">Add Deliverable</button>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">Total Project Budget</label>
+            <input type="text" formControlName="projectBudget" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section B: Intended Use Details -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section B: Intended Use Details</h2>
+        
+        <!-- Media Usage Array -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <label class="block text-sm font-semibold text-slate-700">Media & Platforms</label>
+            <button type="button" (click)="addMediaUsage()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">Add Media</button>
+          </div>
+          
+          <div formArrayName="mediaUsage" class="space-y-4">
+            <div *ngFor="let media of mediaUsageArray.controls; let i = index" [formGroupName]="i" class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-slate-900">Media Entry {{ i + 1 }}</h4>
+                <button type="button" (click)="removeMediaUsage(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+              </div>
+              
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Media Type <span class="text-red-500">*</span></label>
+                  <select formControlName="mediaType" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
+                    <option value="" disabled>Select media type</option>
+                    <option *ngFor="let option of mediaTypeOptions" [value]="option.value">{{ option.label }}</option>
+                  </select>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Specific Platform/Channel <span class="text-red-500">*</span></label>
+                  <input type="text" formControlName="mediaSpecific" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="e.g., Facebook, National TV" />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-slate-700">Language(s) <span class="text-red-500">*</span></label>
+                <div class="space-y-2">
+                  <label *ngFor="let option of languageOptions" class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" [value]="option.value" formControlName="mediaLanguage" class="rounded border-slate-300 text-blue-600" />
+                    <span class="text-sm text-slate-700">{{ option.label }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid gap-4 md:grid-cols-3">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Estimated Audience Reach</label>
+                  <input type="text" formControlName="mediaAudienceSize" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Campaign Duration <span class="text-red-500">*</span></label>
+                  <input type="text" formControlName="mediaDuration" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="e.g., 6 months" />
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Budget Allocation</label>
+                  <input type="text" formControlName="mediaBudgetAllocation" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaign Timeline Array -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <label class="block text-sm font-semibold text-slate-700">Campaign/Usage Timeline</label>
+            <button type="button" (click)="addCampaignTimeline()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">Add Timeline Entry</button>
+          </div>
+          
+          <div formArrayName="campaignTimeline" class="space-y-4">
+            <div *ngFor="let timeline of campaignTimelineArray.controls; let i = index" [formGroupName]="i" class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-slate-900">Timeline Entry {{ i + 1 }}</h4>
+                <button type="button" (click)="removeCampaignTimeline(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-slate-700">Phase/Activity <span class="text-red-500">*</span></label>
+                <input type="text" formControlName="timelinePhase" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+              </div>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Start Date <span class="text-red-500">*</span></label>
+                  <input type="date" formControlName="timelineStart" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">End Date <span class="text-red-500">*</span></label>
+                  <input type="date" formControlName="timelineEnd" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-slate-700">Success Metrics</label>
+                <textarea formControlName="timelineMetrics" rows="2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expected Impact Metrics -->
+        <div formGroupName="expectedImpactMetrics" class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
+          <h3 class="font-semibold text-slate-900">Expected Impact Metrics</h3>
+          
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Industry Awareness Target</label>
+              <input type="text" formControlName="expectedIndustryAwareness" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="e.g., Increase by 30%" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Consumer Awareness Target</label>
+              <input type="text" formControlName="expectedConsumerAwareness" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Expected CB Applications Generated</label>
+              <input type="text" formControlName="expectedCbApplications" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Expected Certifications Issued</label>
+              <input type="text" formControlName="expectedCertifications" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-slate-700">Expected Media Mentions</label>
+              <input type="text" formControlName="expectedMediaCoverage" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700">How KPIs Will Be Measured</label>
+            <textarea formControlName="kpiMeasurementMethod" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section C: Mark Usage Specifications -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section C: Mark Usage Specifications</h2>
+        
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Mark(s) Requested <span class="text-red-500">*</span></label>
+          <div class="space-y-2">
+            <label *ngFor="let option of markTypeOptions" class="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                [value]="option.value"
+                formControlName="marksRequested"
+                class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+              />
+              <span class="text-sm text-slate-700">{{ option.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Color Variations Needed</label>
+          <div class="space-y-2">
+            <label *ngFor="let option of colorOptions" class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" [value]="option.value" formControlName="markColorsNeeded" class="rounded border-slate-300 text-blue-600" />
+              <span class="text-sm text-slate-700">{{ option.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Size Requirements</label>
+          <textarea formControlName="markSizesNeeded" rows="2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="For print materials"></textarea>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Accompanying Text Languages <span class="text-red-500">*</span></label>
+          <div class="space-y-2">
+            <label *ngFor="let option of languageOptions" class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" [value]="option.value" formControlName="markLanguages" class="rounded border-slate-300 text-blue-600" />
+              <span class="text-sm text-slate-700">{{ option.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Placement Examples -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Placement Examples/Mockups</label>
+          <input
+            type="file"
+            (change)="onPlacementFileSelected($event)"
+            multiple
+            accept="image/*,.pdf"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
+          />
+          <div *ngIf="placementFiles.length > 0" class="mt-2 space-y-2">
+            <div *ngFor="let file of placementFiles; let i = index" class="flex items-center justify-between p-2 bg-slate-50 rounded">
+              <span class="text-sm text-slate-700">{{ file.name }}</span>
+              <button type="button" (click)="removePlacementFile(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance with ACAP 1-1 Annex B -->
+        <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 space-y-3">
+          <h3 class="font-semibold text-slate-900">Compliance with ACAP 1-1 Annex B</h3>
+          
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" formControlName="annexBCompliance" class="rounded border-slate-300 text-blue-600" />
+            <span class="text-sm text-slate-700">I have read and understand ACAP 1-1 Annex B requirements <span class="text-red-500">*</span></span>
+          </label>
+
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" formControlName="brandGuidelinesAck" class="rounded border-slate-300 text-blue-600" />
+            <span class="text-sm text-slate-700">Will follow ARSO brand guidelines <span class="text-red-500">*</span></span>
+          </label>
+
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" formControlName="modificationPolicyAcceptance" class="rounded border-slate-300 text-blue-600" />
+            <span class="text-sm text-slate-700">Will not modify marks without approval <span class="text-red-500">*</span></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Section D: Supporting Documents & Declarations -->
+      <section class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section D: Supporting Documents & Declarations</h2>
+        
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-slate-700">Supporting Documents</label>
+          <div class="space-y-2">
+            <div *ngFor="let docType of documentTypeOptions" class="flex gap-2">
+              <select class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
+                <option [value]="docType.value">{{ docType.label }}</option>
+              </select>
+              <input
+                type="file"
+                (change)="onSupportingDocumentSelected($event, docType.value)"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
+              />
+            </div>
+          </div>
+          <div *ngIf="supportingDocuments.length > 0" class="mt-2 space-y-2">
+            <div *ngFor="let doc of supportingDocuments; let i = index" class="flex items-center justify-between p-2 bg-slate-50 rounded">
+              <span class="text-sm text-slate-700">{{ doc.file.name }} ({{ doc.type }})</span>
+              <button type="button" (click)="removeSupportingDocument(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-2">
+            <label for="declarationSignatory" class="block text-sm font-semibold text-slate-700">Declaration Signatory <span class="text-red-500">*</span></label>
+            <input
+              type="text"
+              id="declarationSignatory"
+              formControlName="declarationSignatory"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label for="signatoryTitle" class="block text-sm font-semibold text-slate-700">Signatory Title <span class="text-red-500">*</span></label>
+            <input
+              type="text"
+              id="signatoryTitle"
+              formControlName="signatoryTitle"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="signatoryEmail" class="block text-sm font-semibold text-slate-700">Signatory Email <span class="text-red-500">*</span></label>
+          <input
+            type="email"
+            id="signatoryEmail"
+            formControlName="signatoryEmail"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+          />
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" formControlName="auditRightsAcceptance" class="rounded border-slate-300 text-blue-600" />
+            <span class="text-sm text-slate-700">Accept audit rights <span class="text-red-500">*</span></span>
+          </label>
+
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" formControlName="annualReportingCommitment" class="rounded border-slate-300 text-blue-600" />
+            <span class="text-sm text-slate-700">Commit to submit annual usage reports <span class="text-red-500">*</span></span>
+          </label>
+
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" formControlName="dataSharingConsent" class="rounded border-slate-300 text-blue-600" />
+            <span class="text-sm text-slate-700">Consent to share success metrics in ARSO reports <span class="text-red-500">*</span></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Form Actions -->
+      <div class="flex gap-4 justify-end pt-6 border-t border-slate-200">
+        <button
+          type="button"
+          (click)="saveDraft()"
+          [disabled]="saving || submitting"
+          class="px-6 py-2.5 bg-slate-600 text-white rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <span *ngIf="!saving">Save as Draft</span>
+          <span *ngIf="saving">Saving...</span>
+        </button>
+        <button
+          type="button"
+          (click)="submitApplication()"
+          [disabled]="saving || submitting || !existingApplication"
+          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <span *ngIf="!submitting">Submit Application</span>
+          <span *ngIf="submitting">Submitting...</span>
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="loading" class="p-8 text-center">
+      <p class="text-slate-600">Loading...</p>
+    </div>
+  </div>
+</div>
+

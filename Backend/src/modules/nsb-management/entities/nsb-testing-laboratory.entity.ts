@@ -26,13 +26,13 @@ export class NsbTestingLaboratory {
   @Column({ name: 'scope_of_accreditation', type: 'text', nullable: true })
   scopeOfAccreditation?: string;
 
-  @Column({ name: 'contact_for_acap_referrals_name', length: 255, nullable: true })
+  @Column({ name: 'acap_contact_name', length: 255, nullable: true })
   contactForAcapReferralsName?: string;
 
-  @Column({ name: 'contact_for_acap_referrals_email', length: 255, nullable: true })
+  @Column({ name: 'contact_email', length: 255, nullable: true })
   contactForAcapReferralsEmail?: string;
 
-  @Column({ name: 'contact_for_acap_referrals_phone', length: 50, nullable: true })
+  @Column({ name: 'contact_phone', length: 50, nullable: true })
   contactForAcapReferralsPhone?: string;
 
   @Column({ name: 'is_active', default: true })

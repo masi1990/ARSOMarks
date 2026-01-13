@@ -51,6 +51,10 @@ const routes: Routes = [
             loadChildren: () => import('./pages/nsb-stakeholder-registry/nsb-stakeholder-registry.module').then((m) => m.NsbStakeholderRegistryModule),
           },
           {
+            path: 'stakeholder-registry-list',
+            loadChildren: () => import('./pages/stakeholder-registry-list/stakeholder-registry-list.module').then((m) => m.StakeholderRegistryListModule),
+          },
+          {
             path: '',
             loadChildren: () => import('./pages/nsb-management/nsb-management.module').then((m) => m.NsbManagementModule),
           },
@@ -73,6 +77,122 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT] },
         loadChildren: () => import('./pages/approvals/approvals.module').then((m) => m.ApprovalsModule),
+      },
+      {
+        path: 'operator',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN] },
+        children: [
+          {
+            path: 'register',
+            loadChildren: () =>
+              import('./pages/operator-registration/operator-registration.module').then(
+                (m) => m.OperatorRegistrationModule,
+              ),
+          },
+        ],
+      },
+      {
+        path: 'application-registration',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN] },
+        loadChildren: () =>
+          import('./pages/application-registration/application-registration.module').then(
+            (m) => m.ApplicationRegistrationModule,
+          ),
+      },
+      {
+        path: 'application-registrations',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN] },
+        loadChildren: () =>
+          import('./pages/application-registration-list/application-registration-list.module').then(
+            (m) => m.ApplicationRegistrationListModule,
+          ),
+      },
+      {
+        path: 'product-certification',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT] },
+        children: [
+          {
+            path: 'apply',
+            loadChildren: () =>
+              import('./pages/product-certification/product-certification.module').then(
+                (m) => m.ProductCertificationModule,
+              ),
+          },
+          {
+            path: 'applications/:id',
+            loadChildren: () =>
+              import('./pages/product-certification/product-certification.module').then(
+                (m) => m.ProductCertificationModule,
+              ),
+          },
+        ],
+      },
+      {
+        path: 'documents',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT] },
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('./pages/document-upload/document-upload.module').then(
+                (m) => m.DocumentUploadModule,
+              ),
+          },
+          {
+            path: 'application/:applicationId',
+            loadChildren: () =>
+              import('./pages/document-upload/document-upload.module').then(
+                (m) => m.DocumentUploadModule,
+              ),
+          },
+        ],
+      },
+      {
+        path: 'mark-licenses',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT] },
+        children: [
+          {
+            path: 'apply',
+            loadChildren: () =>
+              import('./pages/mark-license-application/mark-license-application.module').then(
+                (m) => m.MarkLicenseApplicationModule,
+              ),
+          },
+          {
+            path: 'agreements',
+            loadChildren: () =>
+              import('./pages/mark-license-agreement/mark-license-agreement.module').then(
+                (m) => m.MarkLicenseAgreementModule,
+              ),
+          },
+          {
+            path: 'reports',
+            loadChildren: () =>
+              import('./pages/mark-usage-report/mark-usage-report.module').then(
+                (m) => m.MarkUsageReportModule,
+              ),
+          },
+          {
+            path: 'modifications',
+            loadChildren: () =>
+              import('./pages/mark-license-modification/mark-license-modification.module').then(
+                (m) => m.MarkLicenseModificationModule,
+              ),
+          },
+          {
+            path: 'dashboard',
+            loadChildren: () =>
+              import('./pages/mark-license-dashboard/mark-license-dashboard.module').then(
+                (m) => m.MarkLicenseDashboardModule,
+              ),
+          },
+        ],
       },
       {
         path: '',

@@ -1,0 +1,448 @@
+<div class="document-upload-container max-w-7xl mx-auto p-6">
+  <div class="bg-white rounded-lg shadow-lg p-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Document Upload Center</h1>
+      <p class="text-gray-600">Upload and manage all required documents for ARSO Mark Certification</p>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="success" class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+      {{ success }}
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+      {{ error }}
+    </div>
+
+    <!-- Section Navigation Tabs -->
+    <div class="mb-8 border-b">
+      <nav class="flex space-x-8">
+        <button
+          (click)="switchSection('A')"
+          [class.border-b-2]="currentSection === 'A'"
+          [class.border-blue-600]="currentSection === 'A'"
+          [class.text-blue-600]="currentSection === 'A'"
+          class="px-4 py-2 font-medium text-gray-700 hover:text-blue-600"
+        >
+          Section A: Mandatory Documents
+        </button>
+        <button
+          (click)="switchSection('B')"
+          [class.border-b-2]="currentSection === 'B'"
+          [class.border-blue-600]="currentSection === 'B'"
+          [class.text-blue-600]="currentSection === 'B'"
+          class="px-4 py-2 font-medium text-gray-700 hover:text-blue-600"
+        >
+          Section B: Test Reports & Certificates
+        </button>
+        <button
+          (click)="switchSection('C')"
+          [class.border-b-2]="currentSection === 'C'"
+          [class.border-blue-600]="currentSection === 'C'"
+          [class.text-blue-600]="currentSection === 'C'"
+          class="px-4 py-2 font-medium text-gray-700 hover:text-blue-600"
+        >
+          Section C: Supply Chain Documents
+        </button>
+        <button
+          *ngIf="hasEmaApplication()"
+          (click)="switchSection('D')"
+          [class.border-b-2]="currentSection === 'D'"
+          [class.border-blue-600]="currentSection === 'D'"
+          [class.text-blue-600]="currentSection === 'D'"
+          class="px-4 py-2 font-medium text-gray-700 hover:text-blue-600"
+        >
+          Section D: Environmental Documents (EMA)
+        </button>
+      </nav>
+    </div>
+
+    <!-- Section A: Mandatory Documents -->
+    <div *ngIf="currentSection === 'A'" class="space-y-6">
+      <h2 class="text-2xl font-semibold mb-4">Section A: Mandatory Documents Checklist</h2>
+
+      <!-- Mandatory Documents Checklist -->
+      <div class="bg-gray-50 p-6 rounded-lg mb-6">
+        <h3 class="text-lg font-semibold mb-4">Required Documents Status</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div *ngFor="let docType of mandatoryDocumentTypes" class="flex items-center p-3 bg-white rounded border">
+            <span [class.text-green-600]="isMandatoryDocumentUploaded(docType)" [class.text-gray-400]="!isMandatoryDocumentUploaded(docType)" class="mr-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" *ngIf="isMandatoryDocumentUploaded(docType)">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" *ngIf="!isMandatoryDocumentUploaded(docType)">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="text-sm">{{ formatEnumLabel(docType) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Form -->
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Upload New Document</h3>
+        <form [formGroup]="operatorDocumentForm" (ngSubmit)="uploadOperatorDocument()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Category *</label>
+              <select formControlName="documentCategory" class="form-control" [class.invalid]="operatorDocumentForm.get('documentCategory')?.invalid && operatorDocumentForm.get('documentCategory')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let category of documentCategories" [value]="category.value">{{ category.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Type *</label>
+              <select formControlName="documentType" class="form-control" [class.invalid]="operatorDocumentForm.get('documentType')?.invalid && operatorDocumentForm.get('documentType')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let type of documentTypes" [value]="type.value">{{ type.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Name *</label>
+              <input type="text" formControlName="documentName" class="form-control" [class.invalid]="operatorDocumentForm.get('documentName')?.invalid && operatorDocumentForm.get('documentName')?.touched" />
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea formControlName="description" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date (if applicable)</label>
+              <input type="date" formControlName="expiryDate" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Upload File *</label>
+              <input type="file" (change)="onFileSelected($event, operatorDocumentForm)" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="form-control" [class.invalid]="operatorDocumentForm.get('file')?.invalid && operatorDocumentForm.get('file')?.touched" />
+              <small class="text-gray-500">Max size: 10MB. Allowed: PDF, JPG, PNG, DOC, DOCX</small>
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="uploading || operatorDocumentForm.invalid" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
+            {{ uploading ? 'Uploading...' : 'Upload Document' }}
+          </button>
+        </form>
+      </div>
+
+      <!-- Uploaded Documents List -->
+      <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-4">Uploaded Documents</h3>
+        <div class="space-y-4">
+          <div *ngFor="let doc of operatorDocuments" class="p-4 border rounded-lg bg-white">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <h4 class="font-semibold">{{ doc.documentName }}</h4>
+                <p class="text-sm text-gray-600">{{ formatEnumLabel(doc.documentType) }} - {{ formatEnumLabel(doc.documentCategory) }}</p>
+                <p class="text-xs text-gray-500 mt-1">
+                  Uploaded: {{ doc.uploadedAt ? (doc.uploadedAt | date:'short') : 'N/A' }} | Size: {{ formatFileSize(doc.fileSize) }}
+                </p>
+                <span [ngClass]="getStatusColor(doc.verificationStatus)" class="inline-block px-2 py-1 rounded text-xs mt-2">
+                  {{ formatEnumLabel(doc.verificationStatus) }}
+                </span>
+              </div>
+              <div class="flex gap-2">
+                <button (click)="downloadDocument(doc.id, doc.fileName)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm">Download</button>
+                <button (click)="deleteDocument(doc.id, 'operator')" class="px-3 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300 text-sm">Delete</button>
+              </div>
+            </div>
+          </div>
+          <p *ngIf="operatorDocuments.length === 0" class="text-gray-500 text-center py-8">No documents uploaded yet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section B: Test Reports & Certificates -->
+    <div *ngIf="currentSection === 'B'" class="space-y-6">
+      <h2 class="text-2xl font-semibold mb-4">Section B: Test Reports & Certificates</h2>
+
+      <!-- Test Reports Tab -->
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-4">B1: Test Reports</h3>
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <form [formGroup]="testReportForm" (ngSubmit)="uploadTestReport()">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Testing Laboratory Name *</label>
+                <input type="text" formControlName="testLabName" class="form-control" [class.invalid]="testReportForm.get('testLabName')?.invalid && testReportForm.get('testLabName')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Laboratory Accreditation *</label>
+                <input type="text" formControlName="labAccreditation" class="form-control" [class.invalid]="testReportForm.get('labAccreditation')?.invalid && testReportForm.get('labAccreditation')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Test Standard (Code & Year) *</label>
+                <input type="text" formControlName="testStandard" class="form-control" placeholder="e.g., ISO 9001:2015" [class.invalid]="testReportForm.get('testStandard')?.invalid && testReportForm.get('testStandard')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Test Date *</label>
+                <input type="date" formControlName="testDate" class="form-control" [class.invalid]="testReportForm.get('testDate')?.invalid && testReportForm.get('testDate')?.touched" />
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Sample Description *</label>
+                <textarea formControlName="sampleDescription" rows="3" class="form-control" [class.invalid]="testReportForm.get('sampleDescription')?.invalid && testReportForm.get('sampleDescription')?.touched"></textarea>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Test Parameters *</label>
+                <textarea formControlName="testParameters" rows="3" class="form-control" [class.invalid]="testReportForm.get('testParameters')?.invalid && testReportForm.get('testParameters')?.touched"></textarea>
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Test Results Summary *</label>
+                <textarea formControlName="testResultsSummary" rows="3" class="form-control" [class.invalid]="testReportForm.get('testResultsSummary')?.invalid && testReportForm.get('testResultsSummary')?.touched"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Pass/Fail Status *</label>
+                <select formControlName="passFail" class="form-control" [class.invalid]="testReportForm.get('passFail')?.invalid && testReportForm.get('passFail')?.touched">
+                  <option value="">Select...</option>
+                  <option *ngFor="let status of passFailStatuses" [value]="status.value">{{ status.label }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Upload Test Report *</label>
+                <input type="file" (change)="onFileSelected($event, testReportForm)" accept=".pdf" class="form-control" [class.invalid]="testReportForm.get('file')?.invalid && testReportForm.get('file')?.touched" />
+              </div>
+            </div>
+
+            <button type="submit" [disabled]="uploading || testReportForm.invalid" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
+              {{ uploading ? 'Uploading...' : 'Upload Test Report' }}
+            </button>
+          </form>
+        </div>
+
+        <!-- Test Reports List -->
+        <div class="mt-6">
+          <h4 class="font-semibold mb-4">Uploaded Test Reports</h4>
+          <div class="space-y-4">
+            <div *ngFor="let report of testReports" class="p-4 border rounded-lg bg-white">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <h5 class="font-semibold">{{ report.testLabName }}</h5>
+                  <p class="text-sm text-gray-600">Standard: {{ report.testStandard }} | Date: {{ report.testDate ? (report.testDate | date:'short') : 'N/A' }}</p>
+                  <p class="text-sm text-gray-600">Status: {{ report.passFail }}</p>
+                  <span [ngClass]="getStatusColor(report.verificationStatus)" class="inline-block px-2 py-1 rounded text-xs mt-2">
+                    {{ formatEnumLabel(report.verificationStatus) }}
+                  </span>
+                </div>
+                <button (click)="deleteDocument(report.id!, 'test-report')" class="px-3 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300 text-sm">Delete</button>
+              </div>
+            </div>
+            <p *ngIf="testReports.length === 0" class="text-gray-500 text-center py-8">No test reports uploaded yet</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Existing Certificates Tab -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold mb-4">B2: Existing Certificates</h3>
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <form [formGroup]="certificateForm" (ngSubmit)="uploadCertificate()">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Certificate Name/Type *</label>
+                <input type="text" formControlName="certificateName" class="form-control" placeholder="e.g., ISO 9001, HACCP" [class.invalid]="certificateForm.get('certificateName')?.invalid && certificateForm.get('certificateName')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Certificate Number *</label>
+                <input type="text" formControlName="certificateNumber" class="form-control" [class.invalid]="certificateForm.get('certificateNumber')?.invalid && certificateForm.get('certificateNumber')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Issuing Body *</label>
+                <input type="text" formControlName="issuingBody" class="form-control" [class.invalid]="certificateForm.get('issuingBody')?.invalid && certificateForm.get('issuingBody')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Issue Date *</label>
+                <input type="date" formControlName="issueDate" class="form-control" [class.invalid]="certificateForm.get('issueDate')?.invalid && certificateForm.get('issueDate')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date *</label>
+                <input type="date" formControlName="expiryDate" class="form-control" [class.invalid]="certificateForm.get('expiryDate')?.invalid && certificateForm.get('expiryDate')?.touched" />
+              </div>
+
+              <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Upload Certificate *</label>
+                <input type="file" (change)="onFileSelected($event, certificateForm)" accept=".pdf,.jpg,.jpeg,.png" class="form-control" [class.invalid]="certificateForm.get('file')?.invalid && certificateForm.get('file')?.touched" />
+              </div>
+
+              <div class="form-group md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Certificate Scope *</label>
+                <textarea formControlName="certificateScope" rows="3" class="form-control" [class.invalid]="certificateForm.get('certificateScope')?.invalid && certificateForm.get('certificateScope')?.touched"></textarea>
+              </div>
+            </div>
+
+            <button type="submit" [disabled]="uploading || certificateForm.invalid" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
+              {{ uploading ? 'Uploading...' : 'Upload Certificate' }}
+            </button>
+          </form>
+        </div>
+
+        <!-- Certificates List -->
+        <div class="mt-6">
+          <h4 class="font-semibold mb-4">Uploaded Certificates</h4>
+          <div class="space-y-4">
+            <div *ngFor="let cert of existingCertificates" class="p-4 border rounded-lg bg-white">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <h5 class="font-semibold">{{ cert.certificateName }}</h5>
+                  <p class="text-sm text-gray-600">Number: {{ cert.certificateNumber }} | Issued by: {{ cert.issuingBody }}</p>
+                  <p class="text-sm text-gray-600">Valid: {{ cert.issueDate ? (cert.issueDate | date:'short') : 'N/A' }} - {{ cert.expiryDate ? (cert.expiryDate | date:'short') : 'N/A' }}</p>
+                  <span [ngClass]="getStatusColor(cert.verificationStatus)" class="inline-block px-2 py-1 rounded text-xs mt-2">
+                    {{ formatEnumLabel(cert.verificationStatus) }}
+                  </span>
+                  <span *ngIf="cert.isExpired" class="inline-block px-2 py-1 rounded text-xs mt-2 bg-orange-100 text-orange-600 ml-2">Expired</span>
+                </div>
+                <button (click)="deleteDocument(cert.id!, 'certificate')" class="px-3 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300 text-sm">Delete</button>
+              </div>
+            </div>
+            <p *ngIf="existingCertificates.length === 0" class="text-gray-500 text-center py-8">No certificates uploaded yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section C: Supply Chain Documents -->
+    <div *ngIf="currentSection === 'C'" class="space-y-6">
+      <h2 class="text-2xl font-semibold mb-4">Section C: Supply Chain & Traceability Documents</h2>
+
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <form [formGroup]="supplyChainForm" (ngSubmit)="uploadSupplyChainDocument()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Type *</label>
+              <select formControlName="documentType" class="form-control" [class.invalid]="supplyChainForm.get('documentType')?.invalid && supplyChainForm.get('documentType')?.touched">
+                <option value="">Select...</option>
+                <option value="SUPPLIER_LIST">Supplier List</option>
+                <option value="SUPPLIER_EVALUATION">Supplier Evaluation</option>
+                <option value="MATERIAL_CERTIFICATE">Material Certificate</option>
+                <option value="TRACEABILITY_RECORDS">Traceability Records</option>
+                <option value="BATCH_RECORDS">Batch Records</option>
+                <option value="RECALL_PROCEDURE">Recall Procedure</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Name *</label>
+              <input type="text" formControlName="documentName" class="form-control" [class.invalid]="supplyChainForm.get('documentName')?.invalid && supplyChainForm.get('documentName')?.touched" />
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea formControlName="description" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Upload File *</label>
+              <input type="file" (change)="onFileSelected($event, supplyChainForm)" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" class="form-control" [class.invalid]="supplyChainForm.get('file')?.invalid && supplyChainForm.get('file')?.touched" />
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="uploading || supplyChainForm.invalid" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
+            {{ uploading ? 'Uploading...' : 'Upload Document' }}
+          </button>
+        </form>
+      </div>
+
+      <!-- Supply Chain Documents List -->
+      <div class="mt-6">
+        <h3 class="font-semibold mb-4">Uploaded Supply Chain Documents</h3>
+        <div class="space-y-4">
+          <div *ngFor="let doc of supplyChainDocuments" class="p-4 border rounded-lg bg-white">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <h4 class="font-semibold">{{ doc.documentName }}</h4>
+                <p class="text-sm text-gray-600">{{ formatEnumLabel(doc.documentType) }}</p>
+                <span [ngClass]="getStatusColor(doc.verificationStatus)" class="inline-block px-2 py-1 rounded text-xs mt-2">
+                  {{ formatEnumLabel(doc.verificationStatus) }}
+                </span>
+              </div>
+              <button (click)="deleteDocument(doc.id!, 'supply-chain')" class="px-3 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300 text-sm">Delete</button>
+            </div>
+          </div>
+          <p *ngIf="supplyChainDocuments.length === 0" class="text-gray-500 text-center py-8">No supply chain documents uploaded yet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section D: Environmental Documents (EMA Only) -->
+    <div *ngIf="currentSection === 'D' && hasEmaApplication()" class="space-y-6">
+      <h2 class="text-2xl font-semibold mb-4">Section D: Environmental Documents (For EMA Only)</h2>
+
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <form [formGroup]="environmentalForm" (ngSubmit)="uploadEnvironmentalDocument()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Type *</label>
+              <select formControlName="documentType" class="form-control" [class.invalid]="environmentalForm.get('documentType')?.invalid && environmentalForm.get('documentType')?.touched">
+                <option value="">Select...</option>
+                <option value="ENVIRONMENTAL_POLICY">Environmental Policy</option>
+                <option value="ENVIRONMENTAL_MANUAL">Environmental Manual</option>
+                <option value="LCA_REPORT">LCA Report</option>
+                <option value="CARBON_FOOTPRINT_REPORT">Carbon Footprint Report</option>
+                <option value="ENERGY_AUDIT">Energy Audit</option>
+                <option value="WASTE_AUDIT">Waste Audit</option>
+                <option value="RECYCLING_CERTIFICATE">Recycling Certificate</option>
+                <option value="SUSTAINABLE_SOURCING">Sustainable Sourcing</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Document Name *</label>
+              <input type="text" formControlName="documentName" class="form-control" [class.invalid]="environmentalForm.get('documentName')?.invalid && environmentalForm.get('documentName')?.touched" />
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea formControlName="description" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Upload File *</label>
+              <input type="file" (change)="onFileSelected($event, environmentalForm)" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="form-control" [class.invalid]="environmentalForm.get('file')?.invalid && environmentalForm.get('file')?.touched" />
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="uploading || environmentalForm.invalid" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
+            {{ uploading ? 'Uploading...' : 'Upload Document' }}
+          </button>
+        </form>
+      </div>
+
+      <!-- Environmental Documents List -->
+      <div class="mt-6">
+        <h3 class="font-semibold mb-4">Uploaded Environmental Documents</h3>
+        <div class="space-y-4">
+          <div *ngFor="let doc of environmentalDocuments" class="p-4 border rounded-lg bg-white">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <h4 class="font-semibold">{{ doc.documentName }}</h4>
+                <p class="text-sm text-gray-600">{{ formatEnumLabel(doc.documentType) }}</p>
+                <span [ngClass]="getStatusColor(doc.verificationStatus)" class="inline-block px-2 py-1 rounded text-xs mt-2">
+                  {{ formatEnumLabel(doc.verificationStatus) }}
+                </span>
+              </div>
+              <button (click)="deleteDocument(doc.id!, 'environmental')" class="px-3 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300 text-sm">Delete</button>
+            </div>
+          </div>
+          <p *ngIf="environmentalDocuments.length === 0" class="text-gray-500 text-center py-8">No environmental documents uploaded yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

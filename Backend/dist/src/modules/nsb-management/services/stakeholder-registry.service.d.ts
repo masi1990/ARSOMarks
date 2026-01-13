@@ -17,4 +17,7 @@ export declare class StakeholderRegistryService {
     constructor(nsbRepository: Repository<Nsb>, msaRepository: Repository<NsbMarketSurveillanceAuthority>, customsRepository: Repository<NsbCustomsBorderAgency>, regulatoryRepository: Repository<NsbRegulatoryAgency>, industryRepository: Repository<NsbIndustryAssociation>, laboratoryRepository: Repository<NsbTestingLaboratory>, dataSource: DataSource);
     getStakeholderRegistry(nsbId: string): Promise<StakeholderRegistryDto>;
     updateStakeholderRegistry(nsbId: string, dto: StakeholderRegistryDto): Promise<StakeholderRegistryDto>;
+    saveDraft(nsbId: string, dto: StakeholderRegistryDto, userId: string): Promise<StakeholderRegistryDto>;
+    submitRegistry(nsbId: string, dto: StakeholderRegistryDto, userId: string): Promise<StakeholderRegistryDto>;
+    private updateStakeholderRegistryData;
 }

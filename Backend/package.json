@@ -9,7 +9,9 @@
     "build": "nest build",
     "lint": "eslint \"src/**/*.ts\"",
     "create-super-admin": "ts-node scripts/create-super-admin.ts",
-    "create-demo-user": "ts-node scripts/create-demo-user.ts"
+    "create-demo-user": "ts-node scripts/create-demo-user.ts",
+    "reset-user-password": "ts-node scripts/reset-user-password.ts",
+    "run-migration": "ts-node scripts/run-migration.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

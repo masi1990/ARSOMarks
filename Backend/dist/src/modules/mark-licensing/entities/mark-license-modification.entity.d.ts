@@ -1,0 +1,32 @@
+import { MarkLicenseAgreement } from './mark-license-agreement.entity';
+import { SystemUser } from '../../system-user/system-user.entity';
+import { ModificationStatus } from '../../../shared/enums';
+export declare class MarkLicenseModification {
+    id: string;
+    originalLicenseId: string;
+    originalLicense: MarkLicenseAgreement;
+    agreementId: string;
+    modificationTypes: string[];
+    modificationReason: string;
+    proposedChanges: string;
+    effectiveDateRequest: Date;
+    supportingJustificationPath?: string;
+    impactAssessment?: string;
+    feeAdjustmentNeeded?: string;
+    status: ModificationStatus;
+    submittedAt: Date;
+    reviewedAt?: Date;
+    approvedAt?: Date;
+    rejectedAt?: Date;
+    rejectionReason?: string;
+    implementedAt?: Date;
+    implementedChanges?: Record<string, any>;
+    createdAt: Date;
+    updatedAt: Date;
+    createdBy?: string;
+    createdByUser?: SystemUser;
+    updatedBy?: string;
+    updatedByUser?: SystemUser;
+    reviewedBy?: string;
+    reviewedByUser?: SystemUser;
+}

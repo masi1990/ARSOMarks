@@ -44,7 +44,7 @@ GMAIL_APP_PASSWORD=your-gmail-app-password
 FRONTEND_URL=http://localhost:4200
 
 # Server Configuration
-PORT=3000
+PORT=3003
 
 # Super Admin Configuration
 SUPER_ADMIN_EMAIL=admin@arso-oran.org

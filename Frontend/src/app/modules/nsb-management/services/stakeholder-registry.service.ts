@@ -17,5 +17,13 @@ export class StakeholderRegistryService {
   updateStakeholderRegistry(nsbId: string, payload: StakeholderRegistry): Observable<StakeholderRegistry> {
     return this.http.put<StakeholderRegistry>(`${this.baseUrl}/${nsbId}/stakeholder-registry`, payload);
   }
+
+  saveDraft(nsbId: string, payload: StakeholderRegistry): Observable<StakeholderRegistry> {
+    return this.http.post<StakeholderRegistry>(`${this.baseUrl}/${nsbId}/stakeholder-registry/draft`, payload);
+  }
+
+  submitRegistry(nsbId: string, payload: StakeholderRegistry): Observable<StakeholderRegistry> {
+    return this.http.post<StakeholderRegistry>(`${this.baseUrl}/${nsbId}/stakeholder-registry/submit`, payload);
+  }
 }
 

@@ -146,6 +146,23 @@ __decorate([
     __metadata("design:type", system_user_entity_1.SystemUser)
 ], Nsb.prototype, "updatedByUser", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'stakeholder_registry_status', type: 'varchar', length: 50, nullable: true, default: 'DRAFT' }),
+    __metadata("design:type", String)
+], Nsb.prototype, "stakeholderRegistryStatus", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'stakeholder_registry_submitted_at', type: 'timestamp', nullable: true }),
+    __metadata("design:type", Date)
+], Nsb.prototype, "stakeholderRegistrySubmittedAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'stakeholder_registry_submitted_by', type: 'uuid', nullable: true }),
+    __metadata("design:type", String)
+], Nsb.prototype, "stakeholderRegistrySubmittedBy", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => system_user_entity_1.SystemUser, { onDelete: 'SET NULL' }),
+    (0, typeorm_1.JoinColumn)({ name: 'stakeholder_registry_submitted_by' }),
+    __metadata("design:type", system_user_entity_1.SystemUser)
+], Nsb.prototype, "stakeholderRegistrySubmittedByUser", void 0);
+__decorate([
     (0, typeorm_1.OneToMany)(() => nsb_contact_entity_1.NsbContact, (contact) => contact.nsb, { cascade: true }),
     __metadata("design:type", Array)
 ], Nsb.prototype, "contacts", void 0);

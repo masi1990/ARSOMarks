@@ -1,4 +1,4 @@
-<div class="w-full max-w-6xl mx-auto">
+<div class="w-full max-w-7xl mx-auto">
   <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
     <!-- Header -->
     <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
@@ -19,266 +19,682 @@
       <p class="text-slate-500">Loading...</p>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-8 space-y-10" *ngIf="!loading && nsb">
-      <!-- Market Surveillance Authorities -->
+    <form [formGroup]="form" class="p-8 space-y-10" *ngIf="!loading && nsb">
+      <!-- ============================================================================ -->
+      <!-- SECTION A: MARKET SURVEILLANCE AUTHORITIES (MSAs) -->
+      <!-- ============================================================================ -->
       <section class="space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <h2 class="text-lg font-bold text-slate-900">A. Market Surveillance Authorities (MSAs)</h2>
-          <button type="button" (click)="addMsa()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">A. Market Surveillance Authorities (MSAs)</h2>
+            <p class="text-xs text-slate-500 mt-1">Form NSB-003-1: National Authorities Directory</p>
+          </div>
+          <button type="button" (click)="addMsa()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
             + Add MSA
           </button>
         </div>
 
-        <div *ngFor="let msaControl of msaFormArray.controls; let i = index" [formGroup]="$any(msaControl)" class="p-6 border border-slate-200 rounded-lg space-y-4">
-          <div class="flex items-center justify-between">
+        <div *ngFor="let msaControl of msaFormArray.controls; let i = index" [formGroup]="$any(msaControl)" class="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
             <h3 class="font-semibold text-slate-700">MSA {{ i + 1 }}</h3>
-            <button type="button" (click)="removeMsa(i)" class="text-sm text-red-600 hover:text-red-700">Remove</button>
+            <button type="button" (click)="removeMsa(i)" class="text-sm text-red-600 hover:text-red-700 font-medium">Remove</button>
           </div>
 
+          <!-- Basic Information -->
           <div class="grid gap-4 md:grid-cols-2">
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Name *</label>
-              <input formControlName="agencyName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Full Legal Name *</label>
+              <input type="text" formControlName="agencyName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Official name in national language" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Jurisdiction *</label>
-              <select formControlName="jurisdiction" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Name (English)</label>
+              <input type="text" formControlName="agencyNameEnglish" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="English translation" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Acronym</label>
+              <input type="text" formControlName="acronym" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Jurisdiction Scope *</label>
+              <select formControlName="jurisdiction" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
                 <option *ngFor="let opt of msaJurisdictions" [value]="opt.value">{{ opt.label }}</option>
               </select>
             </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Name *</label>
-              <input formControlName="contactPersonName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+            <div *ngIf="msaControl.get('jurisdiction')?.value === 'OTHER'">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Specify Other Jurisdiction</label>
+              <input type="text" formControlName="jurisdictionOther" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Email</label>
-              <input type="email" formControlName="contactPersonEmail" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Supervising Ministry</label>
+              <input type="text" formControlName="parentMinistry" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="grid gap-4 md:grid-cols-2 pt-2 border-t border-slate-200">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Primary ACAP Contact Person *</label>
+              <input type="text" formControlName="contactPersonName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Phone</label>
-              <input formControlName="contactPersonPhone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Title</label>
+              <input type="text" formControlName="contactPersonTitle" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">MOU Status</label>
-              <select formControlName="mouStatus" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                <option value="">Select...</option>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Official Email *</label>
+              <input type="email" formControlName="contactEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Official Phone *</label>
+              <input type="tel" formControlName="contactPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="+xxx xxxx xxxxx" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Alternative Contact</label>
+              <input type="text" formControlName="contactAlt" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+          </div>
+
+          <!-- Authority Scope -->
+          <div class="pt-2 border-t border-slate-200">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Scope of Authority (Multi-select)</label>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <label *ngFor="let scope of msaScopeTypes" class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" [checked]="isMultiSelectChecked(msaControl.get('scopeOfAuthority')!, scope.value)" (change)="toggleMultiSelectValue(msaControl.get('scopeOfAuthority')!, scope.value)" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+                <span class="text-sm text-slate-700">{{ scope.label }}</span>
+              </label>
+            </div>
+            <div *ngIf="isMultiSelectChecked(msaControl.get('scopeOfAuthority')!, 'OTHER')" class="mt-3">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Specify Other Authority</label>
+              <input type="text" formControlName="scopeOther" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+          </div>
+
+          <!-- Products Covered (Tag Input) -->
+          <div class="pt-2 border-t border-slate-200">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Specific Product Categories (HS codes or product categories)</label>
+            <input type="text" [value]="getTagInputValue(msaControl.get('productsCovered')!)" (blur)="setTagInputValue(msaControl.get('productsCovered')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Enter tags separated by commas (e.g., HS 8504, Electrical Equipment)" />
+            <p class="text-xs text-slate-500 mt-1">Separate multiple items with commas</p>
+          </div>
+
+          <!-- MOU Information -->
+          <div class="grid gap-4 md:grid-cols-2 pt-2 border-t border-slate-200">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">MOU Status with NSB *</label>
+              <select formControlName="mouStatus" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
                 <option *ngFor="let opt of mouStatuses" [value]="opt.value">{{ opt.label }}</option>
               </select>
             </div>
+            <div *ngIf="msaControl.get('mouStatus')?.value === 'SIGNED_ACTIVE' || msaControl.get('mouStatus')?.value === 'DRAFT_UNDER_REVIEW'">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">MOU Effective Date</label>
+              <input type="date" formControlName="mouStartDate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div *ngIf="msaControl.get('mouStatus')?.value === 'SIGNED_ACTIVE'">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">MOU Expiry Date</label>
+              <input type="date" formControlName="mouEndDate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <!-- TODO: MOU Document Upload - to be implemented with file upload service -->
+          </div>
+
+          <!-- System Access -->
+          <div class="pt-2 border-t border-slate-200">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">System Access Level Requested *</label>
+            <div class="space-y-2">
+              <label *ngFor="let level of systemAccessLevels" class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" [value]="level.value" formControlName="accessLevel" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                <span class="text-sm text-slate-700">{{ level.label }}</span>
+              </label>
+            </div>
+            <div *ngIf="msaControl.get('accessLevel')?.value === 'CUSTOM'" class="mt-3">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Custom Access Requirements</label>
+              <textarea formControlName="customAccessRequirements" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"></textarea>
+            </div>
+          </div>
+
+          <!-- Training Information -->
+          <div class="grid gap-4 md:grid-cols-2 pt-2 border-t border-slate-200">
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">System Access Level Requested</label>
-              <select formControlName="systemAccessLevelRequested" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                <option value="">Select...</option>
-                <option *ngFor="let opt of systemAccessLevels" [value]="opt.value">{{ opt.label }}</option>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">ACAP Training Status *</label>
+              <select formControlName="trainingStatus" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of acapTrainingStatuses" [value]="opt.value">{{ opt.label }}</option>
               </select>
             </div>
-            <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Scope of Authority</label>
-              <textarea formControlName="scopeOfAuthority" rows="3" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Last Training Date</label>
+              <input type="date" formControlName="lastTrainingDate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div class="flex items-center space-x-2">
+              <input type="checkbox" formControlName="isNationalFocalPoint" id="focalPoint{{i}}" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+              <label for="focalPoint{{i}}" class="text-sm font-semibold text-slate-700 cursor-pointer">Designate as National ACAP Focal Point for this authority type</label>
+            </div>
+          </div>
+
+          <!-- Additional Notes -->
+          <div class="pt-2 border-t border-slate-200">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Additional Notes</label>
+            <textarea formControlName="notes" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Internal NSB notes"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================================ -->
+      <!-- SECTION B: CUSTOMS/BORDER AGENCIES -->
+      <!-- ============================================================================ -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">B. Customs/Border Agencies</h2>
+            <p class="text-xs text-slate-500 mt-1">Part of Form NSB-003-1</p>
+          </div>
+          <button type="button" (click)="addCustoms()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+            + Add Agency
+          </button>
+        </div>
+
+        <div *ngFor="let customsControl of customsFormArray.controls; let i = index" [formGroup]="$any(customsControl)" class="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+            <h3 class="font-semibold text-slate-700">Customs Agency {{ i + 1 }}</h3>
+            <button type="button" (click)="removeCustoms(i)" class="text-sm text-red-600 hover:text-red-700 font-medium">Remove</button>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Customs Agency Name *</label>
+              <input type="text" formControlName="agencyName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Responsible Ministry *</label>
+              <input type="text" formControlName="parentMinistry" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Usually Ministry of Finance/Trade" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">National ACAP Coordinator *</label>
+              <input type="text" formControlName="primaryContactName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Coordinator Email *</label>
+              <input type="email" formControlName="coordinatorEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Coordinator Phone *</label>
+              <input type="tel" formControlName="coordinatorPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">National Single Window Integration *</label>
+              <select formControlName="integrationStatus" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of customsIntegrationStatuses" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div *ngIf="customsControl.get('integrationStatus')?.value !== 'NO_INTEGRATION' && customsControl.get('integrationStatus')?.value !== 'UNKNOWN'" class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Integration Details</label>
+              <textarea formControlName="integrationDetails" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Describe integration level and capabilities"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">API Available for ACAP</label>
+              <div class="space-y-2">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" value="YES" formControlName="apiAvailable" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                  <span class="text-sm text-slate-700">Yes</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" value="NO" formControlName="apiAvailable" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                  <span class="text-sm text-slate-700">No</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" value="UNDER_DEVELOPMENT" formControlName="apiAvailable" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                  <span class="text-sm text-slate-700">Under Development</span>
+                </label>
+              </div>
+              <!-- TODO: API Documentation Upload - to be implemented with file upload service -->
+            </div>
+          </div>
+
+          <!-- Border Posts Array -->
+          <div class="pt-4 border-t border-slate-200">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-slate-700">Border Posts</h4>
+              <button type="button" (click)="addBorderPost(i)" class="text-xs font-medium text-blue-600 hover:text-blue-700">+ Add Border Post</button>
+            </div>
+            <div [formArrayName]="'borderPosts'" class="space-y-3">
+              <div *ngFor="let bpControl of getBorderPostsArray(i).controls; let j = index" [formGroup]="$any(bpControl)" class="p-4 bg-white border border-slate-200 rounded-lg space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-500">Border Post {{ j + 1 }}</span>
+                  <button type="button" (click)="removeBorderPost(i, j)" class="text-xs text-red-600 hover:text-red-700">Remove</button>
+                </div>
+                <div class="grid gap-3 md:grid-cols-2">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Border Post Name *</label>
+                    <input type="text" formControlName="borderPostName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Post Type *</label>
+                    <select formControlName="postType" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                      <option *ngFor="let opt of borderPostTypes" [value]="opt.value">{{ opt.label }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Geographic Location *</label>
+                    <input type="text" formControlName="location" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="City/Region" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">GPS Coordinates</label>
+                    <input type="text" formControlName="gpsCoordinates" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Latitude, Longitude" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ACAP Verification Contact *</label>
+                    <input type="text" formControlName="contactName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Contact Phone *</label>
+                    <input type="tel" formControlName="contactPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Contact Email</label>
+                    <input type="email" formControlName="contactEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Operating Hours *</label>
+                    <input type="text" formControlName="operatingHours" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="For ACAP verification" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Estimated Annual Traffic</label>
+                    <select formControlName="estimatedAnnualTraffic" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                      <option value="">Select...</option>
+                      <option value="HIGH">High (>1M shipments)</option>
+                      <option value="MEDIUM">Medium (100K-1M)</option>
+                      <option value="LOW">Low (<100K)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Customs/Border Agencies -->
+      <!-- ============================================================================ -->
+      <!-- SECTION C: REGULATORY AGENCIES -->
+      <!-- ============================================================================ -->
       <section class="space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <h2 class="text-lg font-bold text-slate-900">B. Customs/Border Agencies</h2>
-          <button type="button" (click)="addCustoms()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">C. Regulatory Agencies</h2>
+            <p class="text-xs text-slate-500 mt-1">Part of Form NSB-003-1</p>
+          </div>
+          <button type="button" (click)="addRegulatory()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
             + Add Agency
           </button>
         </div>
 
-        <div *ngFor="let customsControl of customsFormArray.controls; let i = index" [formGroup]="$any(customsControl)" class="p-6 border border-slate-200 rounded-lg space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="font-semibold text-slate-700">Agency {{ i + 1 }}</h3>
-            <button type="button" (click)="removeCustoms(i)" class="text-sm text-red-600 hover:text-red-700">Remove</button>
+        <div *ngFor="let regulatoryControl of regulatoryFormArray.controls; let i = index" [formGroup]="$any(regulatoryControl)" class="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+            <h3 class="font-semibold text-slate-700">Regulatory Agency {{ i + 1 }}</h3>
+            <button type="button" (click)="removeRegulatory(i)" class="text-sm text-red-600 hover:text-red-700 font-medium">Remove</button>
           </div>
 
           <div class="grid gap-4 md:grid-cols-2">
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Name *</label>
-              <input formControlName="agencyName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Key Border Posts (comma-separated)</label>
-              <input formControlName="keyBorderPosts" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="e.g., Post 1, Post 2" />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">ACAP Verification Contact Name</label>
-              <input formControlName="acapVerificationContactName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">ACAP Verification Contact Email</label>
-              <input type="email" formControlName="acapVerificationContactEmail" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">ACAP Verification Contact Phone</label>
-              <input formControlName="acapVerificationContactPhone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" formControlName="integrationWithNationalSingleWindow" id="integration{{i}}" class="mr-2" />
-              <label for="integration{{i}}" class="text-sm font-semibold text-slate-700">Integration with National Single Window</label>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Regulatory Agencies -->
-      <section class="space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <h2 class="text-lg font-bold text-slate-900">C. Regulatory Agencies</h2>
-          <button type="button" (click)="addRegulatory()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100">
-            + Add Agency
-          </button>
-        </div>
-
-        <div *ngFor="let regulatoryControl of regulatoryFormArray.controls; let i = index" [formGroup]="$any(regulatoryControl)" class="p-6 border border-slate-200 rounded-lg space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="font-semibold text-slate-700">Agency {{ i + 1 }}</h3>
-            <button type="button" (click)="removeRegulatory(i)" class="text-sm text-red-600 hover:text-red-700">Remove</button>
-          </div>
-
-          <div class="grid gap-4 md:grid-cols-2">
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Name *</label>
-              <input formControlName="agencyName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-            </div>
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Type *</label>
-              <select formControlName="agencyType" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+              <select formControlName="agencyType" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
                 <option *ngFor="let opt of regulatoryAgencyTypes" [value]="opt.value">{{ opt.label }}</option>
               </select>
             </div>
-            <div *ngIf="regulatoryControl.get('agencyType')?.value === 'OTHER'" class="md:col-span-2">
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Other Type Description</label>
-              <input formControlName="otherTypeDescription" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Agency Name *</label>
+              <input type="text" formControlName="agencyName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Name</label>
-              <input formControlName="contactPersonName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Specific Department</label>
+              <input type="text" formControlName="specificDepartment" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="e.g., Plant Health, Livestock, Fisheries" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Email</label>
-              <input type="email" formControlName="contactPersonEmail" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">ACAP Contact Person</label>
+              <input type="text" formControlName="contactPersonName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Phone</label>
-              <input formControlName="contactPersonPhone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Email</label>
+              <input type="email" formControlName="contactEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Phone</label>
+              <input type="tel" formControlName="contactPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Engagement Level</label>
+              <select formControlName="engagementLevel" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of engagementLevels" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Relevance to ACAP (Relevant Mandate)</label>
+              <textarea formControlName="relevantMandate" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="How their mandate relates to ACAP"></textarea>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Industry Associations -->
+      <!-- ============================================================================ -->
+      <!-- SECTION D: INDUSTRY ASSOCIATIONS DIRECTORY -->
+      <!-- ============================================================================ -->
       <section class="space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <h2 class="text-lg font-bold text-slate-900">D. Industry Associations Directory</h2>
-          <button type="button" (click)="addIndustry()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">D. Industry Associations Directory</h2>
+            <p class="text-xs text-slate-500 mt-1">Form NSB-003-2: Industry & Private Sector Associations</p>
+          </div>
+          <button type="button" (click)="addIndustry()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
             + Add Association
           </button>
         </div>
 
-        <div *ngFor="let industryControl of industryFormArray.controls; let i = index" [formGroup]="$any(industryControl)" class="p-6 border border-slate-200 rounded-lg space-y-4">
-          <div class="flex items-center justify-between">
+        <div *ngFor="let industryControl of industryFormArray.controls; let i = index" [formGroup]="$any(industryControl)" class="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
             <h3 class="font-semibold text-slate-700">Association {{ i + 1 }}</h3>
-            <button type="button" (click)="removeIndustry(i)" class="text-sm text-red-600 hover:text-red-700">Remove</button>
+            <button type="button" (click)="removeIndustry(i)" class="text-sm text-red-600 hover:text-red-700 font-medium">Remove</button>
           </div>
 
           <div class="grid gap-4 md:grid-cols-2">
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Association Name *</label>
-              <input formControlName="associationName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Association Full Name *</label>
+              <input type="text" formControlName="associationName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Sector/Industry</label>
-              <input formControlName="sectorIndustry" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Association Acronym</label>
+              <input type="text" formControlName="acronym" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Number of Members</label>
-              <input type="number" formControlName="numberOfMembers" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Legal Registration Number *</label>
+              <input type="text" formControlName="registrationNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Name</label>
-              <input formControlName="contactPersonName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Primary Sector/Industry *</label>
+              <input type="text" [value]="getTagInputValue(industryControl.get('primarySector')!)" (blur)="setTagInputValue(industryControl.get('primarySector')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Based on ISIC codes + ACAP priority sectors" />
+              <p class="text-xs text-slate-500 mt-1">Separate multiple sectors with commas</p>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Email</label>
-              <input type="email" formControlName="contactPersonEmail" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Sub-sectors Covered</label>
+              <input type="text" [value]="getTagInputValue(industryControl.get('subSectors')!)" (blur)="setTagInputValue(industryControl.get('subSectors')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Specific product categories" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Person Phone</label>
-              <input formControlName="contactPersonPhone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Membership Composition *</label>
+              <input type="text" [value]="getTagInputValue(industryControl.get('membershipType')!)" (blur)="setTagInputValue(industryControl.get('membershipType')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Manufacturers, Importers, Exporters, Retailers, etc." />
             </div>
-            <div class="flex items-center">
-              <input type="checkbox" formControlName="willingnessToPromoteAcap" id="willingness{{i}}" class="mr-2" />
-              <label for="willingness{{i}}" class="text-sm font-semibold text-slate-700">Willingness to promote ACAP</label>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Number of Member Companies *</label>
+              <input type="number" formControlName="memberCount" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" min="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Estimated SME Members</label>
+              <input type="number" formControlName="estimatedSmeMembers" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" min="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Primary ACAP Contact *</label>
+              <input type="text" formControlName="contactPersonName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Title *</label>
+              <input type="text" formControlName="contactTitle" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Email *</label>
+              <input type="email" formControlName="contactEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Phone *</label>
+              <input type="tel" formControlName="contactPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Association Website</label>
+              <input type="url" formControlName="website" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="https://example.com" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Willingness to Promote ACAP *</label>
+              <select formControlName="willingnessToPromoteAcap" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option value="">Select...</option>
+                <option value="EAGER_TO_PROMOTE">Eager to Promote</option>
+                <option value="WILLING_IF_SUPPORTED">Willing if Supported</option>
+                <option value="NEUTRAL">Neutral</option>
+                <option value="RESISTANT">Resistant</option>
+                <option value="ALREADY_PROMOTING">Already Promoting</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Key Annual Events</label>
+              <textarea formControlName="annualEvents" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Where ACAP could be featured"></textarea>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Additional Notes</label>
+              <textarea formControlName="notes" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"></textarea>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Testing Laboratories & Inspection Bodies -->
+      <!-- ============================================================================ -->
+      <!-- SECTION E: TESTING LABORATORIES & INSPECTION BODIES -->
+      <!-- ============================================================================ -->
       <section class="space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <h2 class="text-lg font-bold text-slate-900">E. Testing Laboratories & Inspection Bodies</h2>
-          <button type="button" (click)="addLaboratory()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">E. Testing Laboratories & Inspection Bodies</h2>
+            <p class="text-xs text-slate-500 mt-1">Form NSB-003-3: Testing, Calibration & Inspection Service Providers</p>
+          </div>
+          <button type="button" (click)="addLaboratory()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
             + Add Laboratory
           </button>
         </div>
 
-        <div *ngFor="let labControl of laboratoryFormArray.controls; let i = index" [formGroup]="$any(labControl)" class="p-6 border border-slate-200 rounded-lg space-y-4">
-          <div class="flex items-center justify-between">
+        <div *ngFor="let labControl of laboratoryFormArray.controls; let i = index" [formGroup]="$any(labControl)" class="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
             <h3 class="font-semibold text-slate-700">Laboratory {{ i + 1 }}</h3>
-            <button type="button" (click)="removeLaboratory(i)" class="text-sm text-red-600 hover:text-red-700">Remove</button>
+            <button type="button" (click)="removeLaboratory(i)" class="text-sm text-red-600 hover:text-red-700 font-medium">Remove</button>
           </div>
 
           <div class="grid gap-4 md:grid-cols-2">
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Name *</label>
-              <input formControlName="name" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Laboratory/Inspection Body Name *</label>
+              <input type="text" formControlName="name" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Accreditation Status</label>
-              <select formControlName="accreditationStatus" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
-                <option value="">Select...</option>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Type of Organization *</label>
+              <select formControlName="organizationType" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of laboratoryTypes" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Legal Status *</label>
+              <select formControlName="legalStatus" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of laboratoryLegalStatuses" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Accreditation Status *</label>
+              <select formControlName="accreditationStatus" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
                 <option *ngFor="let opt of accreditationStatuses" [value]="opt.value">{{ opt.label }}</option>
               </select>
             </div>
-            <div *ngIf="labControl.get('accreditationStatus')?.value === 'OTHER'" class="md:col-span-2">
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Other Accreditation Description</label>
-              <input formControlName="otherAccreditationDescription" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">ACAP Referral Contact Person *</label>
+              <input type="text" formControlName="acapContactName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Email *</label>
+              <input type="email" formControlName="contactEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Phone *</label>
+              <input type="tel" formControlName="contactPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Emergency/After-hours Contact</label>
+              <input type="text" formControlName="emergencyContact" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Testing Categories *</label>
+              <input type="text" [value]="getTagInputValue(labControl.get('testingCategories')!)" (blur)="setTagInputValue(labControl.get('testingCategories')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="Chemical Analysis, Microbiological, Physical Properties, etc." />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Specific Test Methods</label>
+              <input type="text" [value]="getTagInputValue(labControl.get('specificTestMethods')!)" (blur)="setTagInputValue(labControl.get('specificTestMethods')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="ISO/IEC test method standards" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Product Categories Covered *</label>
+              <input type="text" [value]="getTagInputValue(labControl.get('productsCovered')!)" (blur)="setTagInputValue(labControl.get('productsCovered')!, $any($event.target).value)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" placeholder="HS codes or product categories" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Digital Reporting Capability *</label>
+              <select formControlName="digitalCapability" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of digitalCapabilities" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Typical Turnaround Time</label>
+              <select formControlName="typicalTurnaroundTime" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option value="">Select...</option>
+                <option value="LESS_THAN_24_HOURS"><24 hours</option>
+                <option value="2_3_DAYS">2-3 days</option>
+                <option value="1_WEEK">1 week</option>
+                <option value="2_WEEKS">2 weeks</option>
+                <option value="MORE_THAN_2_WEEKS">>2 weeks</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Willing to be in ACAP Directory *</label>
+              <div class="space-y-2">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" value="YES" formControlName="willingAcapListing" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                  <span class="text-sm text-slate-700">Yes</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" value="NO" formControlName="willingAcapListing" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                  <span class="text-sm text-slate-700">No</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" value="CONDITIONAL" formControlName="willingAcapListing" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+                  <span class="text-sm text-slate-700">Conditional</span>
+                </label>
+              </div>
+            </div>
+            <div *ngIf="labControl.get('willingAcapListing')?.value === 'CONDITIONAL'" class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Listing Conditions</label>
+              <textarea formControlName="listingConditions" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"></textarea>
             </div>
             <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Scope of Accreditation</label>
-              <textarea formControlName="scopeOfAccreditation" rows="3" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Additional Notes</label>
+              <textarea formControlName="notes" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"></textarea>
             </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact for ACAP Referrals Name</label>
-              <input formControlName="contactForAcapReferralsName" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <!-- Laboratory Accreditations Array -->
+          <div class="pt-4 border-t border-slate-200">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-slate-700">Accreditations</h4>
+              <button type="button" (click)="addAccreditation(i)" class="text-xs font-medium text-blue-600 hover:text-blue-700">+ Add Accreditation</button>
             </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact for ACAP Referrals Email</label>
-              <input type="email" formControlName="contactForAcapReferralsEmail" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact for ACAP Referrals Phone</label>
-              <input formControlName="contactForAcapReferralsPhone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+            <div [formArrayName]="'accreditations'" class="space-y-3">
+              <div *ngFor="let accControl of getAccreditationsArray(i).controls; let j = index" [formGroup]="$any(accControl)" class="p-4 bg-white border border-slate-200 rounded-lg space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-500">Accreditation {{ j + 1 }}</span>
+                  <button type="button" (click)="removeAccreditation(i, j)" class="text-xs text-red-600 hover:text-red-700">Remove</button>
+                </div>
+                <div class="grid gap-3 md:grid-cols-2">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Accreditation Body *</label>
+                    <input type="text" formControlName="accreditationBody" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Certificate Number *</label>
+                    <input type="text" formControlName="certificateNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Scope of Accreditation *</label>
+                    <textarea formControlName="scopeOfAccreditation" rows="2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Accreditation Expiry Date *</label>
+                    <input type="date" formControlName="accreditationExpiryDate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Actions -->
-      <div class="flex items-center justify-end gap-4 pt-6 border-t border-slate-200">
-        <button type="button" (click)="goToDashboard()" class="px-6 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
-          Cancel
+      <!-- ============================================================================ -->
+      <!-- SECTION F: OTHER STAKEHOLDER GROUPS -->
+      <!-- ============================================================================ -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">F. Other Stakeholder Groups</h2>
+            <p class="text-xs text-slate-500 mt-1">Form NSB-003-4: Additional Stakeholder Categories</p>
+          </div>
+          <button type="button" (click)="addOtherStakeholder()" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+            + Add Stakeholder
+          </button>
+        </div>
+
+        <div *ngFor="let stakeholderControl of otherStakeholderFormArray.controls; let i = index" [formGroup]="$any(stakeholderControl)" class="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+            <h3 class="font-semibold text-slate-700">Stakeholder {{ i + 1 }}</h3>
+            <button type="button" (click)="removeOtherStakeholder(i)" class="text-sm text-red-600 hover:text-red-700 font-medium">Remove</button>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Stakeholder Category *</label>
+              <select formControlName="stakeholderCategory" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of stakeholderCategories" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div *ngIf="stakeholderControl.get('stakeholderCategory')?.value === 'OTHER'">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Specify Other Category</label>
+              <input type="text" formControlName="categoryOther" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Primary Contact *</label>
+              <input type="text" formControlName="primaryContactName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Email *</label>
+              <input type="email" formControlName="contactEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Phone *</label>
+              <input type="tel" formControlName="contactPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Current Engagement Level *</label>
+              <select formControlName="engagementLevel" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of engagementLevels" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">NSB Priority Level *</label>
+              <select formControlName="nsbPriorityLevel" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none">
+                <option *ngFor="let opt of nsbPriorityLevels" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Additional Notes</label>
+              <textarea formControlName="notes" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none"></textarea>
+            </div>
+          </div>
+          <!-- TODO: Category-specific fields (Academic, Consumer, Development Partners, etc.) - to be implemented based on category selection -->
+        </div>
+      </section>
+
+      <!-- Form Actions -->
+      <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-200 bg-slate-50 -mx-8 px-8 -mb-8 py-6 rounded-b-xl">
+        <button type="button" (click)="saveDraft()" [disabled]="saving" class="px-6 py-2.5 rounded-lg font-semibold text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm">
+          {{ saving ? 'Saving...' : 'Save Draft' }}
         </button>
-        <button type="submit" [disabled]="saving || form.invalid" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
-          {{ saving ? 'Saving...' : 'Save Stakeholder Registry' }}
+        <button type="button" (click)="submitRegistry()" [disabled]="saving || form.invalid" class="px-6 py-2.5 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm">
+          {{ saving ? 'Submitting...' : 'Final Submit' }}
+        </button>
+        <button type="button" (click)="goToDashboard()" class="ml-auto px-6 py-2.5 rounded-lg font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          Cancel
         </button>
       </div>
     </form>
   </div>
 </div>
-

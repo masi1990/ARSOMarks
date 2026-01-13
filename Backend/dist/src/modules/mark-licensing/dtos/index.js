@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RejectModificationDto = exports.ApproveModificationDto = exports.CreateLicenseModificationDto = exports.UpdateMarkUsageReportDto = exports.CreateMarkUsageReportDto = exports.RequestAssetsDto = exports.SignAgreementDto = exports.CreateMarkLicenseAgreementDto = exports.SubmitMarkLicenseApplicationDto = exports.UpdateMarkLicenseApplicationDto = exports.CreateMarkLicenseApplicationDto = void 0;
+var create_mark_license_application_dto_1 = require("./create-mark-license-application.dto");
+Object.defineProperty(exports, "CreateMarkLicenseApplicationDto", { enumerable: true, get: function () { return create_mark_license_application_dto_1.CreateMarkLicenseApplicationDto; } });
+var update_mark_license_application_dto_1 = require("./update-mark-license-application.dto");
+Object.defineProperty(exports, "UpdateMarkLicenseApplicationDto", { enumerable: true, get: function () { return update_mark_license_application_dto_1.UpdateMarkLicenseApplicationDto; } });
+var submit_mark_license_application_dto_1 = require("./submit-mark-license-application.dto");
+Object.defineProperty(exports, "SubmitMarkLicenseApplicationDto", { enumerable: true, get: function () { return submit_mark_license_application_dto_1.SubmitMarkLicenseApplicationDto; } });
+var create_mark_license_agreement_dto_1 = require("./create-mark-license-agreement.dto");
+Object.defineProperty(exports, "CreateMarkLicenseAgreementDto", { enumerable: true, get: function () { return create_mark_license_agreement_dto_1.CreateMarkLicenseAgreementDto; } });
+Object.defineProperty(exports, "SignAgreementDto", { enumerable: true, get: function () { return create_mark_license_agreement_dto_1.SignAgreementDto; } });
+Object.defineProperty(exports, "RequestAssetsDto", { enumerable: true, get: function () { return create_mark_license_agreement_dto_1.RequestAssetsDto; } });
+var create_mark_usage_report_dto_1 = require("./create-mark-usage-report.dto");
+Object.defineProperty(exports, "CreateMarkUsageReportDto", { enumerable: true, get: function () { return create_mark_usage_report_dto_1.CreateMarkUsageReportDto; } });
+Object.defineProperty(exports, "UpdateMarkUsageReportDto", { enumerable: true, get: function () { return create_mark_usage_report_dto_1.UpdateMarkUsageReportDto; } });
+var create_license_modification_dto_1 = require("./create-license-modification.dto");
+Object.defineProperty(exports, "CreateLicenseModificationDto", { enumerable: true, get: function () { return create_license_modification_dto_1.CreateLicenseModificationDto; } });
+Object.defineProperty(exports, "ApproveModificationDto", { enumerable: true, get: function () { return create_license_modification_dto_1.ApproveModificationDto; } });
+Object.defineProperty(exports, "RejectModificationDto", { enumerable: true, get: function () { return create_license_modification_dto_1.RejectModificationDto; } });
+//# sourceMappingURL=index.js.map

@@ -22,6 +22,7 @@ const nsb_customs_border_agency_entity_1 = require("../entities/nsb-customs-bord
 const nsb_regulatory_agency_entity_1 = require("../entities/nsb-regulatory-agency.entity");
 const nsb_industry_association_entity_1 = require("../entities/nsb-industry-association.entity");
 const nsb_testing_laboratory_entity_1 = require("../entities/nsb-testing-laboratory.entity");
+const enums_1 = require("../../../shared/enums");
 let StakeholderRegistryService = class StakeholderRegistryService {
     constructor(nsbRepository, msaRepository, customsRepository, regulatoryRepository, industryRepository, laboratoryRepository, dataSource) {
         this.nsbRepository = nsbRepository;
@@ -62,11 +63,11 @@ let StakeholderRegistryService = class StakeholderRegistryService {
             customsBorderAgencies: customs.map((c) => ({
                 id: c.id,
                 agencyName: c.agencyName,
-                keyBorderPosts: c.keyBorderPosts,
+                keyBorderPosts: [],
                 acapVerificationContactName: c.acapVerificationContactName,
                 acapVerificationContactEmail: c.acapVerificationContactEmail,
                 acapVerificationContactPhone: c.acapVerificationContactPhone,
-                integrationWithNationalSingleWindow: c.integrationWithNationalSingleWindow,
+                integrationWithNationalSingleWindow: c.integrationStatus === 'FULLY_INTEGRATED' || c.integrationStatus === 'PARTIAL_INTEGRATION',
                 isActive: c.isActive,
             })),
             regulatoryAgencies: regulatory.map((r) => ({
@@ -138,11 +139,12 @@ let StakeholderRegistryService = class StakeholderRegistryService {
                     const customs = dto.customsBorderAgencies.map((c) => this.customsRepository.create({
                         nsbId,
                         agencyName: c.agencyName,
-                        keyBorderPosts: c.keyBorderPosts || [],
                         acapVerificationContactName: c.acapVerificationContactName,
                         acapVerificationContactEmail: c.acapVerificationContactEmail,
                         acapVerificationContactPhone: c.acapVerificationContactPhone,
-                        integrationWithNationalSingleWindow: c.integrationWithNationalSingleWindow !== undefined ? c.integrationWithNationalSingleWindow : false,
+                        integrationStatus: c.integrationWithNationalSingleWindow !== undefined
+                            ? (c.integrationWithNationalSingleWindow ? 'PARTIAL_INTEGRATION' : 'NO_INTEGRATION')
+                            : undefined,
                         isActive: c.isActive !== undefined ? c.isActive : true,
                     }));
                     await queryRunner.manager.save(customs);
@@ -207,6 +209,147 @@ let StakeholderRegistryService = class StakeholderRegistryService {
         }
         finally {
             await queryRunner.release();
+        }
+    }
+    async saveDraft(nsbId, dto, userId) {
+        const nsb = await this.nsbRepository.findOne({ where: { id: nsbId } });
+        if (!nsb) {
+            throw new common_1.NotFoundException(`NSB with ID ${nsbId} not found`);
+        }
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            await this.updateStakeholderRegistryData(nsbId, dto, queryRunner);
+            await queryRunner.manager.update('nsb', { id: nsbId }, {
+                stakeholderRegistryStatus: enums_1.StakeholderRegistryStatus.DRAFT,
+                stakeholderRegistrySubmittedAt: null,
+                stakeholderRegistrySubmittedBy: null,
+            });
+            await queryRunner.commitTransaction();
+            return this.getStakeholderRegistry(nsbId);
+        }
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        }
+        finally {
+            await queryRunner.release();
+        }
+    }
+    async submitRegistry(nsbId, dto, userId) {
+        const nsb = await this.nsbRepository.findOne({ where: { id: nsbId } });
+        if (!nsb) {
+            throw new common_1.NotFoundException(`NSB with ID ${nsbId} not found`);
+        }
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            await this.updateStakeholderRegistryData(nsbId, dto, queryRunner);
+            await queryRunner.manager.update('nsb', { id: nsbId }, {
+                stakeholderRegistryStatus: enums_1.StakeholderRegistryStatus.SUBMITTED,
+                stakeholderRegistrySubmittedAt: new Date(),
+                stakeholderRegistrySubmittedBy: userId,
+            });
+            await queryRunner.commitTransaction();
+            return this.getStakeholderRegistry(nsbId);
+        }
+        catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        }
+        finally {
+            await queryRunner.release();
+        }
+    }
+    async updateStakeholderRegistryData(nsbId, dto, queryRunner) {
+        if (dto.marketSurveillanceAuthorities !== undefined) {
+            await queryRunner.manager.delete('nsb_market_surveillance_authorities', { nsbId });
+            if (dto.marketSurveillanceAuthorities.length > 0) {
+                const msas = dto.marketSurveillanceAuthorities.map((m) => this.msaRepository.create({
+                    nsbId,
+                    agencyName: m.agencyName,
+                    jurisdiction: m.jurisdiction,
+                    contactPersonName: m.contactPersonName,
+                    contactPersonEmail: m.contactPersonEmail,
+                    contactPersonPhone: m.contactPersonPhone,
+                    scopeOfAuthority: m.scopeOfAuthority,
+                    mouStatus: m.mouStatus,
+                    mouDocumentPath: m.mouDocumentPath,
+                    mouDocumentHash: m.mouDocumentHash,
+                    systemAccessLevelRequested: m.systemAccessLevelRequested,
+                    isActive: m.isActive !== undefined ? m.isActive : true,
+                }));
+                await queryRunner.manager.save(msas);
+            }
+        }
+        if (dto.customsBorderAgencies !== undefined) {
+            await queryRunner.manager.delete('nsb_customs_border_agencies', { nsbId });
+            if (dto.customsBorderAgencies.length > 0) {
+                const customs = dto.customsBorderAgencies.map((c) => this.customsRepository.create({
+                    nsbId,
+                    agencyName: c.agencyName,
+                    acapVerificationContactName: c.acapVerificationContactName,
+                    acapVerificationContactEmail: c.acapVerificationContactEmail,
+                    acapVerificationContactPhone: c.acapVerificationContactPhone,
+                    integrationStatus: c.integrationWithNationalSingleWindow !== undefined
+                        ? (c.integrationWithNationalSingleWindow ? 'PARTIAL_INTEGRATION' : 'NO_INTEGRATION')
+                        : undefined,
+                    isActive: c.isActive !== undefined ? c.isActive : true,
+                }));
+                await queryRunner.manager.save(customs);
+            }
+        }
+        if (dto.regulatoryAgencies !== undefined) {
+            await queryRunner.manager.delete('nsb_regulatory_agencies', { nsbId });
+            if (dto.regulatoryAgencies.length > 0) {
+                const regulatory = dto.regulatoryAgencies.map((r) => this.regulatoryRepository.create({
+                    nsbId,
+                    agencyName: r.agencyName,
+                    agencyType: r.agencyType,
+                    otherTypeDescription: r.otherTypeDescription,
+                    contactPersonName: r.contactPersonName,
+                    contactPersonEmail: r.contactPersonEmail,
+                    contactPersonPhone: r.contactPersonPhone,
+                    isActive: r.isActive !== undefined ? r.isActive : true,
+                }));
+                await queryRunner.manager.save(regulatory);
+            }
+        }
+        if (dto.industryAssociations !== undefined) {
+            await queryRunner.manager.delete('nsb_industry_associations', { nsbId });
+            if (dto.industryAssociations.length > 0) {
+                const industry = dto.industryAssociations.map((i) => this.industryRepository.create({
+                    nsbId,
+                    associationName: i.associationName,
+                    sectorIndustry: i.sectorIndustry,
+                    numberOfMembers: i.numberOfMembers,
+                    contactPersonName: i.contactPersonName,
+                    contactPersonEmail: i.contactPersonEmail,
+                    contactPersonPhone: i.contactPersonPhone,
+                    willingnessToPromoteAcap: i.willingnessToPromoteAcap !== undefined ? i.willingnessToPromoteAcap : false,
+                    isActive: i.isActive !== undefined ? i.isActive : true,
+                }));
+                await queryRunner.manager.save(industry);
+            }
+        }
+        if (dto.testingLaboratories !== undefined) {
+            await queryRunner.manager.delete('nsb_testing_laboratories', { nsbId });
+            if (dto.testingLaboratories.length > 0) {
+                const laboratories = dto.testingLaboratories.map((l) => this.laboratoryRepository.create({
+                    nsbId,
+                    name: l.name,
+                    accreditationStatus: l.accreditationStatus,
+                    otherAccreditationDescription: l.otherAccreditationDescription,
+                    scopeOfAccreditation: l.scopeOfAccreditation,
+                    contactForAcapReferralsName: l.contactForAcapReferralsName,
+                    contactForAcapReferralsEmail: l.contactForAcapReferralsEmail,
+                    contactForAcapReferralsPhone: l.contactForAcapReferralsPhone,
+                    isActive: l.isActive !== undefined ? l.isActive : true,
+                }));
+                await queryRunner.manager.save(laboratories);
+            }
         }
     }
 };

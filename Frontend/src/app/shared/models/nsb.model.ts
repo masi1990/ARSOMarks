@@ -56,6 +56,9 @@ export interface Nsb {
   consumerAffairsFocalPointName?: string;
   consumerAffairsFocalPointContact?: string;
   documents?: NsbDocument[];
+  stakeholderRegistryStatus?: 'DRAFT' | 'SUBMITTED';
+  stakeholderRegistrySubmittedAt?: string;
+  stakeholderRegistrySubmittedBy?: string;
 }
 
 export enum NsbProfileDocumentType {

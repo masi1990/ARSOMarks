@@ -154,6 +154,28 @@ let NsbController = class NsbController {
         }
         return this.stakeholderRegistryService.updateStakeholderRegistry(id, dto);
     }
+    async saveDraft(id, dto, user) {
+        const userRoles = user.roles || (user.role ? [user.role] : []);
+        const isAdmin = userRoles.includes(enums_1.UserRole.SUPER_ADMIN) || userRoles.includes(enums_1.UserRole.ARSO_SECRETARIAT);
+        if (!isAdmin && userRoles.includes(enums_1.UserRole.NSB_ADMIN)) {
+            const myNsb = await this.nsbService.findByUser(user);
+            if ((myNsb === null || myNsb === void 0 ? void 0 : myNsb.id) !== id) {
+                throw new common_1.ForbiddenException('You can only save draft stakeholder registry for your own NSB');
+            }
+        }
+        return this.stakeholderRegistryService.saveDraft(id, dto, user.id);
+    }
+    async submitRegistry(id, dto, user) {
+        const userRoles = user.roles || (user.role ? [user.role] : []);
+        const isAdmin = userRoles.includes(enums_1.UserRole.SUPER_ADMIN) || userRoles.includes(enums_1.UserRole.ARSO_SECRETARIAT);
+        if (!isAdmin && userRoles.includes(enums_1.UserRole.NSB_ADMIN)) {
+            const myNsb = await this.nsbService.findByUser(user);
+            if ((myNsb === null || myNsb === void 0 ? void 0 : myNsb.id) !== id) {
+                throw new common_1.ForbiddenException('You can only submit stakeholder registry for your own NSB');
+            }
+        }
+        return this.stakeholderRegistryService.submitRegistry(id, dto, user.id);
+    }
 };
 exports.NsbController = NsbController;
 __decorate([
@@ -263,6 +285,28 @@ __decorate([
         system_user_entity_1.SystemUser]),
     __metadata("design:returntype", Promise)
 ], NsbController.prototype, "updateStakeholderRegistry", null);
+__decorate([
+    (0, common_1.Post)(':id/stakeholder-registry/draft'),
+    (0, roles_decorator_1.Roles)(enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT, enums_1.UserRole.NSB_ADMIN),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true, skipNullProperties: true, skipUndefinedProperties: true, whitelist: false, forbidNonWhitelisted: false })),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, current_user_decorator_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, system_user_entity_1.SystemUser]),
+    __metadata("design:returntype", Promise)
+], NsbController.prototype, "saveDraft", null);
+__decorate([
+    (0, common_1.Post)(':id/stakeholder-registry/submit'),
+    (0, roles_decorator_1.Roles)(enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT, enums_1.UserRole.NSB_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, current_user_decorator_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, dtos_1.StakeholderRegistryDto,
+        system_user_entity_1.SystemUser]),
+    __metadata("design:returntype", Promise)
+], NsbController.prototype, "submitRegistry", null);
 exports.NsbController = NsbController = __decorate([
     (0, common_1.Controller)('nsb'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),

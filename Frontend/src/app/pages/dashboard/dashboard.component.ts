@@ -111,6 +111,10 @@ export class DashboardComponent implements OnInit {
   // Expose Math for template
   Math = Math;
 
+  get pendingRequestsCount(): number {
+    return this.roleRequests.filter(r => r.status === RoleRequestStatus.PENDING).length;
+  }
+
   refreshProfile(): void {
     this.authService.getProfile().subscribe({
       next: (user) => {
@@ -256,6 +260,11 @@ export class DashboardComponent implements OnInit {
   isNsbAdmin(): boolean {
     const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
     return roles.includes(UserRole.NSB_ADMIN) || roles.includes(UserRole.NSB_USER);
+  }
+
+  isOperator(): boolean {
+    const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
+    return roles.includes(UserRole.OPERATOR) || roles.includes(UserRole.NSB_ADMIN) || roles.includes(UserRole.SUPER_ADMIN);
   }
 
   ngOnInit(): void {

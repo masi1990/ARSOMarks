@@ -66,7 +66,7 @@ __decorate([
     __metadata("design:type", String)
 ], NsbMarketSurveillanceAuthority.prototype, "mouDocumentHash", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'system_access_level_requested', type: 'varchar', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'access_level', type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], NsbMarketSurveillanceAuthority.prototype, "systemAccessLevelRequested", void 0);
 __decorate([

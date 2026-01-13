@@ -4,11 +4,13 @@ export declare class NsbCustomsBorderAgency {
     nsbId: string;
     nsb: Nsb;
     agencyName: string;
-    keyBorderPosts: string[];
+    parentMinistry?: string;
     acapVerificationContactName?: string;
     acapVerificationContactEmail?: string;
     acapVerificationContactPhone?: string;
-    integrationWithNationalSingleWindow: boolean;
+    integrationStatus?: string;
+    integrationDetails?: string;
+    apiAvailable?: string;
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;

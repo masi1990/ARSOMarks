@@ -16,20 +16,26 @@ export class NsbCustomsBorderAgency {
   @Column({ name: 'agency_name', length: 255 })
   agencyName: string;
 
-  @Column({ name: 'key_border_posts', type: 'text', array: true, default: [] })
-  keyBorderPosts: string[];
+  @Column({ name: 'parent_ministry', length: 255, nullable: true })
+  parentMinistry?: string;
 
-  @Column({ name: 'acap_verification_contact_name', length: 255, nullable: true })
+  @Column({ name: 'primary_contact_name', length: 255, nullable: true })
   acapVerificationContactName?: string;
 
-  @Column({ name: 'acap_verification_contact_email', length: 255, nullable: true })
+  @Column({ name: 'coordinator_email', length: 255, nullable: true })
   acapVerificationContactEmail?: string;
 
-  @Column({ name: 'acap_verification_contact_phone', length: 50, nullable: true })
+  @Column({ name: 'coordinator_phone', length: 50, nullable: true })
   acapVerificationContactPhone?: string;
 
-  @Column({ name: 'integration_with_national_single_window', default: false })
-  integrationWithNationalSingleWindow: boolean;
+  @Column({ name: 'integration_status', type: 'varchar', length: 50, nullable: true })
+  integrationStatus?: string;
+
+  @Column({ name: 'integration_details', type: 'text', nullable: true })
+  integrationDetails?: string;
+
+  @Column({ name: 'api_available', type: 'varchar', length: 20, nullable: true })
+  apiAvailable?: string;
 
   @Column({ name: 'is_active', default: true })
   isActive: boolean;

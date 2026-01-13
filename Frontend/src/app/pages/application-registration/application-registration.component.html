@@ -1,0 +1,1596 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 border-2 border-gray-200">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Application Registration</h1>
+          <p class="text-gray-600 text-lg">Complete your application profile to apply for ARSO Mark Certification</p>
+          <p class="text-sm text-gray-500 mt-2">This form is designed for comprehensive application registration</p>
+        </div>
+        <a
+          routerLink="/application-registrations"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 border-2 border-gray-300 font-medium transition-colors text-sm whitespace-nowrap"
+        >
+          ← Back to List
+        </a>
+      </div>
+    </div>
+
+    <!-- Part A Pre-filled Notification -->
+    <div *ngIf="partAPrefilled" class="mb-6 p-4 bg-blue-50 border-2 border-blue-400 text-blue-800 rounded-lg shadow-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+          </svg>
+          <div>
+            <p class="font-bold text-lg">ℹ️ Company Information Pre-filled</p>
+            <p class="text-sm mt-1">Part A (Company Info, Contact & Location, Business Activities, Preferences) has been pre-filled from your previous application. You can edit any fields as needed.</p>
+            <p class="text-sm mt-1 font-semibold">Please complete Part B (Product & Certification Details) for this new product.</p>
+          </div>
+        </div>
+        <button
+          (click)="partAPrefilled = false"
+          class="ml-4 text-blue-600 hover:text-blue-800"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Draft Save Success Message -->
+    <div *ngIf="draftSaveSuccess" class="mb-6 p-4 bg-green-50 border-2 border-green-400 text-green-800 rounded-lg shadow-lg animate-fade-in">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 mr-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <div>
+            <p class="font-bold text-lg">✓ Draft Saved Successfully!</p>
+            <p class="text-sm mt-1">Your progress has been saved. You can continue filling the form and save again anytime.</p>
+          </div>
+        </div>
+        <button
+          (click)="draftSaveSuccess = false"
+          class="ml-4 text-green-600 hover:text-green-800"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Final Submission Success Message -->
+    <div *ngIf="success" class="mb-6 p-4 bg-green-50 border-2 border-green-400 text-green-800 rounded-lg">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <p class="font-semibold">Application submitted successfully!</p>
+      </div>
+      <p class="mt-1">Redirecting to dashboard...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="mb-6 p-4 bg-red-50 border-2 border-red-400 text-red-800 rounded-lg">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+        <p class="font-semibold">{{ error }}</p>
+      </div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 border-2 border-gray-200 overflow-x-auto">
+      <div class="flex items-center justify-between min-w-max">
+        <div *ngFor="let step of [1, 2, 3, 4, 5, 6, 7, 8, 9]; let i = index" class="flex items-center" [class.flex-1]="i < 8">
+          <div class="flex flex-col items-center" [class.flex-1]="i < 8">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300 border-2 flex-shrink-0"
+              [class.bg-blue-600]="currentStep === step"
+              [class.bg-green-500]="currentStep > step"
+              [class.bg-gray-100]="currentStep < step"
+              [class.border-blue-600]="currentStep === step"
+              [class.border-green-500]="currentStep > step"
+              [class.border-gray-300]="currentStep < step"
+              [class.text-white]="currentStep >= step"
+              [class.text-gray-500]="currentStep < step"
+              (click)="goToStep(step)"
+              [class.cursor-pointer]="currentStep >= step"
+              [class.cursor-not-allowed]="currentStep < step"
+            >
+              <span *ngIf="currentStep > step">✓</span>
+              <span *ngIf="currentStep <= step">{{ step }}</span>
+            </div>
+            <span class="mt-2 text-xs text-center font-medium whitespace-nowrap" 
+                  [class.text-gray-900]="currentStep >= step"
+                  [class.text-gray-400]="currentStep < step">{{ getStepTitle(step) }}</span>
+          </div>
+          <div *ngIf="i < 8" class="h-1 rounded mx-1" 
+               [class.bg-green-500]="currentStep > step" 
+               [class.bg-gray-300]="currentStep <= step"
+               [class.flex-1]="i < 8"
+               style="min-width: 20px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" *ngIf="!success" class="bg-white rounded-lg shadow-md p-8 border-2 border-gray-200">
+      <!-- Step 1: Company Information -->
+      <div *ngIf="currentStep === 1" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Section A: Basic Company Information</h2>
+          <p class="text-gray-600 mt-1">Please provide your company's basic details</p>
+        </div>
+
+        <!-- Company Type & Legal Identity -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">A1: Company Type & Legal Identity</h3>
+          <div formGroupName="companyInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Type of Business <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="operatorType" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companyInfo.operatorType')?.invalid && registrationForm.get('companyInfo.operatorType')?.touched">
+                <option value="">Select Type of Business...</option>
+                <option *ngFor="let type of operatorTypes" [value]="type.value">{{ type.label }}</option>
+              </select>
+              <p *ngIf="registrationForm.get('companyInfo.operatorType')?.invalid && registrationForm.get('companyInfo.operatorType')?.touched" class="mt-1 text-sm text-red-600">
+                Please select a business type
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Company Legal Name <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="companyLegalName" 
+                placeholder="Enter company legal name"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companyInfo.companyLegalName')?.invalid && registrationForm.get('companyInfo.companyLegalName')?.touched" />
+              <p *ngIf="registrationForm.get('companyInfo.companyLegalName')?.invalid && registrationForm.get('companyInfo.companyLegalName')?.touched" class="mt-1 text-sm text-red-600">
+                Company legal name is required (minimum 2 characters)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Trading Name (Optional)
+              </label>
+              <input 
+                type="text" 
+                formControlName="tradingName" 
+                placeholder="Enter trading name if different"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Registration Number <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="registrationNumberBusiness" 
+                placeholder="Enter business registration number"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companyInfo.registrationNumberBusiness')?.invalid && registrationForm.get('companyInfo.registrationNumberBusiness')?.touched" />
+              <p *ngIf="registrationForm.get('companyInfo.registrationNumberBusiness')?.invalid && registrationForm.get('companyInfo.registrationNumberBusiness')?.touched" class="mt-1 text-sm text-red-600">
+                Registration number is required
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Tax ID (Optional)
+              </label>
+              <input 
+                type="text" 
+                formControlName="taxId" 
+                placeholder="Enter tax identification number"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                VAT Number (Optional)
+              </label>
+              <input 
+                type="text" 
+                formControlName="vatNumber" 
+                placeholder="Enter VAT number if applicable"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Year Established <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number" 
+                formControlName="yearEstablished" 
+                placeholder="Enter year"
+                [min]="1900"
+                [max]="currentYear"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companyInfo.yearEstablished')?.invalid && registrationForm.get('companyInfo.yearEstablished')?.touched" />
+              <p *ngIf="registrationForm.get('companyInfo.yearEstablished')?.invalid && registrationForm.get('companyInfo.yearEstablished')?.touched" class="mt-1 text-sm text-red-600">
+                Please enter a valid year
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Legal Structure <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="legalStructure" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companyInfo.legalStructure')?.invalid && registrationForm.get('companyInfo.legalStructure')?.touched">
+                <option value="">Select Legal Structure...</option>
+                <option *ngFor="let structure of legalStructures" [value]="structure.value">{{ structure.label }}</option>
+              </select>
+              <p *ngIf="registrationForm.get('companyInfo.legalStructure')?.invalid && registrationForm.get('companyInfo.legalStructure')?.touched" class="mt-1 text-sm text-red-600">
+                Please select legal structure
+              </p>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Main Business Activity <span class="text-red-500">*</span>
+              </label>
+              <textarea 
+                formControlName="businessActivity" 
+                rows="4" 
+                placeholder="Describe your main business activity in detail"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors resize-none"
+                [class.border-red-500]="registrationForm.get('companyInfo.businessActivity')?.invalid && registrationForm.get('companyInfo.businessActivity')?.touched"></textarea>
+              <p *ngIf="registrationForm.get('companyInfo.businessActivity')?.invalid && registrationForm.get('companyInfo.businessActivity')?.touched" class="mt-1 text-sm text-red-600">
+                Please describe your main business activity (minimum 10 characters)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Company Size & Financial Information -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">A2: Company Size & Financial Information</h3>
+          <div formGroupName="companySize" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Number of Employees <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="employeeCount" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companySize.employeeCount')?.invalid && registrationForm.get('companySize.employeeCount')?.touched">
+                <option value="">Select Employee Range...</option>
+                <option *ngFor="let range of employeeCountRanges" [value]="range.value">{{ range.label }}</option>
+              </select>
+              <p *ngIf="registrationForm.get('companySize.employeeCount')?.invalid && registrationForm.get('companySize.employeeCount')?.touched" class="mt-1 text-sm text-red-600">
+                Please select employee count range
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Annual Turnover Range <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="annualTurnover" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('companySize.annualTurnover')?.invalid && registrationForm.get('companySize.annualTurnover')?.touched">
+                <option value="">Select Turnover Range...</option>
+                <option *ngFor="let range of annualTurnoverRanges" [value]="range.value">{{ range.label }}</option>
+              </select>
+              <p *ngIf="registrationForm.get('companySize.annualTurnover')?.invalid && registrationForm.get('companySize.annualTurnover')?.touched" class="mt-1 text-sm text-red-600">
+                Please select annual turnover range
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Annual Revenue (Optional)
+              </label>
+              <input 
+                type="number" 
+                formControlName="annualRevenue" 
+                placeholder="Enter annual revenue"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                % Revenue from Exports
+              </label>
+              <input 
+                type="number" 
+                formControlName="exportPercentage" 
+                placeholder="0-100"
+                min="0" 
+                max="100"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                % Revenue from Imports
+              </label>
+              <input 
+                type="number" 
+                formControlName="importPercentage" 
+                placeholder="0-100"
+                min="0" 
+                max="100"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Capital Investment
+              </label>
+              <input 
+                type="number" 
+                formControlName="capitalInvestment" 
+                placeholder="Enter capital investment amount"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Ownership & Beneficial Ownership -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">A3: Ownership & Beneficial Ownership</h3>
+          <div formGroupName="ownershipInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Type of Ownership <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="ownershipType" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('ownershipInfo.ownershipType')?.invalid && registrationForm.get('ownershipInfo.ownershipType')?.touched">
+                <option value="">Select Ownership Type...</option>
+                <option *ngFor="let type of ownershipTypes" [value]="type.value">{{ type.label }}</option>
+              </select>
+              <p *ngIf="registrationForm.get('ownershipInfo.ownershipType')?.invalid && registrationForm.get('ownershipInfo.ownershipType')?.touched" class="mt-1 text-sm text-red-600">
+                Please select ownership type
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Women-Owned/Led <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="womenOwned" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('ownershipInfo.womenOwned')?.invalid && registrationForm.get('ownershipInfo.womenOwned')?.touched">
+                <option value="">Select...</option>
+                <option *ngFor="let status of ownershipStatuses" [value]="status.value">{{ status.label }}</option>
+              </select>
+              <p *ngIf="registrationForm.get('ownershipInfo.womenOwned')?.invalid && registrationForm.get('ownershipInfo.womenOwned')?.touched" class="mt-1 text-sm text-red-600">
+                Please select women ownership status
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Number of Beneficial Owners <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number" 
+                formControlName="beneficialOwnersCount" 
+                placeholder="Enter number"
+                min="1"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('ownershipInfo.beneficialOwnersCount')?.invalid && registrationForm.get('ownershipInfo.beneficialOwnersCount')?.touched" />
+              <p *ngIf="registrationForm.get('ownershipInfo.beneficialOwnersCount')?.invalid && registrationForm.get('ownershipInfo.beneficialOwnersCount')?.touched" class="mt-1 text-sm text-red-600">
+                Please enter number of beneficial owners (minimum 1)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                PEP Involved? <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="pepInvolved" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('ownershipInfo.pepInvolved')?.invalid && registrationForm.get('ownershipInfo.pepInvolved')?.touched">
+                <option [value]="false">No</option>
+                <option [value]="true">Yes</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2" *ngIf="registrationForm.get('ownershipInfo.pepInvolved')?.value">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                PEP Details
+              </label>
+              <textarea 
+                formControlName="pepDetails" 
+                rows="3" 
+                placeholder="Please provide details about PEP involvement"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Country of Operation <span class="text-red-500">*</span>
+          </label>
+          <select 
+            formControlName="countryId" 
+            class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+            [class.border-red-500]="registrationForm.get('countryId')?.invalid && registrationForm.get('countryId')?.touched">
+            <option value="">Select Country...</option>
+            <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+          </select>
+          <p *ngIf="registrationForm.get('countryId')?.invalid && registrationForm.get('countryId')?.touched" class="mt-1 text-sm text-red-600">
+            Please select a country
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 2: Contact & Location -->
+      <div *ngIf="currentStep === 2" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Section B: Contact & Location Information</h2>
+          <p class="text-gray-600 mt-1">Provide your contact details and business locations</p>
+        </div>
+
+        <!-- Primary Contact -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">B1: Primary Contact Details</h3>
+          <div formGroupName="primaryContact" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Primary Contact Name <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="primaryContact" 
+                placeholder="Enter full name"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('primaryContact.primaryContact')?.invalid && registrationForm.get('primaryContact.primaryContact')?.touched" />
+              <p *ngIf="registrationForm.get('primaryContact.primaryContact')?.invalid && registrationForm.get('primaryContact.primaryContact')?.touched" class="mt-1 text-sm text-red-600">
+                Primary contact name is required (minimum 3 characters)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Position/Title <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="contactPosition" 
+                placeholder="Enter position or title"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('primaryContact.contactPosition')?.invalid && registrationForm.get('primaryContact.contactPosition')?.touched" />
+              <p *ngIf="registrationForm.get('primaryContact.contactPosition')?.invalid && registrationForm.get('primaryContact.contactPosition')?.touched" class="mt-1 text-sm text-red-600">
+                Position/title is required
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Email Address <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="email" 
+                formControlName="contactEmail" 
+                placeholder="Enter email address"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('primaryContact.contactEmail')?.invalid && registrationForm.get('primaryContact.contactEmail')?.touched" />
+              <p *ngIf="registrationForm.get('primaryContact.contactEmail')?.invalid && registrationForm.get('primaryContact.contactEmail')?.touched" class="mt-1 text-sm text-red-600">
+                Please enter a valid email address
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="tel" 
+                formControlName="contactPhone" 
+                placeholder="Enter phone number with country code"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('primaryContact.contactPhone')?.invalid && registrationForm.get('primaryContact.contactPhone')?.touched" />
+              <p *ngIf="registrationForm.get('primaryContact.contactPhone')?.invalid && registrationForm.get('primaryContact.contactPhone')?.touched" class="mt-1 text-sm text-red-600">
+                Phone number is required
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Alternate Contact (Optional)
+              </label>
+              <input 
+                type="text" 
+                formControlName="altContact" 
+                placeholder="Enter alternate contact name"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Alternate Email (Optional)
+              </label>
+              <input 
+                type="email" 
+                formControlName="altEmail" 
+                placeholder="Enter alternate email"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Alternate Phone (Optional)
+              </label>
+              <input 
+                type="tel" 
+                formControlName="altPhone" 
+                placeholder="Enter alternate phone"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Locations -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">B2: Physical Location Details</h3>
+          <div formArrayName="locations">
+            <div *ngFor="let location of locationsFormArray.controls; let i = index" [formGroupName]="i" class="mb-6 p-6 bg-white border-2 border-gray-300 rounded-lg">
+              <div class="flex justify-between items-center mb-4">
+                <h4 class="font-semibold text-gray-900">Location {{ i + 1 }}</h4>
+                <button 
+                  type="button" 
+                  *ngIf="locationsFormArray.length > 1" 
+                  (click)="removeLocation(i)" 
+                  class="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg border-2 border-red-300 transition-colors">
+                  Remove Location
+                </button>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Physical Address <span class="text-red-500">*</span>
+                  </label>
+                  <textarea 
+                    formControlName="physicalAddress" 
+                    rows="3" 
+                    placeholder="Enter complete physical address"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors resize-none"
+                    [class.border-red-500]="location.get('physicalAddress')?.invalid && location.get('physicalAddress')?.touched"></textarea>
+                  <p *ngIf="location.get('physicalAddress')?.invalid && location.get('physicalAddress')?.touched" class="mt-1 text-sm text-red-600">
+                    Physical address is required (minimum 10 characters)
+                  </p>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Address Line 1 <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    formControlName="addressLine1" 
+                    placeholder="Street address"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Address Line 2
+                  </label>
+                  <input 
+                    type="text" 
+                    formControlName="addressLine2" 
+                    placeholder="Apartment, suite, etc."
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    City/Town <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    formControlName="cityTown" 
+                    placeholder="Enter city or town"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Region/State <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    formControlName="regionState" 
+                    placeholder="Enter region or state"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Postal Code <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    formControlName="postalCode" 
+                    placeholder="Enter postal code"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Country <span class="text-red-500">*</span>
+                  </label>
+                  <select 
+                    formControlName="countryId" 
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                    <option value="">Select Country...</option>
+                    <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            (click)="addLocation()" 
+            class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 border-2 border-gray-300 transition-colors font-medium">
+            + Add Another Location
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Business Activities -->
+      <div *ngIf="currentStep === 3" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Section C: Business Activities & Markets</h2>
+          <p class="text-gray-600 mt-1">Tell us about your business sectors and market reach</p>
+        </div>
+
+        <!-- Business Sectors -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">C1: Business Sectors & Activities</h3>
+          <div formArrayName="businessSectors">
+            <div *ngFor="let sector of businessSectorsFormArray.controls; let i = index" [formGroupName]="i" class="mb-6 p-6 bg-white border-2 border-gray-300 rounded-lg">
+              <div class="flex justify-between items-center mb-4">
+                <h4 class="font-semibold text-gray-900">Sector {{ i + 1 }}</h4>
+                <button 
+                  type="button" 
+                  *ngIf="businessSectorsFormArray.length > 1" 
+                  (click)="removeBusinessSector(i)" 
+                  class="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg border-2 border-red-300 transition-colors">
+                  Remove Sector
+                </button>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Main Sector <span class="text-red-500">*</span>
+                  </label>
+                  <select 
+                    formControlName="mainSector" 
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                    <option value="">Select Main Sector...</option>
+                    <option *ngFor="let sector of mainBusinessSectors" [value]="sector">{{ sector }}</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    % of Annual Revenue <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="number" 
+                    formControlName="percentageRevenue" 
+                    placeholder="0-100"
+                    min="0" 
+                    max="100"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="businessSectorsFormArray.errors?.['totalNot100']" class="mt-2 p-3 bg-red-50 border-2 border-red-300 text-red-700 rounded-lg text-sm">
+            ⚠️ Total revenue percentage across all sectors must equal 100%
+          </div>
+          <button 
+            type="button" 
+            (click)="addBusinessSector()" 
+            class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 border-2 border-gray-300 transition-colors font-medium">
+            + Add Another Sector
+          </button>
+        </div>
+
+        <!-- Markets -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">C2: Market Reach & Trade</h3>
+          <div formGroupName="marketInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Domestic Markets <span class="text-red-500">*</span>
+              </label>
+              <select 
+                multiple 
+                formControlName="domesticMarkets" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors min-h-[100px]">
+                <option *ngFor="let market of domesticMarketTypes" [value]="market">{{ market }}</option>
+              </select>
+              <p class="mt-1 text-xs text-gray-500">Hold Ctrl (Windows) or Cmd (Mac) to select multiple</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                AfCFTA Awareness <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="afcftaAwareness" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="">Select Awareness Level...</option>
+                <option *ngFor="let level of afcftaAwarenessLevels" [value]="level">{{ level }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Production Capacity -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">C3: Production Capacity & Capabilities</h3>
+          <div formGroupName="productionCapacity" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Annual Production Capacity <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number" 
+                formControlName="productionCapacity" 
+                placeholder="Enter capacity"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Capacity Unit <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="capacityUnit" 
+                placeholder="e.g., units, kg, liters, tonnes"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Capacity Utilization % <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number" 
+                formControlName="capacityUtilization" 
+                placeholder="0-100"
+                min="0" 
+                max="100"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Quality Management System <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="qualityManagement" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="">Select...</option>
+                <option *ngFor="let option of qualityManagementOptions" [value]="option">{{ option }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                QMS Type <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="qmsType" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="">Select QMS Type...</option>
+                <option *ngFor="let type of qmsTypes" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Number of Technical/QC Staff <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number" 
+                formControlName="technicalStaff" 
+                placeholder="Enter number"
+                min="0"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Preferences & Consent -->
+      <div *ngIf="currentStep === 4" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Section D: Preferences, Accessibility & Consent</h2>
+          <p class="text-gray-600 mt-1">Set your preferences and provide necessary consents</p>
+        </div>
+
+        <!-- Preferences -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">D1: User Preferences</h3>
+          <div formGroupName="preferences" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Preferred Language <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="preferredLanguage" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option *ngFor="let lang of preferredLanguages" [value]="lang">{{ lang }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Notification Frequency <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="notificationFrequency" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option *ngFor="let freq of notificationFrequencies" [value]="freq">{{ formatEnumLabel(freq) }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Timezone <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="timezone" 
+                placeholder="e.g., UTC+2, Africa/Lagos"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Currency <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="currency" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="LOCAL">Local Currency</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">D2: Accessibility & Special Needs</h3>
+          <div formGroupName="accessibility" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Need Accessibility Assistance? <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="assistiveTech" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option [value]="false">No</option>
+                <option [value]="true">Yes</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Digital Literacy Level <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="literacyLevel" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option *ngFor="let level of digitalLiteracyLevels" [value]="level">{{ level }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Internet Access Type <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="internetAccess" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="">Select...</option>
+                <option *ngFor="let type of internetAccessTypes" [value]="type">{{ formatEnumLabel(type) }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Primary Device <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="deviceType" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="">Select...</option>
+                <option *ngFor="let device of deviceTypes" [value]="device">{{ formatEnumLabel(device) }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consents -->
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900">D3: Data & Marketing Consent</h3>
+          <div formGroupName="consents" class="space-y-4">
+            <div class="flex items-start p-4 bg-white rounded-lg border-2 border-gray-200">
+              <input 
+                type="checkbox" 
+                formControlName="dataConsent" 
+                id="dataConsent" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" />
+              <label for="dataConsent" class="text-sm text-gray-700 flex-1">
+                I consent to the processing of my personal data as per ACAP Privacy Policy <span class="text-red-500">*</span>
+              </label>
+            </div>
+
+            <div class="flex items-start p-4 bg-white rounded-lg border-2 border-gray-200">
+              <input 
+                type="checkbox" 
+                formControlName="dataSharingConsent" 
+                id="dataSharingConsent" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" />
+              <label for="dataSharingConsent" class="text-sm text-gray-700 flex-1">
+                I consent to share my certification status in public directory <span class="text-red-500">*</span>
+              </label>
+            </div>
+
+            <div class="flex items-start p-4 bg-white rounded-lg border-2 border-gray-200">
+              <input 
+                type="checkbox" 
+                formControlName="crossBorderData" 
+                id="crossBorderData" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" />
+              <label for="crossBorderData" class="text-sm text-gray-700 flex-1">
+                I consent to cross-border data sharing within AfCFTA for verification purposes <span class="text-red-500">*</span>
+              </label>
+            </div>
+
+            <div class="flex items-start p-4 bg-white rounded-lg border-2 border-gray-200">
+              <input 
+                type="checkbox" 
+                formControlName="termsAcceptance" 
+                id="termsAcceptance" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" />
+              <label for="termsAcceptance" class="text-sm text-gray-700 flex-1">
+                I accept the Terms and Conditions of ARSO Mark usage <span class="text-red-500">*</span>
+              </label>
+            </div>
+
+            <div class="flex items-start p-4 bg-white rounded-lg border-2 border-gray-200">
+              <input 
+                type="checkbox" 
+                formControlName="marketingConsent" 
+                id="marketingConsent" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" />
+              <label for="marketingConsent" class="text-sm text-gray-700 flex-1">
+                I agree to receive marketing communications about ACAP services (Optional)
+              </label>
+            </div>
+
+            <div class="mt-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Digital Signature (Full Name) <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="declarationSignature" 
+                placeholder="Enter your full name as digital signature"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('consents.declarationSignature')?.invalid && registrationForm.get('consents.declarationSignature')?.touched" />
+              <p *ngIf="registrationForm.get('consents.declarationSignature')?.invalid && registrationForm.get('consents.declarationSignature')?.touched" class="mt-1 text-sm text-red-600">
+                Digital signature is required (minimum 3 characters)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Product & Certification Details -->
+      <div *ngIf="currentStep === 5" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Part B - Section 2: Product & Certification Details</h2>
+          <p class="text-gray-600 mt-1">Reference: ACAP 1-2:2025, Sections 4–5; ISO/IEC 17030:2021; KEBS Clause 6</p>
+        </div>
+
+        <div formGroupName="productCertification" class="space-y-6">
+          <!-- Mark Applied For -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Mark Applied For <span class="text-red-500">*</span>
+            </label>
+            <div class="space-y-3">
+              <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                     [class.border-blue-500]="registrationForm.get('productCertification.markAppliedFor')?.value === 'ARSO_QUALITY_MARK'"
+                     [class.bg-blue-50]="registrationForm.get('productCertification.markAppliedFor')?.value === 'ARSO_QUALITY_MARK'">
+                <input type="radio" formControlName="markAppliedFor" value="ARSO_QUALITY_MARK" class="mr-3">
+                <span class="font-medium">ARSO Quality Mark</span>
+              </label>
+              <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                     [class.border-blue-500]="registrationForm.get('productCertification.markAppliedFor')?.value === 'ECO_MARK_AFRICA'"
+                     [class.bg-blue-50]="registrationForm.get('productCertification.markAppliedFor')?.value === 'ECO_MARK_AFRICA'">
+                <input type="radio" formControlName="markAppliedFor" value="ECO_MARK_AFRICA" class="mr-3">
+                <span class="font-medium">Eco Mark Africa</span>
+              </label>
+            </div>
+            <p *ngIf="registrationForm.get('productCertification.markAppliedFor')?.invalid && registrationForm.get('productCertification.markAppliedFor')?.touched" class="mt-1 text-sm text-red-600">
+              Please select a mark
+            </p>
+          </div>
+
+          <!-- ACAP Scheme -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              ACAP Scheme <span class="text-red-500">*</span>
+            </label>
+            <select 
+              formControlName="acapScheme" 
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('productCertification.acapScheme')?.invalid && registrationForm.get('productCertification.acapScheme')?.touched">
+              <option value="">Select ACAP Scheme...</option>
+              <option *ngFor="let scheme of acapSchemes" [value]="scheme.code">{{ scheme.code }} - {{ scheme.name }}</option>
+            </select>
+            <p *ngIf="registrationForm.get('productCertification.acapScheme')?.invalid && registrationForm.get('productCertification.acapScheme')?.touched" class="mt-1 text-sm text-red-600">
+              Please select an ACAP scheme
+            </p>
+          </div>
+
+          <!-- Product Brand Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Product Brand Name <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              formControlName="productBrandName" 
+              placeholder="Enter product brand name"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('productCertification.productBrandName')?.invalid && registrationForm.get('productCertification.productBrandName')?.touched" />
+            <p *ngIf="registrationForm.get('productCertification.productBrandName')?.invalid && registrationForm.get('productCertification.productBrandName')?.touched" class="mt-1 text-sm text-red-600">
+              Product brand name is required (minimum 2 characters)
+            </p>
+          </div>
+
+          <!-- Product Model/Type Number -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Product Model/Type Number <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              formControlName="productModelTypeNumber" 
+              placeholder="Enter model/type number"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('productCertification.productModelTypeNumber')?.invalid && registrationForm.get('productCertification.productModelTypeNumber')?.touched" />
+            <p *ngIf="registrationForm.get('productCertification.productModelTypeNumber')?.invalid && registrationForm.get('productCertification.productModelTypeNumber')?.touched" class="mt-1 text-sm text-red-600">
+              Product model/type number is required
+            </p>
+          </div>
+
+          <!-- Applicable ARSO Standards -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Applicable ARSO Standard(s) <span class="text-red-500">*</span>
+            </label>
+            <div class="space-y-2 max-h-48 overflow-y-auto border-2 border-gray-300 rounded-lg p-4">
+              <label *ngFor="let standard of arsoStandards" class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                <input type="checkbox" [value]="standard.code" 
+                       [checked]="registrationForm.get('productCertification.applicableArsoStandards')?.value?.includes(standard.code)"
+                       (change)="toggleArsoStandard(standard.code)"
+                       class="mr-3">
+                <span>{{ standard.code }} - {{ standard.name }}</span>
+              </label>
+            </div>
+            <p *ngIf="registrationForm.get('productCertification.applicableArsoStandards')?.invalid && registrationForm.get('productCertification.applicableArsoStandards')?.touched" class="mt-1 text-sm text-red-600">
+              Please select at least one ARSO standard
+            </p>
+          </div>
+
+          <!-- Scope of Certification -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Scope of Certification <span class="text-red-500">*</span>
+            </label>
+            <textarea 
+              formControlName="scopeOfCertification" 
+              rows="5"
+              placeholder="Provide a detailed description of products/processes covered by this certification..."
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('productCertification.scopeOfCertification')?.invalid && registrationForm.get('productCertification.scopeOfCertification')?.touched"></textarea>
+            <p *ngIf="registrationForm.get('productCertification.scopeOfCertification')?.invalid && registrationForm.get('productCertification.scopeOfCertification')?.touched" class="mt-1 text-sm text-red-600">
+              Scope of certification is required (minimum 20 characters)
+            </p>
+          </div>
+
+          <!-- Expected Annual Certified Volume -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Expected Annual Certified Volume <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="expectedAnnualCertifiedVolume" 
+                placeholder="e.g., 1000"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                [class.border-red-500]="registrationForm.get('productCertification.expectedAnnualCertifiedVolume')?.invalid && registrationForm.get('productCertification.expectedAnnualCertifiedVolume')?.touched" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Unit
+              </label>
+              <select 
+                formControlName="expectedAnnualCertifiedVolumeUnit" 
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors">
+                <option value="">Select unit...</option>
+                <option value="tons">Tons</option>
+                <option value="kg">Kilograms (kg)</option>
+                <option value="units">Units</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Target Markets -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Target Markets <span class="text-red-500">*</span>
+            </label>
+            <div class="space-y-2 border-2 border-gray-300 rounded-lg p-4">
+              <label *ngFor="let market of targetMarkets" class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                <input type="checkbox" [value]="market.value" 
+                       [checked]="registrationForm.get('productCertification.targetMarkets')?.value?.includes(market.value)"
+                       (change)="toggleTargetMarket(market.value)"
+                       class="mr-3">
+                <span>{{ market.label }}</span>
+              </label>
+            </div>
+            <p *ngIf="registrationForm.get('productCertification.targetMarkets')?.invalid && registrationForm.get('productCertification.targetMarkets')?.touched" class="mt-1 text-sm text-red-600">
+              Please select at least one target market
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Manufacturer Information -->
+      <div *ngIf="currentStep === 6" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Part B - Section 3: Production & Manufacturer Information</h2>
+          <p class="text-gray-600 mt-1">Reference: ACAP 1-2: Annexes; KEBS Clause 6.3</p>
+        </div>
+
+        <div formGroupName="manufacturerInfo" class="space-y-6">
+          <!-- Manufacturer's Legal Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Manufacturer's Legal Name <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              formControlName="manufacturerLegalName" 
+              placeholder="Enter legal entity name"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('manufacturerInfo.manufacturerLegalName')?.invalid && registrationForm.get('manufacturerInfo.manufacturerLegalName')?.touched" />
+            <p *ngIf="registrationForm.get('manufacturerInfo.manufacturerLegalName')?.invalid && registrationForm.get('manufacturerInfo.manufacturerLegalName')?.touched" class="mt-1 text-sm text-red-600">
+              Manufacturer's legal name is required (minimum 2 characters)
+            </p>
+          </div>
+
+          <!-- Manufacturer's Address -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Manufacturer's Address & Country <span class="text-red-500">*</span>
+            </label>
+            <textarea 
+              formControlName="manufacturerAddress" 
+              rows="3"
+              placeholder="Enter physical location of the factory/production site"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('manufacturerInfo.manufacturerAddress')?.invalid && registrationForm.get('manufacturerInfo.manufacturerAddress')?.touched"></textarea>
+            <p *ngIf="registrationForm.get('manufacturerInfo.manufacturerAddress')?.invalid && registrationForm.get('manufacturerInfo.manufacturerAddress')?.touched" class="mt-1 text-sm text-red-600">
+              Manufacturer's address is required (minimum 10 characters)
+            </p>
+          </div>
+
+          <!-- Manufacturer Country -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Manufacturer's Country <span class="text-red-500">*</span>
+            </label>
+            <select 
+              formControlName="manufacturerCountryId" 
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('manufacturerInfo.manufacturerCountryId')?.invalid && registrationForm.get('manufacturerInfo.manufacturerCountryId')?.touched">
+              <option value="">Select Country...</option>
+              <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+            </select>
+            <p *ngIf="registrationForm.get('manufacturerInfo.manufacturerCountryId')?.invalid && registrationForm.get('manufacturerInfo.manufacturerCountryId')?.touched" class="mt-1 text-sm text-red-600">
+              Please select a country
+            </p>
+          </div>
+
+          <!-- Production Site GPS Coordinates -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Production Site GPS Coordinates <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              formControlName="productionSiteGpsCoordinates" 
+              placeholder="e.g., -1.2921, 36.8219 or -1.2921;36.8219"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('manufacturerInfo.productionSiteGpsCoordinates')?.invalid && registrationForm.get('manufacturerInfo.productionSiteGpsCoordinates')?.touched" />
+            <p class="mt-1 text-sm text-gray-500">Format: Latitude,Longitude (±10m accuracy required)</p>
+            <p *ngIf="registrationForm.get('manufacturerInfo.productionSiteGpsCoordinates')?.invalid && registrationForm.get('manufacturerInfo.productionSiteGpsCoordinates')?.touched" class="mt-1 text-sm text-red-600">
+              GPS coordinates are required
+            </p>
+          </div>
+
+          <!-- Type of Production -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Type of Production <span class="text-red-500">*</span>
+            </label>
+            <select 
+              formControlName="typeOfProduction" 
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('manufacturerInfo.typeOfProduction')?.invalid && registrationForm.get('manufacturerInfo.typeOfProduction')?.touched">
+              <option value="">Select Type of Production...</option>
+              <option *ngFor="let type of productionTypes" [value]="type.value">{{ type.label }}</option>
+            </select>
+            <p *ngIf="registrationForm.get('manufacturerInfo.typeOfProduction')?.invalid && registrationForm.get('manufacturerInfo.typeOfProduction')?.touched" class="mt-1 text-sm text-red-600">
+              Please select a type of production
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7: Conformity Evidence -->
+      <div *ngIf="currentStep === 7" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Part B - Section 4: Conformity Evidence & Document Validation</h2>
+          <p class="text-gray-600 mt-1">Reference: ACAP 1-1: Clause 14; ISO/IEC 17025; KEBS Clause 6.3 & Appendix F</p>
+        </div>
+
+        <div formGroupName="conformityEvidence" class="space-y-6">
+          <!-- Test Report -->
+          <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Test Report from Accredited Lab <span class="text-red-500">*</span></h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Test Report (PDF)</label>
+                <input 
+                  type="file" 
+                  accept=".pdf"
+                  (change)="onFileSelected($event, 'testReportFileId')"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                <p class="mt-1 text-sm text-gray-500">Report from an AFRAC MRA-accredited lab (ACAP 1-1: 14.1)</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Test Report Issuing Body <span class="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  formControlName="testReportIssuingBody" 
+                  placeholder="Enter issuing body name"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                  [class.border-red-500]="registrationForm.get('conformityEvidence.testReportIssuingBody')?.invalid && registrationForm.get('conformityEvidence.testReportIssuingBody')?.touched" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Test Report Certificate No. <span class="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  formControlName="testReportCertificateNo" 
+                  placeholder="Enter certificate number"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                  [class.border-red-500]="registrationForm.get('conformityEvidence.testReportCertificateNo')?.invalid && registrationForm.get('conformityEvidence.testReportCertificateNo')?.touched" />
+              </div>
+            </div>
+          </div>
+
+          <!-- QMS Certificate (Optional) -->
+          <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Manufacturer's QMS/FSMS Certificate (Optional)</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Upload QMS Certificate (PDF)</label>
+                <input 
+                  type="file" 
+                  accept=".pdf"
+                  (change)="onFileSelected($event, 'qmsCertificateFileId')"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                <p class="mt-1 text-sm text-gray-500">e.g., ISO 9001, ISO 22000, FSSC certificate</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">QMS Certificate Issuing Body</label>
+                <input 
+                  type="text" 
+                  formControlName="qmsCertificateIssuingBody" 
+                  placeholder="Enter issuing body name"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">QMS Certificate No.</label>
+                <input 
+                  type="text" 
+                  formControlName="qmsCertificateNo" 
+                  placeholder="Enter certificate number"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Evidence (Optional) -->
+          <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Other Evidence (Optional)</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Other Evidence (PDF)</label>
+                <input 
+                  type="file" 
+                  accept=".pdf"
+                  (change)="onFileSelected($event, 'otherEvidenceFileId')"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                <p class="mt-1 text-sm text-gray-500">Other recognized certifications (IECEE, national CBs)</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Other Evidence Issuing Body</label>
+                <input 
+                  type="text" 
+                  formControlName="otherEvidenceIssuingBody" 
+                  placeholder="Enter issuing body name"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Other Evidence Certificate No.</label>
+                <input 
+                  type="text" 
+                  formControlName="otherEvidenceCertificateNo" 
+                  placeholder="Enter certificate number"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Photographs -->
+          <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Product Photographs & Label Artwork <span class="text-red-500">*</span></h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Product Photographs (Images)</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  multiple
+                  (change)="onMultipleFilesSelected($event, 'productPhotographsFileIds')"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+                <p class="mt-1 text-sm text-gray-500">Clear images showing product, packaging, and proposed label with space for the ARSO CoC Number</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Label Artwork (Image) <span class="text-red-500">*</span></label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  (change)="onFileSelected($event, 'labelArtworkFileId')"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Declaration of Conformity -->
+          <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Declaration of Conformity <span class="text-red-500">*</span></h3>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Declaration of Conformity (PDF)</label>
+              <input 
+                type="file" 
+                accept=".pdf"
+                (change)="onFileSelected($event, 'declarationOfConformityFileId')"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              <p class="mt-1 text-sm text-gray-500">Signed statement taking full responsibility for compliance (Template per KEBS Appendix H)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 8: Post-Certification Commitments -->
+      <div *ngIf="currentStep === 8" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Part B - Section 5: Post-Certification Commitments & Systems</h2>
+          <p class="text-gray-600 mt-1">Reference: KEBS Clauses 8.1, 10.1.4, 10.3; ACAP 1-1: Clause 16</p>
+        </div>
+
+        <div formGroupName="postCertification" class="space-y-6">
+          <!-- Product Recall Procedure -->
+          <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Product Recall Procedure <span class="text-red-500">*</span></h3>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Product Recall Procedure (PDF)</label>
+              <input 
+                type="file" 
+                accept=".pdf"
+                (change)="onFileSelected($event, 'productRecallProcedureFileId')"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              <p class="mt-1 text-sm text-gray-500">Documented plan for market withdrawal (KEBS 10.1.4)</p>
+            </div>
+          </div>
+
+          <!-- Complaints Management Procedure -->
+          <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Complaints Management Procedure <span class="text-red-500">*</span></h3>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Complaints Management Procedure (PDF)</label>
+              <input 
+                type="file" 
+                accept=".pdf"
+                (change)="onFileSelected($event, 'complaintsManagementProcedureFileId')"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
+              <p class="mt-1 text-sm text-gray-500">System for logging and resolving consumer complaints (KEBS 10.3)</p>
+            </div>
+          </div>
+
+          <!-- Agreement to Surveillance -->
+          <div class="bg-yellow-50 p-6 rounded-lg border-2 border-yellow-200">
+            <label class="flex items-start cursor-pointer">
+              <input 
+                type="checkbox" 
+                formControlName="agreementToSurveillance" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                [class.border-red-500]="registrationForm.get('postCertification.agreementToSurveillance')?.invalid && registrationForm.get('postCertification.agreementToSurveillance')?.touched" />
+              <div class="flex-1">
+                <span class="font-semibold text-gray-900">Agreement to Surveillance <span class="text-red-500">*</span></span>
+                <p class="text-sm text-gray-600 mt-1">I authorize ARSO/CB to conduct market surveillance, testing, and unannounced audits (KEBS 8.1)</p>
+              </div>
+            </label>
+            <p *ngIf="registrationForm.get('postCertification.agreementToSurveillance')?.invalid && registrationForm.get('postCertification.agreementToSurveillance')?.touched" class="mt-2 text-sm text-red-600">
+              You must agree to surveillance
+            </p>
+          </div>
+
+          <!-- Traceability Undertaking -->
+          <div class="bg-yellow-50 p-6 rounded-lg border-2 border-yellow-200">
+            <label class="flex items-start cursor-pointer">
+              <input 
+                type="checkbox" 
+                formControlName="traceabilityUndertaking" 
+                class="mt-1 mr-3 w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                [class.border-red-500]="registrationForm.get('postCertification.traceabilityUndertaking')?.invalid && registrationForm.get('postCertification.traceabilityUndertaking')?.touched" />
+              <div class="flex-1">
+                <span class="font-semibold text-gray-900">Traceability Undertaking <span class="text-red-500">*</span></span>
+                <p class="text-sm text-gray-600 mt-1">I commit to maintain batch-level sales records to the first customer for traceability</p>
+              </div>
+            </label>
+            <p *ngIf="registrationForm.get('postCertification.traceabilityUndertaking')?.invalid && registrationForm.get('postCertification.traceabilityUndertaking')?.touched" class="mt-2 text-sm text-red-600">
+              You must commit to traceability
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 9: Certification Body Selection -->
+      <div *ngIf="currentStep === 9" class="space-y-8">
+        <div class="border-b-2 border-gray-200 pb-4">
+          <h2 class="text-2xl font-bold text-gray-900">Part B - Section 6: Certification Body Selection & Declaration</h2>
+          <p class="text-gray-600 mt-1">Reference: ACAP 1-3; ISO/IEC 17065:2021</p>
+        </div>
+
+        <div formGroupName="cbSelection" class="space-y-6">
+          <!-- Selected Certification Body -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Selected Certification Body (CB) <span class="text-red-500">*</span>
+            </label>
+            <select 
+              formControlName="selectedCertificationBodyId" 
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+              [class.border-red-500]="registrationForm.get('cbSelection.selectedCertificationBodyId')?.invalid && registrationForm.get('cbSelection.selectedCertificationBodyId')?.touched">
+              <option value="">Select Certification Body...</option>
+              <option *ngFor="let cb of certificationBodies" [value]="cb.id">
+                {{ cb.name }}<span *ngIf="cb.shortName"> ({{ cb.shortName }})</span><span *ngIf="cb.country"> - {{ cb.country }}</span>
+              </option>
+            </select>
+            <p class="mt-1 text-sm text-gray-500">The chosen CB will manage the audit, issue the CoC, and report to ARSO</p>
+            <p *ngIf="registrationForm.get('cbSelection.selectedCertificationBodyId')?.invalid && registrationForm.get('cbSelection.selectedCertificationBodyId')?.touched" class="mt-1 text-sm text-red-600">
+              Please select a certification body
+            </p>
+          </div>
+
+          <!-- Final Declaration -->
+          <div class="bg-green-50 p-6 rounded-lg border-2 border-green-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900">Final Declaration & Signature <span class="text-red-500">*</span></h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Signature</label>
+                <input 
+                  type="text" 
+                  formControlName="finalDeclarationSignature" 
+                  placeholder="Enter your full name as signature"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                  [class.border-red-500]="registrationForm.get('cbSelection.finalDeclarationSignature')?.invalid && registrationForm.get('cbSelection.finalDeclarationSignature')?.touched" />
+                <p class="mt-1 text-sm text-gray-500">Confirms all information is correct and agrees to all terms, including fee payment</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Date <span class="text-red-500">*</span></label>
+                <input 
+                  type="date" 
+                  formControlName="finalDeclarationDate" 
+                  [max]="currentYear + '-12-31'"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                  [class.border-red-500]="registrationForm.get('cbSelection.finalDeclarationDate')?.invalid && registrationForm.get('cbSelection.finalDeclarationDate')?.touched" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center mt-8 pt-6 border-t-2 border-gray-200">
+        <button 
+          type="button" 
+          *ngIf="currentStep > 1" 
+          (click)="previousStep()" 
+          class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 border-2 border-gray-300 font-medium transition-colors">
+          ← Previous
+        </button>
+        <div *ngIf="currentStep === 1" class="flex-1"></div>
+
+        <div class="flex gap-4">
+          <button 
+            type="button" 
+            (click)="saveDraft()" 
+            [disabled]="saving" 
+            class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-yellow-600 font-medium transition-colors shadow-md">
+            <span *ngIf="!saving">💾 Save Draft</span>
+            <span *ngIf="saving">⏳ Saving...</span>
+          </button>
+
+          <button 
+            type="button" 
+            *ngIf="currentStep < totalSteps" 
+            (click)="nextStep()" 
+            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 border-2 border-blue-700 font-medium transition-colors shadow-md">
+            Next →
+          </button>
+
+          <button 
+            type="submit" 
+            *ngIf="currentStep === totalSteps" 
+            [disabled]="loading" 
+            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-green-700 font-medium transition-colors shadow-md">
+            <span *ngIf="!loading">✓ Submit Application</span>
+            <span *ngIf="loading">⏳ Submitting...</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
