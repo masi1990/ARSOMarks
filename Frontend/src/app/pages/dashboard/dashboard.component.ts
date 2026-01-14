@@ -264,7 +264,12 @@ export class DashboardComponent implements OnInit {
 
   isOperator(): boolean {
     const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
-    return roles.includes(UserRole.OPERATOR) || roles.includes(UserRole.NSB_ADMIN) || roles.includes(UserRole.SUPER_ADMIN);
+    return roles.includes(UserRole.OPERATOR) || roles.includes(UserRole.NSB_ADMIN) || roles.includes(UserRole.SUPER_ADMIN) || roles.includes(UserRole.PUBLIC);
+  }
+
+  isPublic(): boolean {
+    const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
+    return roles.includes(UserRole.PUBLIC);
   }
 
   ngOnInit(): void {

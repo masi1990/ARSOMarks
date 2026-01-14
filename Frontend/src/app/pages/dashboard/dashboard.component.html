@@ -523,7 +523,7 @@
   </div>
 
   <!-- Mark License Management Section -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isNsbAdmin() || isApprover()">
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isNsbAdmin() || isApprover() || isPublic()">
     <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
       <div class="rounded-lg bg-indigo-50 p-2">
         <svg class="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -545,7 +545,7 @@
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
           </svg>
-          Dashboard
+          Mark License Dashboard
         </span>
         <svg class="h-4 w-4 text-indigo-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -560,7 +560,7 @@
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
-          New Application
+          New License Application
         </span>
         <svg class="h-4 w-4 text-blue-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -608,7 +608,7 @@
         </svg>
       </div>
       <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">Operator Registration</h3>
+        <h3 class="text-lg font-bold text-slate-900">Operator Services</h3>
         <p class="text-sm text-slate-600">Complete your company profile and apply for ARSO Mark Certification</p>
       </div>
     </div>

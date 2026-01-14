@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { MarkLicenseModificationComponent } from './mark-license-modification.component';
+import { MarkLicenseModificationListComponent } from '../mark-license-modification-list/mark-license-modification-list.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: MarkLicenseModificationListComponent,
+  },
   {
     path: 'new/:licenseId',
     component: MarkLicenseModificationComponent,
@@ -16,8 +21,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [MarkLicenseModificationComponent],
-  imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  declarations: [MarkLicenseModificationComponent, MarkLicenseModificationListComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule.forChild(routes)],
 })
 export class MarkLicenseModificationModule {}
 

@@ -1,0 +1,1035 @@
+ 
+
+ARSO QUALITY MARK
+A POLICY ON THE USAGE AND GOVERNANCE OF THE MARK
+ 
+Contents
+1.0 PURPOSE AND SCOPE	6
+1.1 Purpose	6
+1.2 Scope	6
+2.0 NORMATIVE REFERENCES	7
+3.0 GOVERNANCE PRINCIPLES	7
+3.1 Impartiality and Independence	7
+3.2 Transparency and Accessibility	8
+3.3 Consistency and Harmonization	9
+3.4 Mutual Recognition and Acceptance	9
+3.5 Confidentiality	9
+3.6 Competence and Reliability	10
+3.6 Accountability and Decision-Making Authority	10
+3.7 Continual Improvement and Review	10
+3.8 Legal and Regulatory Compliance	10
+3.9 Digital-First & Innovation	11
+4.0 GOVERNANCE STRUCTURE & AUTHORITY	14
+4.1 Overview of the Governance Structure	14
+4.2 ARSO Council	15
+4.3 ARSO Conformity Assessment Committee (CACO)	17
+4.4 ARSO Central Secretariat	20
+4.5 Advisory Committee	23
+4.6 National Standards Body (NSB)	24
+4.7 Approved Certification Bodies (CBs)	25
+4.8 Standards Management Committee (SMC)	27
+5.0 OPERATIONAL PROCEDURES & SCHEME MANAGEMENT	29
+5.1 Application and Licensing Process for Certification Bodies (CBs)	29
+5.2 Client Certification Process (From Application to Certification)	31
+5.3 Surveillance, Re-assessment, and Recertification Cycles	32
+5.4 Extension and Reduction of Certification Scope	33
+5.5 Management of Changes by Certified Clients	33
+5.6 Suspension, Withdrawal, and Restoration of Certification	34
+5.7 Process for Scheme Development and Modification	34
+5.8 Management of Multiple-Site and Multi-National Certification	35
+6.0 MARK USAGE, CONTROL & PROTECTION	35
+6.1 Rules for the Use of the ARSO Mark and Eco Mark Africa	35
+6.2 Technical Specifications for Mark Reproduction (Size, Color, Placement)	36
+6.3 Control of Certified Products and Traceability Requirements	37
+6.4 Obligations of the Certified Client (Licensee)	37
+6.5 Anti-Counterfeiting and Fraud Prevention Measures	38
+6.6 Digital Credentials and E-Certificates	38
+6.7 Mark Misuse: Identification, Investigation, and Sanctions	39
+7.0 COMPLIANCE, ENFORCEMENT & MARKET SURVEILLANCE	39
+7.1 Monitoring and Oversight of Approved Certification Bodies	39
+7.2 Witness Audits and Performance Evaluation of CBs	40
+7.3 National Market Surveillance Coordination Role of NSBs	40
+7.4 Handling of Non-Conforming Products in the Market	41
+7.5 Recall Procedures for Non-Conforming Certified Products	41
+7.6 Cross-Border Enforcement Cooperation Mechanisms	42
+8.0 APPEALS, COMPLAINTS & DISPUTE RESOLUTION	42
+8.1 Definition and Scope of Appeals vs. Complaints	42
+8.2 Formal Appeals Process Against Certification Decisions	42
+8.3 Complaint Handling Process (From Clients and Third Parties)	43
+8.4 Role of the CACO Appeals Panel	43
+8.5 Arbitration and Escalation to the ARSO Council	43
+8.6 Record Keeping and Trend Analysis	44
+9.0 FINANCIAL & CONTRACTUAL FRAMEWORK	44
+9.1 Fee Structure (Application, Audit, Licensing, Royalty Fees)	44
+9.2 Financial Model and Sustainability of the ACAP Scheme	45
+9.3 License Agreement Templates (CBs and Certified Clients)	46
+9.4 Liability, Insurance, and Indemnity Provisions	46
+9.5 Grant and Funding Mechanisms for Capacity Building	47
+10.0 DIGITAL INFRASTRUCTURE & DATA MANAGEMENT	47
+10.1 ACAP Digital Platform Architecture and Security	47
+10.2 Data Requirements and Interoperability with National Systems	48
+10.3 Public Registry of Certified Products and CBs	48
+10.4 QR Code / Digital Link Specification for Mark Verification	48
+10.5 Data Privacy, Ownership, and Sharing Protocols	49
+10.6 Integration with AfCFTA Trade Facilitation Systems (e.g., SANoT)	49
+11.0 MUTUAL RECOGNITION & INTERNATIONAL COOPERATION	49
+11.1 Framework for Bilateral/Multilateral Recognition Agreements	49
+11.2 Equivalence Assessment of Other Certification Schemes	50
+11.3 Role in the AfCFTA Committee on TBT	50
+11.4 Engagement with International Bodies (ISO, IEC, WTO, UN Agencies)	51
+11.5 Integration with Regional Economic Communities (RECs) Systems	51
+12.0 COMMUNICATION, CAPACITY BUILDING & STAKEHOLDER ENGAGEMENT	51
+12.1 Brand Strategy and Promotion of the ARSO Mark	51
+12.2 Stakeholder Mapping and Engagement Plan	52
+12.3 Training and Competence Development Framework	52
+12.4 Public Awareness Campaigns for Consumers and Regulators	53
+12.5 Guidance Document Development and Publication	53
+13.0 MANAGEMENT SYSTEM & CONTINUAL IMPROVEMENT	53
+13.1 Internal Audits of the ACAP Governance System	53
+13.2 Management Review by the ARSO Council	54
+13.3 Monitoring of Key Performance Indicators (KPIs)	54
+13.4 Process for Periodic Review of this Policy Document	55
+13.5 Corrective and Preventive Action (CAPA) Process	55
+
+1.0 PURPOSE AND SCOPE
+1.1 Purpose
+This procedure establishes the rules for the governance, protection, licensing, and usage of the ARSO Conformity Assessment Programme (ACAP) Marks of Conformity. This includes the ARSO Mark and the Eco Mark Africa (EMA).
+This procedure is aligned with AfCFTA Annex 6 on Technical Barriers to Trade, which implements the AfCFTA’s commitment to reduce technical barriers and promote continental harmonization.
+As required by ACAP 1-1 Clause 1 and aligned with the AfCFTA Agreement Article 3 (Objectives) and WTO TBT Agreement Article 2.2, this certification procedure aims to facilitate intra-African trade while ensuring product safety and quality.
+This procedure defines the roles, responsibilities, decision-making authority, compliance mechanisms, and accountability structures necessary to ensure the integrity, credibility, and consistent application of the marks across Africa and internationally, with specific attention to the diverse requirements of ACAP certification schemes (A- L).
+1.2 Scope
+Per ACAP 1-1 Clause 1 and in accordance with AfCFTA Annex 6 on Technical Barriers to Trade, this procedure covers:
+•	Harmonized certification across AfCFTA member states
+•	Mutual recognition of conformity assessment results in line with AfCFTA Annex 6 on Technical Barriers to Trade and WTO TBT Agreement Article 6.
+•	Reduction of technical barriers to trade per WTO/TBT Agreement Preamble
+This procedure applies to:
+1.	ARSO Central Secretariat (Scheme Owner)
+2.	ARSO Conformity Assessment Committee (CACO)
+3.	ARSO Advisory Committee
+4.	National Standards Bodies (NSBs) of ARSO Member States
+5.	Approved Certification Bodies (CBs)
+6.	Licensed Operators (Certified Clients)
+7.	Accreditation Bodies (ABs) under AFRAC MRA
+8.	Testing laboratories and inspection bodies
+9.	Other stakeholders (regulators, industry associations, consumers)
+2.0 NORMATIVE REFERENCES
+•	ACAP 1-1:2025 – General requirements for ACAP certification scheme
+•	ACAP 1-2:2025 – Specific requirements for ACAP certification schemes
+•	ACAP 1-3:2025 – Requirements for approval of certification bodies
+•	ISO/IEC 17000:2020 – Conformity assessment — Vocabulary and general principles
+•	ISO/IEC 17065:2021 – Requirements for bodies certifying products, processes and services
+•	ISO/IEC 17030:2021 – General requirements for third-party marks of conformity
+•	ISO/IEC 17067:2013 – Fundamentals of product certification
+•	IAF MD 25:2023 – Criteria for Evaluation of Conformity Assessment Schemes
+•	AFRAC MRA Documents
+3.0 GOVERNANCE PRINCIPLES
+The governance of the ARSO Conformity Assessment Programme (ACAP) Marks of Conformity shall be founded on the following principles (transparency, impartiality, harmonization, and mutual recognition), which are derived from and aligned with internationally recognized conformity assessment standards, the AfCFTA legal framework (AfCFTA Protocol on Trade in Goods (Annex 6)), and the WTO TBT Agreement.
+This ensures that the Marks serve as facilitators of intra- African trade rather than technical barriers to trade. 
+3.1 Impartiality and Independence
+All activities related to the administration, licensing, and surveillance of the ARSO Marks shall be carried out impartially and free from conflicts of interest.
+Reference:
+•	ISO/IEC 17000:2020, Clause 4.4 (Impartiality)
+•	ACAP 1-1:2025, Clause 6.2(e) (Advisory Committee ensures impartiality)
+•	ISO/IEC 17065:2021, Clause 5.2 (Impartiality and conflict of interest management)
+Non- discrimination
+The Scheme Owner (ARSO) and all authorized Certification Bodies (CBs) shall operate in a manner that ensures fair treatment of all applicants, regardless of their country of origin within the AfCFTA.
+•	WTO TBT Agreement, Article 2.1 & 5.1.1:
+"Products imported from the territory of any Member shall be accorded treatment no less favourable than that accorded to like products of national origin and to like products originating in any other country."
+•	AfCFTA Annex 6, Article 5 (Non-Discrimination):
+"State Parties shall ensure that technical regulations, standards and conformity assessment procedures are not prepared, adopted or applied with a view to or with the effect of creating unnecessary obstacles to international trade."
+3.2 Transparency and Accessibility
+Information regarding the ARSO Marks, certification requirements, procedures, and decisions shall be made publicly available in a timely and accessible manner, in line with the principles of open trade and regulatory transparency.
+Reference:
+•	WTO TBT Agreement, Article 2.9–2.11 (Notification and transparency of technical regulations)
+•	AfCFTA Annex 6 on TBT (Promotion of transparency and use of international standards)
+•	ACAP 1-1:2025, Clause 6.1(h) (Public availability of scheme documents)
+•	ISO/IEC 17030:2021, Clause 5.3 (Information to be made available)
+Notification
+All requirements, fees, and processing times for the ARSO Quality Mark shall be publicly available to prevent hidden trade barriers.
+•	WTO TBT Agreement, Article 2.9:
+"Members shall publish a notice in a publication at an early appropriate stage... to enable interested parties in other Members to become acquainted with it."
+•	AfCFTA Annex 6, Article 8 (Transparency):
+"State Parties shall notify the Secretariat and other State Parties of any new or amended technical regulations and conformity assessment procedures... at least sixty (60) days before their entry into force."
+3.3 Consistency and Harmonization
+To ensure the ARSO Mark is globally valid and facilitates the Single African Market, technical requirements are based on harmonized standards.
+
+The ARSO Marks shall be applied consistently across all member states and certification schemes, in accordance with harmonized African Standards (ARS) and international best practices to facilitate intra-African trade.
+Reference:
+•	AfCFTA Agreement, Article 3(a) & (b) (Single market and liberalized trade)
+•	ACAP 1-1:2025, Clause 4.2(b) (Definition of common criteria for African Standards)
+•	ISO/IEC 17067:2013, Clause 5.2 (Basis of certification schemes)
+3.4 Mutual Recognition and Acceptance
+The ARSO Mark relies on the principle that a product tested and certified in one member state should be accepted in all others without re-testing.
+•	AfCFTA Annex 6, Article 10 (Mutual Recognition):
+"State Parties shall accept the results of conformity assessment procedures produced in other State Parties, provided they are satisfied that those procedures offer an assurance of conformity... equivalent to their own."
+•	WTO TBT Agreement, Article 6.1:
+"Members shall ensure, whenever possible, that results of conformity assessment procedures in other Members are accepted, even when those procedures differ from their own, provided they are satisfied that those procedures offer an assurance of conformity..."
+3.5 Confidentiality
+All proprietary information obtained during the certification process shall be protected to safeguard the commercial interests of the applicant.
+•	WTO TBT Agreement, Article 5.2.4:
+"The confidentiality of information about legitimate commercial interests... is respected in the same way as for domestic products and in such a manner that legitimate commercial interests are protected."
+3.6 Competence and Reliability
+All bodies and personnel involved in the certification, testing, inspection, and accreditation processes shall demonstrate and maintain appropriate competence, as verified through accreditation, qualification, and ongoing evaluation.
+Reference:
+•	ISO/IEC 17065:2021, Clause 7 (Competence of personnel)
+•	ACAP 1-3:2025 (Requirements for approval of certification bodies)
+•	AFRAC MRA Documents (Accreditation requirements for CABs)
+•	IAF MD 25:2023 (Criteria for evaluation of conformity assessment schemes)
+3.6 Accountability and Decision-Making Authority
+Clear lines of accountability and decision-making authority shall be established among ARSO Members States NSBs, certification bodies, accreditation bodies, and other stakeholders, in accordance with defined roles and responsibilities.
+Reference:
+•	ACAP 1-1:2025, Clause 6.1 (ARSO Central Secretariat responsibilities)
+•	ACAP 1-1:2025, Clause 6.4 (ARSO CACO functions)
+•	ISO/IEC 17000:2020, Clause 4.6 (Accountability in conformity assessment)
+3.7 Continual Improvement and Review
+The ARSO Marks governance system shall be subject to periodic review and improvement to ensure its continued relevance, effectiveness, and alignment with evolving regulatory, market, and international requirements.
+Reference:
+•	ACAP 1-1:2025, Clause 18.1 (Review of ACAP Certification System)
+•	ISO/IEC 17030:2021, Clause 8 (Management system requirements for mark owners)
+•	IAF MD 25:2023, Clause 6.5 (Review of scheme effectiveness)
+3.8 Legal and Regulatory Compliance
+All activities related to the ARSO Marks shall comply with applicable national, regional (AfCFTA), and international (WTO) legal and regulatory requirements, including those related to trade, safety, and consumer protection.
+Reference:
+•	AfCFTA Agreement, Article 4(a) (Progressive elimination of non-tariff barriers)
+•	WTO TBT Agreement, Article 2.2 (Legitimate objectives and necessity test)
+•	ACAP 1-1:2025, Clause 18.1(a) (Changes in applicable legislation)
+3.9 Digital-First & Innovation
+The governance and operation of the ACAP Marks shall embrace digital transformation, innovation, and technology-enabled processes to enhance accessibility, efficiency, transparency, and trust in conformity assessment across Africa. This includes the use of digital platforms for certification management, verification, and trade facilitation.
+•	AfCFTA Annex 9 on Trade Facilitation – Encourages the use of information technology, paperless trade, and electronic systems to expedite the movement, release, and clearance of goods.
+•	ACAP 1-1:2025, Clause 6.1(d) – ARSO Central Secretariat shall facilitate liaison of regional standardization, metrology, accreditation, and conformity assessment activities, which may include digital integration.
+•	ISO/IEC 17030:2021, Clause 5.6 – Addresses the use of electronic means for providing information related to marks of conformity.
+•	ISO/IEC 17067:2013, Clause 7.4 – Recognizes that certification schemes may include requirements for traceability and use of technology in product identification and verification.
+•	AFRAC MRA Documents – May include provisions for electronic accreditation records and digital recognition frameworks.
+•	IAF MD 25:2023, Clause 6.4 – Encourages the use of information technology to improve the effectiveness and efficiency of conformity assessment schemes.
+ 
+ 
+Comparative Table: Harmonization, Mutual Recognition & TBT Reduction
+Principle	AfCFTA Agreement	ARSO ACAP 1-1	WTO TBT Agreement
+Harmonization of Standards & Certification	Art. 3(e), 3(g) – Promote sustainable development, industrialisation, competitiveness.
+Annex 6 (TBT) – Requires use of international/regional standards as basis for technical regulations.
+Art. 5(l) – Encourages best practices in RECs and international conventions.	Clause 4.1(a) – Provides an African certification system based on ARSO standards.
+Clause 6.5(a) – Works with AFRAC MRA accreditation bodies.
+Clause 18.1 – Regular review to align with international standards.	Preamble – Encourages international standards to improve efficiency & facilitate trade.
+Art. 2.4 – Use international standards as basis for technical regulations.
+Art. 2.6 – Play full part in international standardisation.
+Mutual Recognition of Conformity Assessment	Annex 6 (TBT) – Encourages mutual recognition of conformity assessment results (aligned with WTO TBT Art. 6).
+Protocol on Trade in Services, Art. 10 – Mutual recognition of qualifications, licenses, certifications.	Clause 9 – Seeks endorsement within AFRAC MRA for mutual recognition.
+Clause 6.5(a) – Collaboration with AFRAC-accredited bodies to ensure cross-border acceptance.	Art. 6.1 – Acceptance of other Members’ conformity assessment results.
+Art. 6.3 – Encourages negotiation of mutual recognition agreements.
+Art. 9 – Promotes international/regional conformity assessment systems.
+Reduction of Technical Barriers to Trade	Art. 3(a), 3(b) – Create single market, liberalise trade.
+Annex 6 (TBT) – Aligns with WTO TBT to prevent unnecessary obstacles.
+Art. 4(a) – Progressive elimination of non-tariff barriers.	Clause 4.1(c) – Facilitates intra-African and global trade.
+Clause 4.2(b) – Defines criteria for design/implementation to reduce barriers.
+Clause 10.1 – Ensures transparent entry into certification scheme.	Preamble – Ensure TBTs do not create unnecessary obstacles.
+Art. 2.2 – Technical regulations not more trade-restrictive than necessary.
+Art. 5.1.2 – Conformity assessment procedures not to create unnecessary obstacles.
+
+ 
+4.0 GOVERNANCE STRUCTURE & AUTHORITY
+The governance structure of the ARSO Conformity Assessment Programme (ACAP) is designed to ensure effective oversight, technical integrity, operational efficiency, and continental alignment with AfCFTA objectives. It establishes clear lines of authority, responsibility, and accountability among all stakeholders, ensuring the ARSO Marks maintain their credibility and facilitate intra-African trade.
+•	ACAP 1-1:2025, Clause 6 – Administrative Structure of ARSO Conformity Assessment Programme
+4.1 Overview of the Governance Structure
+The governance structure shall comprise a hierarchical framework to ensure effective oversight, technical expertise, operational implementation, and stakeholder engagement. It includes:
+•	The ARSO Council as the supreme policy-making body.
+•	The ARSO Conformity Assessment Committee (CACO) for technical policy development and scheme maintenance.
+•	The Advisory Committee for safeguarding impartiality.
+•	The Standards Management Committee (SMC) for harmonization of standards.
+•	The ARSO Central Secretariat for day-to-day administration.
+This structure shall promote harmonization and mutual recognition of conformity assessment results, reducing technical barriers to trade.
+o	WTO TBT Agreement, Article 2.1 – "Members shall ensure that in respect of technical regulations, products imported from the territory of any Member shall be accorded treatment no less favourable than that accorded to like products of national origin and to like products originating in any other country."
+o	ACAP 1-1:2025, Clause 6.6 – "Relationship between ARSO, AB’s and CABs," defining interactions for accreditation and certification.
+o	ISO/IEC 17030:2021, Clause 4 – General requirements for third-party marks, requiring a defined governance to maintain mark integrity.
+All bodies shall operate in accordance with the principles in Section 3.0, with decisions documented and subject to periodic review as per Section 3.7.
+
+4.2 ARSO Council
+4.2.1 Role and Authority on the ACAP
+The ARSO Council, comprising the Heads/CEOs of National Standards Bodies (NSBs) of ARSO member states, acts as the supreme governing body for the strategic direction of the ACAP scheme. 
+o	ARSO Constitution, Article 7 – Establishes the ARSO Council as the supreme governing body comprising Heads/CEOs of National Standards Bodies (NSBs) of Member States.
+The ARSO Council provides the high-level mandate necessary to secure government commitment to the scheme across the continent.
+1.	Strategic Oversight and Policy Ratification -The Council reviews and ratifies the certification rules and harmonization policies recommended by the Conformity Assessment Committee (CACO). It ensures these policies are consistent with national laws and regional regulations.
+o	AfCFTA Annex 6, Article 13 (Cooperation):
+"State Parties shall cooperate in the development and harmonization of standards... and conformity assessment procedures." 
+2.	Facilitation of Mutual Recognition - The Council members (Heads of NSBs) are responsible for championing the acceptance of the ARSO Mark within their respective national jurisdictions, thereby reducing re-testing and re-certification.
+o	AfCFTA Annex 6, Article 10 (Mutual Recognition):
+"State Parties shall accept the results of conformity assessment procedures produced in other State Parties... provided they are satisfied that those procedures offer an assurance of conformity equivalent to their own."
+o	WTO TBT Agreement, Article 6.3:
+"Members are encouraged, at the request of other Members, to be willing to enter into negotiations for the conclusion of agreements for the mutual recognition of results of each other's conformity assessment procedures."
+3.	Resource Allocation and Sustainability - The Council approves the financial model and resource allocation for the ACAP scheme, ensuring the ARSO Central Secretariat and CACO have the necessary resources to maintain accreditation and operational integrity.
+o	ISO/IEC 17065:2021, Clause 4.3 (Liability and Financing):
+Requires the certification body (or scheme owner) to have adequate arrangements (e.g., insurance or reserves) to cover liabilities arising from its operations.
+4.	Final Arbiter of Strategic Disputes - While technical appeals are handled by the CACO or an Appeals Panel, the Council resolves high-level strategic disputes between Member States regarding the interpretation of the ACAP scheme or its impact on national sovereignty.
+o	AfCFTA Protocol on Rules and Procedures on the Settlement of Disputes:
+Provides the overarching framework for dispute settlement, which the Council mirrors at the technical infrastructure level.
+5.	Appointment Authority - The Council exercises the power to appoint members of the ARSO Conformity Assessment Committee (CACO) and the Advisory Committee. This ensures that the technical and impartial governance bodies are staffed by competent experts representing a balance of interests across Member States.
+o	ACAP 1-1:2025, Clause 6 (Governance Structure):
+Establishes the Council's authority to constitute technical committees and safeguard the impartiality of the scheme.
+o	ISO/IEC 17065:2021, Clause 5.2 (Mechanism for safeguarding impartiality):
+Requires that the body ensuring impartiality (Advisory Committee) be formally appointed by the top management to guarantee its independence.
+Decision Process
+The decision-making process within the Council is primarily consensus-based, ensuring that strategic directives reflect the collective agreement and unified interest of all Member States. This approach fosters regional ownership and alignment with the AfCFTA’s goal of continental integration. In instances where consensus cannot be reached after exhausting all efforts, decisions shall be determined through formal voting procedures as defined in the ARSO Rules of Procedure. This dual mechanism guarantees that governance remains efficient while respecting the sovereign rights of each National Standards Body.
+•	ARSO Rules of Procedure:
+Specifies the quorum requirements and voting thresholds (simple majority or two-thirds majority) for Council resolutions.
+•	WTO TBT Agreement, Annex 3 (Code of Good Practice):
+Emphasizes that standardizing bodies should make decisions based on consensus to ensure standards are not trade-restrictive.
+•	AfCFTA Agreement, Article 14 (Decision Making):
+"Decisions of the institutions of the AfCFTA shall be taken by consensus." 
+4.3 ARSO Conformity Assessment Committee (CACO)
+4.3.1 Role and Authority
+The ARSO Conformity Assessment Committee (CACO) is the principal technical and policy-making body responsible for developing, validating, maintaining, and overseeing the implementation of all ACAP certification schemes (A – L). CACO ensures the technical integrity, harmonization, and continual improvement of the ARSO Marks system in alignment with international best practices and AfCFTA obligations.
+•	ACAP 1-1:2025, Clause 6.4 – ARSO Conformity Assessment Committee responsibilities.
+•	ISO/IEC 17000:2020, Clause 4.8 – Definition and role of a conformity assessment system.
+Functions and Responsibilities
+1.	Scheme Development, Validation and Maintenance
+•	Develops, drafts, and validates new ACAP certification schemes and major revisions to the existing schemes in accordance with IAF MD 25:2023 and ISO/IEC 17067:2013.
+•	Ensures each scheme has clearly defined scope, normative references (ARS standards), conformity assessment methods (e.g., type testing, surveillance), and rules for mark use.
+o	ACAP 1-1:2025, Clause 6.4(d) 
+o	IAF MD 25:2023, Clause 6 (Validation of Schemes)
+•	Conducts periodic systematic reviews of all schemes to ensure they remain relevant, effective, and aligned with updated standards, market needs, and technological advancements.
+o	ISO/IEC 17067:2013, Clause 6.5 (Scheme Maintenance):
+Requires the scheme owner (delegated to CACO) to regularly review the scheme to ensure it continues to fulfill its objectives.
+o	ACAP 1-1:2025, Clause 6.4:
+Explicitly mandates CACO to "establish and maintain the rules and procedures for the ACAP."
+2. Maintenance of Rules and Procedures 
+As mandated by ACAP 1-1:2025 Clause 6.4, CACO establishes and maintains the comprehensive set of rules governing ACAP. This includes the continuous review and updating of:   
+•	ACAP 1-1:  Conformity assessment — Part 1: General requirements for the ACAP certification Scheme
+•	ACAP 1-2:  Conformity assessment — Part 2: Specific requirements for the ACAP certification Schemes
+•	ACAP 1-3:  Conformity assessment — Part 3: Requirements for approval of certification bodies
+CACO ensures these documents remain relevant to technological changes, such as the digitization of conformity assessment, and evolving market conditions.
+3. Technical Policy and Document Control
+Develops, approves, and maintains all ACAP normative documents (e.g., ACAP 1-2 series, specific scheme rules, guidance documents for Certification Bodies).
+Interprets ACAP rules and provides binding technical clarifications to the ARSO Central Secretariat, Certification Bodies, and other stakeholders.
+Establishes and maintains a controlled document register, ensuring all parties operate from the current version of scheme requirements.
+•	ACAP 1-1:2025, Clause 5 – Document control
+o	(a) The latest versions of all normative documents can be downloaded free of charge from the website. 
+o	(b) Original documents are available in English, French and Portuguese. Once published, the ARSO documents become mandatory for the implementation of the ACAP. 
+4. Oversight of Certification Body (CB) Approval and Performance
+Approves, suspends, or withdraws the status of Certification Bodies (CBs) based on recommendations from the ARSO Central Secretariat, which are derived from assessments of the CB's accreditation status (AFRAC MRA) and operational performance.
+Establishes and monitors key performance indicators (KPIs) for approved CBs, including audit quality, decision consistency, and complaint handling.
+
+Manages a register of approved CBs and their specific scopes of recognition under the ACAP.
+o	ACAP 1-1:2025, Clause 6.5 – For the purpose of operationalizing the ACAP system, ARSO Secretariat: (a) shall work with accreditation bodies under the African Accreditation Cooperation (AFRAC) MRA; (b) shall act as administrators of ACAP; (c) shall license Conformity Assessment Bodies accredited by Accreditation Bodies under the AFRAC MRA.
+o	ACAP 1-3:2025, Clause 4 – Certification body approval process: In order to become a recognized CB for the ACAP, a series of requirements must be fulfilled for approval and confirmed in time for approval maintenance.
+5. Decision-Making on Technical Appeals and Disputes
+Establishes and operates a formal Appeals Panel to hear and adjudicate technical appeals from clients (applicants or certified entities) regarding certification decisions made by CBs or the ARSO Central Secretariat.
+Resolves technical disputes between CBs, or between CBs and other stakeholders, regarding the interpretation or application of ACAP rules.
+Ensures appeals and disputes are handled impartially, competently, and within defined timelines.
+o	ISO/IEC 17065:2021, Clause 7.9 – Appeals: The certification body shall have a process for receiving, evaluating, and making decisions on appeals.
+o	ACAP 1-1:2025, Clause 16 – Complaints and appeal management: Complaints on certified operators shall be first managed, by the operator. The CB shall deal with the complaint when dissatisfied with the response from the operator... If the complaints are connected to the organisation's dissatisfaction with the CB's administrative or technical performances, the disputes can be addressed to the ARSO Secretariat.
+o	ACAP 1-1:2025, Clause 6.4(p) – Retention of records by scheme owner and certification bodies.
+
+5. Liaison and Harmonization
+Works closely with the Standards Management Committee (SMC) to ensure ACAP schemes are perfectly aligned with newly published or revised African Standards (ARS).
+Liaises with the AFRAC and other regional accreditation bodies to ensure ACAP requirements are understood and incorporated into accreditation activities.
+Engages with other regional and international conformity assessment systems to promote mutual recognition and equivalence.
+o	ACAP 1-1:2025, Clause 6.1(d) – Facilitate the liaison of regional standardization, metrology, accreditation and conformity assessment activities.
+o	ACAP 1-1:2025, Clause 6.3(i) – Provision of guidance to TC secretariats and NSBs on procedural matters.
+o	AfCFTA Annex 6, Article 10 – Mutual Recognition: State Parties shall accept the results of conformity assessment procedures produced in other State Parties...
+6. Recommendation to the ARSO Council
+Prepares detailed technical recommendations, impact assessments, and proposals for the ARSO Council on all matters requiring strategic policy decisions, such as launching new schemes, major fee changes, or responding to systemic non-conformities.
+o	ACAP 1-1:2025, Foreword – ARSO CACO comprises experts from Member States. Member States participate in the committee on a voluntary basis and the documents developed follow the principles and procedures for the Harmonisation of African Standards.
+Decision-Making Process
+CACO shall operate on a consensus-seeking basis for technical decisions. When consensus is not achievable, decisions shall be made by a qualified majority vote (e.g., two-thirds of members present). All CACO decisions, rationale, and actions shall be meticulously documented in meeting minutes and formally communicated to the ARSO Central Secretariat for execution and to the ARSO Council for information. CACO shall meet at regular intervals (e.g., semi-annually) and may conduct extraordinary meetings or electronic balloting for urgent matters.
+o	ACAP 1-1:2025, Clause 6.4 – ARSO CACO is a policy and technical committee established by the ARSO Council.
+o	ISO/IEC 17000:2020, Clause 4.7 – Decision-making in conformity assessment activities should be based on objective evidence of conformity obtained from the determination activities.
+4.4 ARSO Central Secretariat 
+The ARSO Central Secretariat acts as the Scheme Owner and the permanent administrative and operational arm of the ARSO Conformity Assessment Programme (ACAP). It is responsible for the day-to-day management, implementation, promotion, and global representation of the ACAP scheme and the ARSO Marks. 
+The Secretariat executes the strategic directives of the ARSO Council and the technical policies established by the Conformity Assessment Committee (CACO), ensuring the scheme operates efficiently, transparently, and with integrity across all member states.
+o	ACAP 1-1:2025, Clause 6.1 – Responsibilities of the ARSO Central Secretariat.
+Role and Authority
+1. Operational Authority and Administration
+The Secretariat executes the mandate of the Scheme Owner through the following critical functions:
+•	System Management: It manages the entire lifecycle of the certification process, from the application of Certification Bodies to the issuance of licenses for the ARSO Mark. It is the central processing unit for all ACAP activities.
+•	Database Management: It maintains the centralized ACAP database, which serves as the "single source of truth" for the status of all certified products, licensed CBs, and accredited laboratories. This digital registry is critical for transparency and allows customs officials across the AfCFTA to verify certificates in real-time, reducing fraud and expediting trade.
+•	Document Control: The Secretariat ensures that all scheme documents (standards, checklists, procedures) are controlled, up-to-date, and accessible to stakeholders, fulfilling the transparency obligations of WTO TBT Article 2.9 and AfCFTA Annex 6 Article 8.   
+2.  Scheme Administration and License Management
+•	Serves as the central licensing authority for the ARSO Marks, issuing, suspending, or withdrawing licenses to Approved Certification Bodies (CBs) and, in certain defined cases (e.g., under Scheme Type 5), directly to manufacturers.
+•	Maintains and publishes the official, up-to-date registers of: Approved Certification Bodies (CBs), Licensed Operators (Certified Clients), and Scopes of Certification.
+•	Manages the contractual agreements (License Agreements) with CBs and certified clients, ensuring compliance with ACAP rules.
+•	Collects and administers scheme fees, including licensing fees from CBs and, where applicable, royalties associated with the use of the marks.
+o	ACAP 1-1:2025, Clause 6.1(c) & (f)
+o	ISO/IEC 17030:2021, Clause 5.2 (Control of the mark)
+3. Operational Support and Monitoring of Certification Bodies (CBs)
+•	Conducts initial desk assessments and ongoing performance monitoring of Approved CBs, verifying their continued accreditation status under the AFRAC MRA and their adherence to ACAP 1-3 requirements.
+•	Provides operational guidance, interpretations, and training to CBs on the implementation of ACAP rules.
+•	Investigates complaints related to the administrative or technical performance of CBs and takes appropriate corrective or disciplinary action, including recommending suspension or withdrawal of approval to CACO.
+•	Facilitates the resolution of disputes between CBs and clients, acting as the first point of escalation before referral to the CACO Appeals Panel.
+o	ACAP 1-1:2025, Clause 6.1(e), 6.5, 16.3; 
+o	ACAP 1-3:2025.
+4. Operational Support and Monitoring of Certification Bodies (CBs):
+•	Conducts initial desk assessments and ongoing performance monitoring of Approved CBs, verifying their continued accreditation status under the AFRAC MRA and their adherence to ACAP 1-3 requirements.
+•	Provides operational guidance, interpretations, and training to CBs on the implementation of ACAP rules.
+•	Investigates complaints related to the administrative or technical performance of CBs and takes appropriate corrective or disciplinary action, including recommending suspension or withdrawal of approval to CACO.
+•	Facilitates the resolution of disputes between CBs and clients, acting as the first point of escalation before referral to the CACO Appeals Panel.
+o	ACAP 1-1:2025, Clause 6.1(e), 6.5, 16.3
+o	ACAP 1-3:2025
+
+ 5. Reporting and Review Support:
+•	Prepares regular performance and financial reports on the ACAP scheme for the CACO and the ARSO Council.
+•	Supports the CACO and Advisory Committee in conducting periodic scheme reviews and management system audits by providing operational data and records.
+•	Monitors changes in national, regional, and international regulations and standards, alerting CACO to impacts on the ACAP.
+o	ACAP 1-1:2025, Clause 18.1; 
+o	ISO/IEC 17030:2021, Clause 8 (Management system).
+
+4.5 Advisory Committee
+Role and Authority
+The Advisory Committee is an independent committee appointed by the ARSO Council with the sole mandate to safeguard the impartiality and integrity of the entire ARSO Conformity Assessment Programme (ACAP). It operates independently of the ARSO Central Secretariat, CACO, and any commercial or political influences, providing objective oversight and advice to ensure the scheme’s decisions are made fairly and without bias.
+o	ACAP 1-1:2025, Clause 6.2 – Role of the Advisory Committee
+o	ISO/IEC 17065:2021, Clause 5.2 (Mechanism for safeguarding impartiality).
+Composition
+The Committee shall be composed of a balanced group of respected, independent experts who are not employed by ARSO, an Approved Certification Body, or a directly certified client. Members may include:
+•	Representatives from consumer associations.
+•	Academics with expertise in quality infrastructure, trade law, or relevant technical fields.
+•	Industry representatives (from sectors not currently undergoing certification to avoid conflict).
+•	Legal experts.
+All members must sign declarations of impartiality and confidentiality.
+ 1. Impartiality Oversight
+•	Reviews the structure, policies, and procedures of the ACAP to identify, evaluate, and mitigate potential risks to impartiality arising from its activities, relationships, or governance.
+•	Scrutinizes the activities of the ARSO Central Secretariat and CACO to ensure all operational and policy decisions are made objectively.
+o	ISO/IEC 17065:2021, Clause 5.2.2 – The committee shall advise on matters affecting impartiality.
+2. Conflict of Interest Management
+•	Establishes and monitors the implementation of a robust conflict-of-interest policy for all bodies and personnel involved in the ACAP (ARSO staff, CACO members, CB personnel).
+•	Investigates alleged breaches of impartiality or conflicts of interest and recommends corrective actions to the ARSO Council.
+o	Section 3.1 (Impartiality and Independence).
+3. Review of Appeals and Complaints
+•	May be called upon to review the processes and outcomes of the CACO Appeals Panel for systemic impartiality concerns, ensuring the appeals process itself is fair and unbiased.
+•	Examines trends in complaints to identify potential systemic biases in the application of the scheme.
+4. Strategic Advice
+•	Provides independent, non-binding advice to the ARSO Council on high-level strategic matters that could impact the perceived or actual impartiality of the scheme.
+
+4.6 National Standards Body (NSB)
+Role and Dual Function
+National Standards Bodies (NSBs) of ARSO Member States serve a dual critical function within the ACAP governance structure: as national representatives in the policy-making arena and as national implementation facilitators on the ground. They are the essential bridge between the continental ACAP system and national regulatory and market environments.
+Role and Authority
+1. Policy Representation and Input:
+•	Represent their member state's interests in the ARSO Council, participating in the supreme strategic decision-making for the ACAP.
+•	Nominate technical experts to serve on the ARSO Conformity Assessment Committee (CACO) and other relevant technical committees.
+•	Provide input on the development and revision of African Standards (ARS) through the Standards Management Committee (SMC), ensuring national needs are considered.
+o	ARSO Constitution
+o	ACAP 1-1:2025, Foreword
+2. National Advocacy and Recognition
+•	Act as the primary national advocate for the ARSO Mark, promoting its recognition and acceptance to national government agencies, including ministries of trade, industry, health, agriculture, and customs authorities.
+•	Work towards the formal incorporation of the ARSO Mark into national technical regulations as a preferred or recognized means of demonstrating conformity, thereby fulfilling the AfCFTA mutual recognition obligation.
+o	AfCFTA Annex 6, Article 10 (Mutual Recognition); Section 4.2.2.
+3. Stakeholder Engagement and Capacity Building:
+•	Raise awareness of the ACAP scheme among local manufacturers, exporters, and industry associations within their country.
+•	Identify and support potential local Certification Bodies (CBs) in seeking accreditation (through AFRAC members) and subsequent approval under the ACAP scheme.
+•	Collaborate with the ARSO Central Secretariat on national capacity-building and training initiatives.
+4. Liaison and Information Hub:
+•	Serve as the official national contact point for all ACAP-related inquiries from national stakeholders.
+•	Disseminate information about ACAP rules, updates, and published lists of approved CBs and certified products within their country.
+•	Provide feedback to the ARSO Central Secretariat on national market surveillance findings related to the ARSO Mark.
+4.7 Approved Certification Bodies (CBs)
+Role and Authority
+Approved Certification Bodies (CBs) are independent, third-party organizations licensed by the ARSO Central Secretariat to conduct conformity assessment activities and grant/ maintain certification for clients under specific ACAP schemes. They are the operational face of the ACAP, directly interacting with clients and making certification decisions based on ACAP rules. CBs must be accredited by an accreditation body that is a signatory to the AFRAC Multilateral Recognition Arrangement (MRA) for the relevant scope.
+•	ACAP 1-1:2025, Clause 6.5
+•	ACAP 1-3:2025
+•	ISO/IEC 17065:2021.
+1. Conformity Assessment Execution:
+•	Conduct all certification activities (application review, evaluation, auditing, testing coordination, surveillance, re-certification) in strict compliance with the relevant ACAP scheme rules (ACAP 1-1, 1-2, 1-3), ISO/IEC 17065, and their own accreditation requirements.
+•	Make impartial certification decisions (grant, maintain, extend, suspend, reduce, withdraw) based solely on objective evidence of conformity.
+o	ISO/IEC 17065:2021, Clause 7.8 (Review, decision and certification).
+2. License and Mark Management:
+•	Hold a valid License Agreement with the ARSO Central Secretariat.
+•	Ensure correct use of the ARSO Mark by their certified clients, including issuing guidelines and taking action against misuse.
+•	Report all certification decisions (new certificates, suspensions, withdrawals) promptly to the ARSO Central Secretariat for inclusion in the central register.
+o	 ISO/IEC 17030:2021, Clause 5.4 (Rules for use of the mark).
+3. Upholding Scheme Integrity:
+•	Maintain impartiality, independence, and confidentiality throughout all operations, managing conflicts of interest rigorously.
+•	Employ competent personnel and use reliable evaluation methodologies.
+•	Hold appropriate liability insurance to cover risks arising from their certification activities.
+o	Section 3.1, 3.5, 3.6 
+o	ISO/IEC 17065:2021, Clauses 5.2, 4.3, 7.
+4. Interaction with ARSO and Client Management:
+•	Pay all applicable fees to the ARSO Central Secretariat.
+•	Participate in performance monitoring and assessments conducted by ARSO.
+•	Manage complaints and appeals from clients at the first level, in accordance with a documented process.
+•	Provide all necessary records and information to ARSO for oversight purposes or during investigations.
+o	ACAP 1-1:2025, Clause 16
+o	ACAP 1-3:2025
+4.8 Standards Management Committee (SMC)
+Role and Authority
+The Standards Management Committee (SMC) is the foundational technical governance body responsible for the strategic development, harmonization, maintenance, and promotion of African Standards (ARS). Its primary mandate is to create the unified, consensus-based technical specifications that form the indispensable basis for all ACAP certification schemes. The SMC ensures that ARS are aligned with international best practices (ISO, IEC, Codex Alimentarius), responsive to African market and regulatory needs, and developed through a transparent and inclusive process, thereby providing the credible technical foundation required for mutual recognition and the reduction of technical barriers to trade under the AfCFTA.
+o	ARSO Constitution and Standards Development Procedures; Section 3.3 (Consistency and Harmonization);
+o	AfCFTA Annex 6, Article 7 (Use of International Standards)
+Composition
+The SMC shall be composed of:
+•	A Chairperson and Vice-Chairperson appointed by the ARSO Council.
+•	Senior technical representatives nominated by National Standards Bodies (NSBs) of ARSO Member States.
+•	Representatives from relevant Pan-African industry associations, consumer groups, and academic institutions, as determined by the ARSO Council.
+•	The Chairs of ARSO Technical Committees (TCs) may serve as ex-officio or advisory members.
+All members shall possess expertise in standardization processes, specific technical sectors, and an understanding of the AfCFTA trade objectives.
+1. Strategic Standardization Planning and Prioritization:
+•	Develops and maintains a Strategic Standardization Work Programme for Africa, identifying key sectors where harmonized standards are most critical for facilitating intra-African trade and supporting industrial development.
+•	Prioritizes the development of new ARS and the revision of existing ones based on market needs, regulatory shifts, technological advancements, and requests from the ARSO Council, stakeholders or CACO.
+o	WTO TBT Agreement, Annex 3, Clause L – Standardizing bodies shall base their work programme on market needs.
+2. Oversight of the African Standard (ARS) Development Process:
+•	Establishes, dissolves, and provides overall guidance to ARSO Technical Committees (TCs) and Subcommittees responsible for developing standards in specific sectors.
+•	Ensures strict adherence to the ARSO Standards Harmonization Procedure, which embody the WTO TBT Code of Good Practice (Annex 3), guaranteeing transparency, openness, impartiality, consensus, and coherence in all standards work.
+•	Manages the formal stages of the standards development process: proposal, drafting, commenting, validation, and approval, ensuring balanced participation from all interested Member States and stakeholder groups.
+o	WTO TBT Agreement, Annex 3 (Code of Good Practice for the Preparation, Adoption and Application of Standards).
+3. Approval and Publication of Harmonized African Standards:
+•	Reviews and gives recommendation for approval for the publication of draft ARS as full African Standards, ensuring they meet all procedural and technical requirements.
+•	Oversees the official publication, translation, and wide dissemination of ARS to ensure accessibility across the continent.
+o	ACAP 1-1:2025, Clause 4.2(b) – Definition of common criteria for African Standards.
+4. Alignment with International and Regional Requirements:
+•	Actively promotes the adoption of, or alignment with, relevant International Standards (ISO, IEC, etc.) as the basis for ARS, in accordance with WTO TBT Agreement Article 2.4 and AfCFTA Annex 6 Article 7, to minimize divergence and support global market access.
+•	Manages ARSO’s engagement with international and regional standardizing bodies to ensure African interests are represented and to avoid duplication of work.
+•	Considers and integrates, where appropriate, regional regulatory requirements and market realities into the development of ARS.
+5. Liaison with the Conformity Assessment Committee (CACO):
+•	Maintains a critical and systematic liaison with CACO to ensure perfect alignment between the standardization and conformity assessment pillars of the ACAP.
+6. Promotion and Capacity Building on ARS:
+•	Develops strategies to promote the awareness, understanding, and implementation of ARS by industry, regulators, and other stakeholders across Africa.
+•	Identifies needs for and supports the development of guidance documents, handbooks, and training materials related to the implementation of key ARS.
+4.8.4 Decision-Making Process
+The SMC shall operate on the principle of consensus, in line with international best practice for standardization. Decisions on the recommendation for approval of standards, work programmes, and major procedural changes shall seek to reconcile the views of all participating Member States.
+•	WTO TBT Agreement, Annex 3, Clause D – "The standardizing body shall make every effort to avoid duplication of, or overlap with, the work of other standardizing bodies, and shall make every effort to achieve a national consensus on the standards it develops."
+
+Where consensus on technical content cannot be achieved, decisions may proceed based on the voting rules specified in the ARSO Standards Harmonisation Procedures, requiring a qualified majority. 
+
+All SMC decisions and the rationale for standards approval shall be formally documented and made accessible to CACO and the ARSO Central Secretariat to ensure seamless integration into the ACAP ecosystem.
+5.0 OPERATIONAL PROCEDURES & SCHEME MANAGEMENT
+5.1 Application and Licensing Process for Certification Bodies (CBs)
+5.1.1 Purpose
+To establish a consistent, transparent process for evaluating and approving Certification Bodies to operate under the ACAP scheme, ensuring they meet all requirements for competence, impartiality, and operational capability.
+5.1.2 Eligibility Criteria
+5.1.2.1 Mandatory Accreditation: The CB must hold valid accreditation from an accreditation body that is a signatory to the AFRAC Multilateral Recognition Arrangement (MRA) for the specific scope(s) applied for, in accordance with ISO/IEC 17065.
+5.1.2.2 Legal Entity: The CB must be a legally registered entity in an ARSO Member State, with demonstrated financial stability and liability insurance covering certification activities.
+5.1.2.3 Technical Competence: The CB must demonstrate technical competence in the specific product sectors covered by the ACAP scheme(s) for which approval is sought, including employed or contracted personnel with relevant qualifications and experience.
+5.1.3 Application Process
+1.	Expression of Interest (EOI): The CB submits a formal EOI to the ARSO Central Secretariat, indicating the desired scheme(s) and scope(s).
+
+2.	Documentation Submission: The CB completes and submits the formal application package, including:
+o	Completed ACAP Form CB-01 (Application for Approval).
+o	Copy of valid AFRAC-MRA accreditation certificate(s) and scope(s).
+o	Organizational structure chart and details of top management.
+o	Documentation of the CB's management system (quality manual, procedures).
+o	Details of personnel (CVs, competence records) for the relevant schemes.
+o	Signed Declaration of Impartiality and Confidentiality.
+o	Proof of liability insurance.
+
+3.	Application Fee: Payment of the non-refundable application fee as per the published fee structure.
+5.1.4 Evaluation and Decision Process
+5.1.4.1 Completeness Check: The ARSO Central Secretariat verifies the application package is complete within 10 working days.
+5.1.4.2 Desktop Assessment: The Secretariat conducts a detailed assessment against ACAP 1-3 requirements, verifying alignment between the CB's accredited scope and the applied ACAP scheme requirements.
+5.1.4.3 Witness Assessment (If Required): For new CBs or significant scope extensions, the Secretariat may arrange a witness assessment of the CB conducting a live audit, performed by ARSO staff or a contracted expert. The CB bears the cost.
+5.1.4.4 CACO Review and Recommendation: The assessment report is submitted to the Conformity Assessment Committee (CACO). CACO reviews the findings and recommends approval, conditional approval (with defined corrective actions), or rejection.
+5.1.4.5 Final Decision and Licensing: Based on CACO's recommendation, the ARSO Central Secretariat issues the decision.
+Approval: A formal ACAP License Agreement is issued for a period of three (3) years. The CB is listed in the Public Register of Approved CBs.
+Conditional Approval: The CB is given a defined period (typically 90 days) to address non-conformities. Upon satisfactory evidence, full approval is granted.
+Rejection: A formal notification with clear reasons is provided. The CB may appeal. 
+5.1.5 Reference: ACAP 1-3:2025; ISO/IEC 17065:2021; AFRAC MRA Documents.
+________________________________________
+5.2 Client Certification Process (From Application to Certification)
+5.2.1 Purpose
+To define the standardized steps a client (manufacturer, processor, producer) follows to obtain certification for its products/processes under an ACAP scheme, ensuring consistency and integrity.
+5.2.2 Process Stages:
+5.2.2.1 Preparation & Application:
+•	The client selects an Approved Certification Body (CB) from the public register.
+•	The client submits a formal application (ACAP Form CL-01) to the chosen CB, detailing product(s), manufacturing site(s), and applicable ARS standard(s).
+•	The CB reviews the application for completeness, conducts a preliminary document review (e.g., of product specifications, test reports), and provides a quotation.
+5.2.2.2 Contract & Audit Planning:
+•	Upon acceptance of the quotation, the client and CB sign a certification contract.
+•	The CB develops a detailed audit plan, including the scope, criteria, audit team, and dates for Stage 1 and Stage 2 audits.
+5.2.2.3 Stage 1 Audit (Documentation Review & Readiness Assessment):
+•	Conducted on-site or remotely to review the client's management system documentation, evaluate readiness for Stage 2, and understand processes and site conditions.
+•	Focuses on conformity with the relevant ARS standard(s) and regulatory requirements.
+5.2.2.4 Stage 2 Audit (On-Site Evaluation of Implementation):
+•	A detailed on-site audit to evaluate the effective implementation of the management system and conformity of products/processes to the ARS standard(s).
+•	Includes witnessing of production, inspection of facilities, testing of products (or review of test reports from accredited labs), and interviews with personnel.
+5.2.2.5 Audit Report & Corrective Actions:
+•	The audit team issues a report detailing findings (conformities and non-conformities).
+•	The client must address any major non-conformities within an agreed timeframe (typically 90 days). The CB verifies the effectiveness of corrective actions.
+5.2.2.6 Certification Decision & Issuance:
+•	The CB's certification decision panel reviews the complete audit file, including corrected non-conformities.
+•	Upon positive decision, the CB:
+1.	Issues the ACAP Certificate of Conformity (with a unique ID number).
+2.	Enters the certificate details into the ACAP Digital Platform (triggering its appearance in the public register).
+3.	Grants a sub-license to the client for the use of the ARSO Mark on the certified products, per Chapter 6 rules.
+5.2.3 Reference: ACAP 1-1:2025, Clause 10; ACAP 1-2:2025; ISO/IEC 17065:2021, Clause 7.
+5.3 Surveillance, Re-assessment, and Recertification Cycles
+5.3.1 Purpose
+To ensure continued conformity of certified clients and the integrity of the ARSO Mark through ongoing oversight between certification cycles.
+5.3.2 Surveillance Audits
+5.3.2.1 Frequency: Conducted at least annually, following a surveillance plan established by the CB. The first surveillance audit must occur within 12 months of initial certification.
+5.3.2.2 Scope: Covers critical aspects of the management system and product conformity. May be shorter in duration than the initial audit but must be sufficient to verify ongoing compliance.
+5.3.2.3 Unannounced Audits: The CB may conduct a percentage of surveillance audits unannounced, based on a risk assessment, to enhance scheme integrity.
+5.3.3 Re-assessment (Recertification)
+5.3.3.1 Cycle: Conducted every three (3) years, prior to the expiry of the current certificate.
+5.3.3.2 Process: Similar in rigor to the initial certification process, including a full review of the client's system and performance over the certification cycle. It may include a review of complaints, changes, and surveillance results.
+5.3.3.3 Timing: The re-assessment audit must be completed sufficiently before the certificate expiry date to allow for decision-making and potential corrective actions. A certificate remains valid pending the re-assessment decision.
+5.3.4 Actions Following Surveillance/Re-assessment:
+•	Continued Conformity: Certificate remains valid.
+•	Minor Non-conformities: Client must correct within an agreed timeframe; CB verifies.
+•	Major Non-conformities: May lead to suspension (see 5.6) if not addressed promptly and effectively.
+•	Decision not to Recertify: Results in certificate withdrawal upon expiry.
+5.3.5 Reference: ISO/IEC 17065:2021, Clauses 7.7 & 7.8.
+5.4 Extension and Reduction of Certification Scope
+5.4.1 Purpose: To manage changes to a client's certified scope in a controlled manner.
+5.4.2 Scope Extension: Client wishes to add new products, processes, or sites to an existing certificate.
+5.4.2.1 Application: Client submits a formal request to the CB.
+5.4.2.2 Evaluation: CB evaluates the significance of the extension:
+Minor Extension: Similar products/processes at the same site. May be handled via a document review or limited audit.
+Major Extension: New product line, significant process change, or new site. Requires an audit equivalent to a relevant portion of the initial certification process.
+5.4.2.3 Decision & Update: Upon satisfactory evaluation, the CB updates the certificate scope and the ACAP Digital Platform register.
+5.4.3 Scope Reduction: Client voluntarily removes a product, process, or site from the certificate, or the CB imposes reduction due to non-conformity.
+•	Process must be documented, with updated certificate issued and public register amended.
+5.4.4 Reference: ISO/IEC 17065:2021, Clause 7.10.
+5.5 Management of Changes by Certified Clients
+5.5.1 Purpose
+To ensure that changes made by the certified client do not affect conformity and are evaluated by the CB.
+5.5.2 Notification Obligation: The client must inform the CB without delay of intended changes that may affect:
+•	Legal, commercial, organizational, or ownership status.
+•	Organization and management (e.g., key managerial staff).
+•	Premises, locations, and manufacturing sites.
+•	Major equipment, production processes, or quality management system.
+•	Contact details.
+5.5.3 CB Evaluation: The CB shall determine the need for any follow-up activity (document review, visit, or partial/full audit) to verify continued conformity. Changes may trigger a scope extension process (5.4.2) or, if they lead to non-conformity, a suspension process (5.6).
+5.6 Suspension, Withdrawal, and Restoration of Certification
+5.6.1 Suspension: Temporary invalidation of the certificate.
+5.6.1.1 Grounds: Including but not limited to: failure to correct major non-conformities, refusal to facilitate surveillance/re-assessment, misuse of mark (Chapter 6.7), or a voluntary request by the client.
+5.6.1.2 Process: CB issues a formal Notice of Suspension to the client, copying ARSO Central Secretariat. The client must cease using the ARSO Mark on affected products. Suspension is recorded in the public register.
+5.6.1.3 Duration: Maximum of 6 months. If the issue is not resolved, withdrawal follows.
+5.6.2 Withdrawal (Cancellation): Permanent termination of the certificate.
+5.6.2.1 Grounds: Including but not limited to: failure to resolve suspension, serious/multiple non-conformities, fraudulent activity, or client request.
+5.6.2.2 Process: CB issues a Notice of Withdrawal. The client must immediately cease all use of the ARSO Mark and return/destroy related materials. The withdrawal is published in the public register.
+5.6.3 Restoration: Following suspension, if the client demonstrates effective correction of the root cause, the CB conducts a verification audit and, if satisfied, restores the certificate. A formal Restoration Notice is issued.
+5.6.4 Reference: ISO/IEC 17065:2021, Clause 7.11.
+5.7 Process for Scheme Development and Modification
+5.7.1 Initiation: A need for a new scheme or major revision can be identified by the ARSO Council, CACO, an NSB, industry association, or through market analysis.
+5.7.2 Proposal: A formal Project Proposal (ACAP Form SCH-01) is submitted to CACO, outlining scope, objectives, rationale (including AfCFTA trade facilitation rationale), and resource implications.
+5.7.3 Feasibility Study & Drafting: CACO establishes a working group to develop the draft scheme document(s) (aligning with ACAP 1-2 structure), based on the relevant ARS.
+5.7.4 Consultation & Validation: The draft is circulated to all NSBs and key stakeholders for comment (minimum 60 days). Comments are resolved, and a validation plan (e.g., pilot testing) may be executed.
+5.7.5 Approval & Publication: The final draft is approved by CACO and ratified by the ARSO Council. The ARSO Central Secretariat publishes the scheme and updates all relevant documents and registers.
+5.8 Management of Multiple-Site and Multi-National Certification
+5.8.1 Centralized Management: Certification of an organization with multiple production sites or operations across different AfCFTA Member States shall be managed through a single "head office" contract with one Approved CB.
+5.8.2 Sampling Approach: The CB shall apply a risk-based sampling plan for audits of the sites, as defined in IAF MD 1:2018 (IAF Mandatory Document for the Application of ISO/IEC 17021-1 for Audits of Multi-Site Organizations) or equivalent for product certification.
+5.8.3 Requirements for All Sites:
+•	All sites must operate under a common, centrally managed quality system applicable to the certified scope.
+•	The head office must have full authority and responsibility for all sites concerning the certified activity.
+•	Internal audits and management reviews must be centralized.
+
+5.8.4 Certificate Listing: The certificate and the public register shall clearly list all certified sites and their locations.
+
+6.0 MARK USAGE, CONTROL & PROTECTION
+6.1 Rules for the Use of the ARSO Mark and Eco Mark Africa
+6.1.1 Authorized Users: 
+Only clients holding a valid, non-suspended ACAP Certificate of Conformity, and operating under a valid license agreement with either the ARSO Central Secretariat or an Approved Certification Body, are authorized to apply the relevant mark (ARSO Mark or Eco Mark Africa) to products, packaging, or associated promotional materials covered by the certificate scope.
+6.1.2 Prohibited Uses:
+•	Use on non-certified products, prototypes, or products outside the certified scope.
+•	Use on test reports, calibration certificates, or laboratory reports (unless specifically certified under a scheme allowing this).
+•	Use in any manner that implies ARSO or the CB endorses the company itself, rather than the conformity of specific products/processes.
+•	Use in any misleading, deceptive, or disparaging context.
+•	Alteration, distortion, or modification of the mark's design elements, proportions, or colors beyond the specifications in Section 6.2.
+6.1.3 Mandatory Accompanying Information: When the mark is used, the following must be legibly presented adjacent to it or in an immediately accessible location (e.g., via a QR code link):
+•	The unique ACAP Certificate number.
+•	The identity of the Approved Certification Body that issued the certificate.
+•	A reference to the specific ARSO Standard(s) or regulation(s) to which conformity is claimed.
+•	For the Eco Mark Africa, the specific environmental criteria fulfilled.
+6.1.4 Reference: ISO/IEC 17030:2021, Clauses 5.4 & 5.5; ACAP 1-1:2025, Clause 13.
+6.2 Technical Specifications for Mark Reproduction (Size, Color, Placement)
+6.2.1 Official Design Files: Authorized users must download the official vector graphic files (e.g., .EPS, .SVG) from the ARSO Website. Pixel-based images (e.g., .JPG, .PNG) are only permissible for low-resolution digital use as specified.
+6.2.2 Color Specifications:
+•	ARSO Mark:
+o	Primary Palette: ARSO Blue (PANTONE 2945 C, CMYK: 100, 70, 0, 10, RGB: 0, 82, 155) and White.
+o	Monochromatic: All-black or reversed white-out versions are permitted on single-color applications.
+•	Eco Mark Africa:
+o	Primary Palette: Green (PANTONE 347 C, CMYK: 81, 0, 100, 0, RGB: 0, 154, 68), Gold (PANTONE 1235 C, CMYK: 0, 25, 100, 0, RGB: 255, 191, 0), and White.
+o	The leaf and continent motifs must remain clearly distinguishable.
+6.2.3 Minimum Size and Clear Space:
+•	The mark must never be reproduced smaller than 15mm in width for physical products/packaging or 100 pixels in width for digital media.
+•	A clear space equal to the height of the letter "A" in "ARSO" must be maintained around all sides of the mark, free of other graphic elements, text, or edges.
+6.2.4 Placement on Product:
+•	The mark should be placed on the product or its immediate packaging in a permanent, legible, and accessible location.
+•	For very small products, the mark may be placed on accompanying documentation or a hang tag, provided a clear reference (e.g., "Marked with ARSO Quality Mark") is on the product.
+6.3 Control of Certified Products and Traceability Requirements
+6.3.1 Client's Obligation: The certified client shall establish, document, and maintain procedures to:
+•	Identify and segregate certified products from non-certified products at all stages (production, packaging, storage, shipment).
+•	Maintain records that enable full traceability from the final certified product back to raw material batches, including dates of production and unique lot/batch numbers.
+•	Control the application of the mark to ensure it is only applied to conforming products from certified production lines/sites.
+6.3.2 Traceability System: The system shall allow for the tracking of a certified product's history, distribution, and location through documented information. This system is subject to audit by the CB.
+6.3.3 Reference: ISO/IEC 17067:2013, Clause 7.4 (Traceability).
+6.4 Obligations of the Certified Client (Licensee)
+The certified client, as a licensee of the mark, shall:
+1.	Comply with Rules: Adhere to all usage rules in this Chapter and the license agreement.
+2.	Facilitate Surveillance: Allow the CB and ARSO representatives access to premises, personnel, and records for audit and surveillance purposes.
+3.	Notify Changes: Inform the CB of any relevant changes per Section 5.5.
+4.	Maintain Conformity: Ensure ongoing conformity of certified products/processes to the ARS standard(s).
+5.	Address Non-Conformities: Take immediate corrective action for any non-conformities found and notify the CB.
+6.	Use Mark Correctly: Use the mark only as authorized and take steps to prevent misuse by subcontractors or distributors.
+7.	Claims and Advertising: Make claims regarding certification only in relation to the scope of the certificate and not in a misleading manner.
+8.	Upon Termination/Suspension: Immediately cease all use of the mark, retrieve marked materials from the market if practicable, and provide a declaration of compliance to the CB.
+6.5 Anti-Counterfeiting and Fraud Prevention Measures
+6.5.1 Security Features: The ARSO Mark design shall incorporate copy-evident features, such as fine line patterns, micro-text, or specific color gradients that are difficult to replicate with standard printing technology.
+6.5.2 Digital Verification Hub: The ARSO shall host a public verification portal where any stakeholder (customs, retailer, consumer) can:
+•	Enter a certificate number to verify its validity and scope.
+•	Scan a QR code on the product/packaging (see 6.6) to be directed to the certificate's digital record.
+6.5.3 Cooperation with Authorities: The ARSO Central Secretariat shall establish formal cooperation protocols with national customs authorities, market surveillance agencies, and police across AfCFTA Member States to:
+•	Provide training on identifying genuine marks.
+•	Facilitate rapid verification of suspected counterfeit goods.
+•	Support enforcement actions under national laws.
+6.5.4 Reporting Mechanism: A dedicated channel (e.g., web form, email) shall be established for reporting suspected counterfeit marks or fraudulent certification. Reports are investigated per Section 6.7.
+6.6 Digital Credentials and E-Certificates
+6.6.1 Legal Status: The electronically issued ACAP Certificate of Conformity (e-Certificate) hosted on the ARSO ACAP Digital Platform and accessible via a secure link or QR code shall have the same legal standing as a paper certificate.
+6.6.2 Mandatory Data Fields: Each e-Certificate in the public register shall contain:
+•	Unique Certificate ID
+•	Name and address of certified client
+•	Certified product/process scope
+•	Applicable ARS standard(s)
+•	Name of Approved Certification Body
+•	Issue and expiry dates
+•	Current status (Valid, Suspended, Withdrawn)
+•	Digital signature/hash of the issuing CB/ARSO
+6.6.3 QR Code Specification: A dynamic, tamper-evident QR code shall be generated for each certified product batch/lot. Scanning the code shall lead directly to the specific verification page for that batch, showing real-time certificate status.
+6.6.4 Integrity and Security: The digital credential system shall employ cryptographic techniques to prevent tampering and ensure authenticity, in line with international standards for digital trust services.
+6.7 Mark Misuse: Identification, Investigation, and Sanctions
+6.7.1 Types of Misuse: Includes counterfeiting, unauthorized use by non-certified entities, use outside scope, and misleading advertising implying certification.
+6.7.2 Investigation Process:
+1.	Report Receipt: ARSO Central Secretariat or relevant CB receives a report.
+2.	Preliminary Assessment: Determine validity and severity.
+3.	Evidence Gathering: Collect documentation, images, purchase samples.
+4.	Engagement with Alleged Offender: Seek explanation and evidence of authorization.
+5.	Finding: Determine if misuse occurred.
+6.7.3 Sanctions: Applied proportionally and may include:
+•	For Certified Clients: Formal warning, mandatory corrective action, suspension or withdrawal of certification, financial penalty per license agreement, publication of the violation.
+•	For Non-Certified Entities: Cease and desist legal notice, reporting to national legal authorities for prosecution under trademark and consumer protection laws, public alert notices.
+6.7.4 Appeals: Subject to the appeals process in Chapter 8.
+7.0 COMPLIANCE, ENFORCEMENT & MARKET SURVEILLANCE
+7.1 Monitoring and Oversight of Approved Certification Bodies
+7.1.1 Annual Performance Review: The ARSO Central Secretariat shall conduct an annual performance review of each Approved CB based on:
+•	Analysis of CB-submitted data (number of audits, certificates issued/suspended/withdrawn, complaint/appeal statistics).
+•	Outcomes of witness audits (7.2).
+•	Feedback from certified clients and other stakeholders.
+•	Status of accreditation surveillance by the AFRAC MRA body.
+7.1.2 Key Performance Indicators (KPIs): CBs shall be assessed against KPIs including:
+•	Audit man-day adequacy.
+•	Timeliness of reporting and certificate issuance.
+•	Effectiveness of corrective action follow-up.
+•	Number and severity of non-conformities raised in witness audits.
+7.1.3 Corrective Action Requests (CARs): Where non-conformity with ACAP rules is identified, the Secretariat issues a CAR. Failure to address CARs satisfactorily may lead to suspension of approval (5.6).
+7.2 Witness Audits and Performance Evaluation of CBs
+7.2.1 Purpose
+To directly observe and evaluate the competence, impartiality, and consistency of a CB's audit teams during live certification activities.
+7.2.2 Frequency & Selection:
+•	Scheduled: At least once per CB approval cycle (3 years), and for new CBs within the first year.
+•	Risk-Based: Increased frequency for CBs with performance issues or handling high-risk product sectors.
+•	Unannounced: A percentage may be unannounced.
+7.2.3 Process: An ARSO assessor accompanies the CB's audit team. The assessor evaluates:
+•	Audit planning and preparation.
+•	Opening and closing meeting conduct.
+•	Audit evidence collection and interviewing techniques.
+•	Conformity decision-making against criteria.
+•	Adherence to ACAP and CB procedures.
+7.2.4 Reporting & Follow-up: A witness audit report is provided to the CB and CACO. Non-conformities lead to CARs (7.1.3).
+________________________________________
+7.3 National Market Surveillance Coordination Role of NSBs
+7.3.1 Focal Point: Each NSB shall serve as the national focal point for ACAP-related market surveillance activities.
+7.3.2 Responsibilities:
+•	Coordinate with national market surveillance authorities (MSAs) to incorporate checks for the ARSO Mark into routine inspection regimes.
+•	Provide training and reference materials to MSAs on the ACAP scheme and mark verification.
+•	Receive and triage reports from MSAs or the public on suspected non-conforming certified products.
+•	Investigate or facilitate investigation of such reports.
+•	Report findings and enforcement actions taken to the ARSO Central Secretariat for continental trend analysis.
+7.3.3 Information Sharing: NSBs shall participate in a secure information-sharing network to alert other Member States of serious non-conformities or recalls.
+7.4 Handling of Non-Conforming Products in the Market
+7.4.1 Detection: Non-conformity may be detected through market surveillance, consumer complaints, or CB surveillance.
+7.4.2 Immediate Actions by CB/Client: Upon confirmation, the responsible CB shall instruct the client to immediately:
+•	Cease shipment of affected batches.
+•	Initiate identification and segregation of affected products in the supply chain.
+•	Determine the root cause.
+7.4.3 Notification to ARSO and NSBs: The CB shall notify the ARSO Central Secretariat and the NSBs in the countries where the product is known to be distributed within 24 hours of confirming a serious safety-related non-conformity.
+7.4.4 Corrective Actions: The client, under CB oversight, must implement corrective actions to address the non-conformity and prevent recurrence. The CB verifies effectiveness.
+7.5 Recall Procedures for Non-Conforming Certified Products
+7.5.1 Recall Decision: Initiated by the certified client, mandated by the CB, or ordered by a national regulatory authority.
+7.5.2 Recall Plan: The certified client must have a documented product recall plan. The CB shall verify the plan's adequacy during audits.
+7.5.3 Recall Execution:
+•	The client notifies distributors, retailers, and, if required by law, the public.
+•	The client coordinates the return, replacement, or destruction of affected products.
+•	The CB monitors the recall's progress and effectiveness.
+7.5.4 Continental Alert System: For recalls involving cross-border distribution, the ARSO Central Secretariat shall activate an alert through the ACAP Digital Platform to notify all relevant NSBs and MSAs.
+7.6 Cross-Border Enforcement Cooperation Mechanisms
+7.6.1 Mutual Assistance Agreement: ARSO shall facilitate a framework agreement among Member States' NSBs and MSAs for mutual assistance in enforcement.
+7.6.2 Designated Contact Points: Each NSB shall designate an official contact point for rapid cross-border communication on enforcement matters.
+7.6.3 Joint Investigations: For complex cases involving multiple countries, joint investigation teams may be formed with coordination by the ARSO Central Secretariat.
+7.6.4 Harmonized Sanctions Database: A secure database of enforcement actions (sanctions, bans, prosecutions) related to ACAP mark misuse shall be maintained to deter repeat offenders operating in different jurisdictions.
+8.0 APPEALS, COMPLAINTS & DISPUTE RESOLUTION
+8.1 Definition and Scope of Appeals vs. Complaints
+8.1.1 Appeal: A request by an applicant, a certified client, or an Approved CB for reconsideration of a decision made by ARSO or a CB that adversely affects them. Examples: denial of application, suspension/withdrawal of certificate/CB approval, imposition of a sanction.
+8.1.2 Complaint: An expression of dissatisfaction by any person or organization (other than an appeal) relating to the activities of ARSO, a CB, or a certified client. Examples: dissatisfaction with auditor conduct, alleged misuse of mark by a third party, perceived unfair treatment.
+8.2 Formal Appeals Process Against Certification Decisions
+8.2.1 Submission: The appellant must submit a written appeal (ACAP Form APP-01) to the body that made the decision (the CB or ARSO Central Secretariat) within 30 calendar days of being notified of the decision.
+8.2.2 Acknowledgement and Review: The receiving body must acknowledge receipt within 5 working days. An individual not previously involved in the matter shall conduct an initial review.
+8.2.3 Resolution Attempt: The reviewing body shall attempt to resolve the appeal through discussion and review of evidence with the appellant within 30 days.
+8.2.4 Escalation to CACO Appeals Panel: If unresolved, the appellant may escalate the appeal in writing to the CACO Appeals Panel within 14 days of the initial resolution attempt's conclusion.
+8.3 Complaint Handling Process (From Clients and Third Parties)
+8.3.1 Submission: Complaints can be submitted to the relevant CB (if concerning a certified client or the CB's service) or directly to the ARSO Central Secretariat (if concerning a CB's performance or ARSO itself) via the ACAP Digital Platform or designated email.
+8.3.2 Triage and Investigation:
+•	The receiving entity acknowledges receipt within 5 working days.
+•	The complaint is assigned to a competent, impartial person for investigation.
+•	The investigation includes gathering evidence and seeking input from relevant parties.
+8.3.3 Decision and Action: The investigating entity makes a decision on the complaint's validity and determines any necessary corrective or disciplinary actions. The complainant is informed of the outcome.
+8.3.4 Escalation: If dissatisfied with the outcome, the complainant may escalate the complaint to the next level (from CB to ARSO, from ARSO staff to the Advisory Committee for impartiality concerns).
+8.4 Role of the CACO Appeals Panel
+8.4.1 Composition: An ad-hoc panel of 3-5 members appointed by CACO from its membership or external experts, excluding anyone with a conflict of interest.
+8.4.2 Procedure: The Panel reviews written submissions from both parties, may request additional information, and may hold a hearing. Deliberations are confidential.
+8.4.3 Decision: The Panel's decision is binding on the CB or ARSO Secretariat regarding the specific appeal. Decisions are documented and used to improve processes.
+8.5 Arbitration and Escalation to the ARSO Council
+8.5.1 Scope: For appeals that are exceptionally complex, involve multiple Member States, or where the appellant remains dissatisfied after the CACO Appeals Panel decision.
+8.5.2 Process: The matter may be referred, by mutual agreement of the parties, to an independent arbitration process administered by a mutually agreed body (e.g., the AfCFTA Dispute Settlement Body for state-related issues, or a commercial arbitration center for contractual ones).
+8.5.3 Council as Final Arbiter: For strategic, non-technical disputes between Member States regarding the scheme's governance, the ARSO Council shall be the final arbiter, making decisions in line with its consensus-based process (4.2).
+8.6 Record Keeping and Trend Analysis
+8.6.1 Records: All appeals, complaints, and their resolutions shall be recorded in a secure database, including the nature, parties involved, actions taken, and outcome.
+8.6.2 Confidentiality: Records shall be treated confidentially, with access restricted to authorized personnel involved in handling and oversight.
+8.6.3 Trend Analysis: The ARSO Central Secretariat shall analyze records annually to identify systemic issues, recurring non-conformities, or patterns of poor performance by specific CBs or in specific sectors. Results feed into management review and continual improvement (Chapter 13).
+
+9.0 FINANCIAL & CONTRACTUAL FRAMEWORK
+9.1 Fee Structure (Application, Audit, Licensing, Royalty Fees)
+9.1.1 Purpose
+To establish a transparent, equitable, and sustainable fee structure that ensures the financial viability of the ACAP scheme while promoting accessibility for businesses across Africa.
+9.1.2 Fee Categories:
+9.1.2.1 Application and Assessment Fees (Non-refundable):
+•	CB Approval: Fee for processing CB applications, covering administrative and initial assessment costs.
+•	Scheme-Specific Fees: May vary by product complexity and risk category.
+9.1.2.2 Audit/Evaluation Fees:
+•	Charged by Approved CBs to clients for certification and surveillance activities. CBs shall determine these fees based on man-days, travel, and complexity, but must apply them in a non-discriminatory manner.
+•	ARSO may publish recommended fee ranges or calculation methodologies for transparency.
+9.1.2.3 Annual Licensing Fees:
+•	CB Licensing Fee: Annual fee paid by each Approved CB to ARSO to maintain its licensed status, contribute to scheme maintenance, and access the ARSO ACAP Digital Platform.
+•	Client Mark License Fee (if applicable): An annual royalty fee may be charged to certified clients for the right to use the ARSO Mark, calculated based on factors such as company size, turnover, or volume of certified products. Micro and small enterprises may be exempted or granted reduced fees.
+9.1.2.4 Transaction Fees:
+•	Fee per certificate issuance or renewal, paid by the CB to ARSO, to cover the cost of maintaining the public register and verification system.
+9.1.3 Publication and Review: All fees shall be published in a clear schedule on the ACAP Digital Platform in USD, with equivalent amounts in major African currencies. Fees shall be reviewed biennially by the ARSO Council.
+9.1.4 Reference: WTO TBT Agreement, Article 5.2.8 – "Fees imposed for conducting conformity assessment... shall be equitable in relation to fees charged to like products of national origin."
+9.2 Financial Model and Sustainability of the ACAP Scheme
+9.2.1 Revenue Streams: The scheme shall be financed through a mix of:
+•	Licensing and transaction fees (9.1.2.3 & 9.1.2.4).
+•	Grants and contributions from development partners, the AfCFTA Secretariat, and Member States for initial setup and capacity building.
+•	Revenue from value-added services (e.g., premium listing in directories, specialized training).
+9.2.2 Cost Centers: Major costs include:
+•	Operation of the ARSO Central Secretariat's ACAP unit.
+•	Development and maintenance of the ACAP Digital Platform.
+•	CACO and other committee operations.
+•	Promotion, capacity building, and stakeholder engagement.
+•	Oversight and monitoring activities (e.g., witness audits).
+9.2.3 Financial Governance:
+•	A separate budget for ACAP operations shall be prepared by the ARSO Central Secretariat and approved by the ARSO Council.
+•	Financial accounts shall be subject to annual independent audit.
+•	A reserve fund shall be established to ensure scheme continuity and cover potential liabilities.
+9.2.4 Subsidies and Support: A policy shall be established to provide fee waivers or reductions for least-developed countries, micro-enterprises, and products critical to food security or public health, funded by a portion of scheme revenues or designated grants.
+9.3 License Agreement Templates (CBs and Certified Clients)
+9.3.1 CB License Agreement (ARSO ↔ CB): This binding contract shall include:
+•	Grant of license to operate under specified ACAP schemes.
+•	CB's obligations (impartiality, competence, reporting, fee payment).
+•	ARSO's obligations (scheme maintenance, platform access, promotion).
+•	Terms for monitoring, suspension, and termination of the license.
+•	Liability, insurance, and indemnity clauses.
+•	Confidentiality and intellectual property provisions.
+
+9.3.2 Sub-License Agreement (CB ↔ Certified Client): This agreement, based on a template provided by ARSO, shall include:
+•	Grant of right to use the ARSO Mark on certified products.
+•	Client's obligations (conformity, surveillance cooperation, mark usage rules, fee payment).
+•	CB's obligations (auditing, certification decisions).
+•	Terms for suspension/withdrawal and consequences.
+•	Liability provisions.
+9.4 Liability, Insurance, and Indemnity Provisions
+9.4.1 Limitation of Liability: ARSO, as the scheme owner, shall not be held liable for:
+•	Losses arising from the failure of a certified product to conform to standards, provided the ACAP rules were correctly applied by the CB.
+•	Actions or omissions of Approved CBs or certified clients.
+•	Misuse of the mark by unauthorized parties.
+9.4.2 CB Liability and Insurance: Approved CBs shall:
+•	Hold professional indemnity insurance adequate to cover liabilities arising from their certification activities across all countries of operation.
+•	Be contractually liable to their clients for negligent or improper certification decisions.
+•	Indemnify ARSO against claims arising from the CB's breach of the license agreement or ACAP rules.
+9.4.3 Client Liability: Certified clients are liable for the conformity of their products and for any damages caused by non-conforming products. They must indemnify the CB and ARSO against claims arising from mark misuse or product failure due to the client's actions.
+9.5 Grant and Funding Mechanisms for Capacity Building
+9.5.1 Capacity Building Fund: ARSO shall establish and manage an ACAP Capacity Building Fund, resourced through a percentage of scheme revenues and donor contributions.
+9.5.2 Fund Objectives: To support:
+•	Training of auditors, especially in least-developed countries.
+•	Technical assistance to NSBs for market surveillance.
+•	Support for SMEs to understand and achieve certification.
+•	Development of guidance documents and training materials in local languages.
+9.5.3 Application and Disbursement: NSBs, CBs, and industry associations may apply for grants based on approved project proposals aligned with the ACAP strategic plan. Disbursement is subject to reporting on results.
+10.0 DIGITAL INFRASTRUCTURE & DATA MANAGEMENT
+10.1 ACAP Digital Platform Architecture and Security
+10.1.1 Core Architecture: The platform shall be a cloud-based, modular system with the following core modules:
+•	CB Portal: For application submission, client data management, and certificate issuance.
+•	Client Portal: For application status tracking and document submission.
+•	Public Registry & Verification Portal: Open-access database of certificates and CBs.
+•	Administration Portal: For ARSO Secretariat oversight and reporting.
+•	NSB Portal: For market surveillance reporting and alerts.
+10.1.2 Security Standards: The platform shall comply with ISO/IEC 27001 (Information Security Management). It shall feature:
+•	Role-based access control (RBAC).
+•	Multi-factor authentication for privileged users.
+•	End-to-end encryption for sensitive data transfer.
+•	Regular penetration testing and security audits.
+10.1.3 Hosting and Sovereignty: Data shall be hosted on servers located at ARSO Central Secretariat, with robust disaster recovery and business continuity plans.
+10.2 Data Requirements and Interoperability with National Systems
+10.2.1 Minimum Data Set: A standardized, harmonized data set shall be defined for all certificates, including fields in 6.6.2, to ensure consistency across CBs and Member States.
+10.2.2 APIs for Interoperability: The platform shall provide secure Application Programming Interfaces (APIs) to enable:
+•	Direct data exchange with national single windows and customs systems (e.g., for pre-arrival processing).
+•	Integration with NSB and MSA databases.
+•	Automated status updates to the AfCFTA Trade Information Portal.
+10.2.3 Data Mapping: ARSO shall develop and maintain a data mapping document aligning ACAP data fields with international standards (e.g., UN/CEFACT) and key REC systems.
+10.3 Public Registry of Certified Products and CBs
+10.3.1 Accessibility: The registry shall be freely accessible via the web without login requirements.
+10.3.2 Search Functionality: Users shall be able to search by:
+•	Certificate number
+•	Company name
+•	Product type
+•	ARS standard
+•	Country of manufacture/certification
+•	CB name
+10.3.3 Real-Time Status: The registry shall display the real-time status of every certificate (Valid, Suspended, Withdrawn). A historical record of status changes shall be maintained.
+10.4 QR Code / Digital Link Specification for Mark Verification
+10.4.1 QR Code Generation: A unique, dynamic QR code shall be generated for each certificate and, optionally, for each production batch. The code shall be linked to a unique URL on the verification portal.
+10.4.2 Data on Landing Page: Scanning the QR code shall open a mobile-optimized page displaying:
+•	Product/company details from the certificate.
+•	Certificate validity status.
+•	Date of last surveillance.
+•	Option to report a concern.
+•	10.4.3 Security: QR codes shall be generated with cryptographic signatures to prevent forgery. The linked pages shall use HTTPS.
+10.5 Data Privacy, Ownership, and Sharing Protocols
+10.5.1 Data Ownership: ARSO, as the scheme owner, is the data controller for all information within the ACAP Digital Platform. Certified clients own the underlying data about their products but grant ARSO and the CB a license to process and display it for scheme purposes.
+10.5.2 Privacy Compliance: The platform shall comply with applicable data protection laws, including the African Union Convention on Cyber Security and Personal Data Protection (Malabo Convention). A clear privacy policy shall be published.
+10.5.3 Data Sharing Protocol:
+•	Public Data: Certificate information (as per 10.3) is public.
+•	Confidential Business Information: Audit reports, financial data, and proprietary technical information shall be accessible only to the relevant CB, the client, and ARSO oversight staff under strict confidentiality.
+•	Sharing with Authorities: Data may be shared with national authorities (MSAs, customs) upon legitimate request for enforcement purposes under a formal data sharing agreement.
+10.6 Integration with AfCFTA Trade Facilitation Systems (e.g., SANoT)
+10.6.1 Strategic Alignment: The ACAP Digital Platform shall be designed as a key component of the AfCFTA digital trade ecosystem.
+10.6.2 Linkage to the SANoT: The platform shall integrate with the Sub-Saharan Africa National Single Window and Trade Facilitation Platform (SANoT) or its successor system, allowing:
+•	Customs officials in an importing country to instantly verify an ACAP certificate presented for goods in transit or at the border.
+•	Automated notification of certificate suspensions or withdrawals to relevant border posts.
+10.6.3 Working Group: ARSO shall participate in the relevant AfCFTA digital trade and TBT committees to ensure ongoing technical alignment.
+11.0 MUTUAL RECOGNITION & INTERNATIONAL COOPERATION
+11.1 Framework for Bilateral/Multilateral Recognition Agreements
+11.1.1 Model Agreement Template: ARSO shall develop a model Mutual Recognition Agreement (MRA) template for use with:
+•	Other regional conformity assessment systems (e.g., SADCAS, EAC).
+•	National regulatory authorities within AfCFTA.
+•	International partners (e.g., EU, GCC).
+11.1.2 Core Principles of MRAs: Agreements shall be based on:
+•	Equivalence: Demonstrated equivalence of technical requirements (ARS vs. partner's standards).
+•	Competence: Confidence in the accreditation (AFRAC MRA) and certification systems.
+•	Transparency: Exchange of information on regulations, standards, and non-conformities.
+•	Safeguards: Provisions for suspending recognition in case of systemic failure.
+11.1.3 Negotiation Process: Led by the ARSO Central Secretariat with guidance from CACO and approval from the ARSO Council.
+11.2 Equivalence Assessment of Other Certification Schemes
+11.2.1 Purpose
+To determine if products certified under another recognized scheme (e.g., a national mark, an international private standard) can be deemed equivalent and avoid duplicative ACAP certification.
+11.2.2 Assessment Criteria: CACO shall develop criteria assessing:
+•	The standard's alignment with the relevant ARS.
+•	The rigor of the foreign scheme's certification and oversight processes.
+•	The credibility of its accreditation/oversight body.
+
+11.2.3 Outcome: A positive equivalence finding may lead to:
+
+•	Automatic Recognition: Acceptance of the foreign certificate.
+•	Simplified Conformity Assessment: Reduced testing or auditing for ACAP certification.
+11.3 Role in the AfCFTA Committee on TBT
+11.3.1 Representation: ARSO shall seek official observer or advisor status on the AfCFTA Committee on Technical Barriers to Trade.
+
+11.3.2 Contributions: ARSO shall provide technical input on:
+•	Harmonization of standards.
+•	Implementation of mutual recognition (Annex 6, Article 10).
+•	Use of the ACAP as a tool to reduce TBTs.
+
+11.3.3 Receiving Guidance: The Committee's decisions and guidance shall inform the evolution of the ACAP.
+11.4 Engagement with International Bodies (ISO, IEC, WTO, UN Agencies)
+11.4.1 ISO/IEC: Active participation in relevant Technical Committees to influence international standards that underpin ARS.
+11.4.2 WTO TBT Committee: ARSO shall align its procedures with the WTO TBT Code of Good Practice (Annex 3) and may submit notifications regarding the ACAP scheme.
+11.4.3 UN Agencies (UNIDO, ITC, FAO): Collaborate on capacity-building projects and joint initiatives to promote quality infrastructure for development.
+11.5 Integration with Regional Economic Communities (RECs) Systems
+11.5.1 Policy Alignment: Work with RECs (ECOWAS, COMESA, EAC, SADC, etc.) to align their regional quality policies with the ACAP as the continental instrument.
+11.5.2 Technical Integration: Explore technical integration of the ACAP Digital Platform with existing REC trade facilitation or certification databases to avoid duplication for traders operating within RECs.
+12.0 COMMUNICATION, CAPACITY BUILDING & STAKEHOLDER ENGAGEMENT
+12.1 Brand Strategy and Promotion of the ARSO Mark
+12.1.1 Brand Positioning: The ARSO Mark shall be positioned as "The Trusted Symbol for African Trade." It represents verified quality, safety, and continental acceptance, facilitating the free movement of goods under the AfCFTA.
+12.1.2 Core Brand Messages:
+•	For Governments & Regulators: A tool for market surveillance, consumer protection, and reduced border delays.
+•	For Industry & Manufacturers: A passport to continental markets, reducing costs from multiple testing/certification.
+•	For Retailers & Importers: A guarantee of product conformity and supply chain reliability.
+•	For Consumers: A symbol of safety, quality, and pan-African pride.
+12.1.3 Promotion Channels:
+•	Digital: Dedicated website, social media campaigns, webinars, integration with trade portals.
+•	Events: Presence at major continental trade fairs, AfCFTA forums, and industry exhibitions.
+•	Media: Engagement with African business, trade, and consumer media.
+•	Ambassadors: Engagement with respected industry leaders and institutions as brand champions.
+12.2 Stakeholder Mapping and Engagement Plan
+12.2.1 Key Stakeholder Groups:
+•	Primary: NSBs, Approved CBs, Certified Clients, AFRAC, AfCFTA Secretariat.
+•	Secondary: National Regulatory Authorities (Customs, Food & Drug Agencies, etc.), Industry Associations, Academia, Development Partners (AU, UNIDO, AfDB).
+•	Tertiary: Consumers, Media, Civil Society Organizations.
+12.2.2 Engagement Strategies:
+•	NSBs & Regulators: Formal consultations, technical working groups, joint capacity-building.
+•	Industry: Roadshows, sector-specific guidance, simplified information packages.
+•	Development Partners: Regular briefing sessions, collaborative project development.
+•	General Public: Clear, simple messaging via media and digital platforms.
+12.2.3 Feedback Mechanisms: Structured channels (surveys, focus groups, online forums) shall be established to gather stakeholder input for scheme improvement.
+12.3 Training and Competence Development Framework
+12.3.1 Target Audiences & Programs:
+•	CB Auditors: "ACAP Lead Auditor" certification program, covering ACAP rules, specific scheme requirements, and auditing techniques.
+•	NSB & Regulatory Staff: Training on mark verification, market surveillance protocols, and the ACAP governance system.
+•	Industry & SMEs: Awareness workshops on the benefits and process of obtaining certification.
+•	Accreditation Body Assessors: Briefings on ACAP scheme requirements for consistent assessment of CBs.
+12.3.2 Delivery Methods: A blend of e-learning modules (for theory), regional in-person workshops (for practical application), and train-the-trainer programs to ensure scalability.
+12.3.3 Competency Records: A central register of trained personnel (auditors, trainers) shall be maintained, with requirements for periodic refresher training.
+12.4 Public Awareness Campaigns for Consumers and Regulators
+12.4.1 Consumer Campaigns: "Look for the Mark" campaigns utilizing TV, radio, social media, and point-of-sale materials to educate the public on the meaning and value of the ARSO Mark.
+12.4.2 Regulator Campaigns: Targeted seminars and toolkits for customs and market surveillance officers, focusing on:
+•	How to verify a certificate using the ACAP Digital Platform.
+•	Procedures for handling non-conforming certified products at borders.
+•	Understanding the legal standing of the mark.
+12.4.3 Multilingual Materials: All key awareness materials shall be produced in English, French, Portuguese, and Arabic at a minimum.
+12.5 Guidance Document Development and Publication
+12.5.1 Hierarchy of Documents:
+•	Level 1: This Policy Document (mandatory).
+•	Level 2: Scheme-specific implementation guides (e.g., "ACAP for Agro-Products Guide").
+•	Level 3: Technical interpretations, FAQs, and best practice notes.
+12.5.2 Development Process: Guidance documents shall be developed by CACO or its designated working groups, following a defined drafting-consultation-approval-publication process.
+12.5.3 Accessibility: All guidance documents shall be freely downloadable from the ACAP Digital Platform in searchable PDF format.
+13.0 MANAGEMENT SYSTEM & CONTINUAL IMPROVEMENT
+13.1 Internal Audits of the ACAP Governance System
+13.1.1 Purpose
+To verify that the ACAP system (including the ARSO Central Secretariat's administration, CACO's processes, and the overall governance) conforms to the requirements of this policy, ACAP 1-1, and relevant ISO standards.
+13.1.2 Schedule: A comprehensive internal audit program shall be conducted at least annually. Audits are planned based on risk and the results of previous audits.
+13.1.3 Conduct: Audits shall be performed by competent, objective personnel not directly responsible for the activities being audited. They may be internal ARSO staff or contracted external experts.
+13.1.4 Reporting & Follow-up: Audit reports detailing findings (conformities and non-conformities) are presented to the ARSO Secretary-General and the Chair of CACO. Responsibility for corrective actions is assigned, with verification of effectiveness.
+13.2 Management Review by the ARSO Council
+13.2.1 Frequency: A formal Management Review of the entire ACAP system shall be conducted by the ARSO Council at least once per year.
+13.2.2 Inputs: The review shall consider:
+•	Results of internal and external audits (e.g., by development partners).
+•	Feedback from stakeholders (complaints, appeals, survey results).
+•	Analysis of KPIs (Section 13.3).
+•	Status of corrective and preventive actions.
+•	Changes that could affect the system (legal, regulatory, technological).
+•	Financial performance and sustainability of the scheme.
+13.2.3 Outputs & Decisions: The Council shall make decisions and authorize actions related to:
+•	Improvement of the effectiveness of the ACAP system.
+•	Necessary changes to this policy or other documents.
+•	Resource needs.
+•	Strategic direction.
+Minutes of the Management Review shall be maintained.
+13.3 Monitoring of Key Performance Indicators (KPIs)
+13.3.1 KPI Framework: A balanced scorecard of KPIs shall be established to measure the health, performance, and impact of the ACAP. 
+13.3.2 Key Indicator Categories:
+•	Effectiveness & Integrity: Number of certificates suspended/withdrawn, results of witness audits, successful fraud prevention actions.
+•	Efficiency & Accessibility: Average time to certify, cost of certification, geographic distribution of CBs and certified clients.
+•	Impact & Trade Facilitation: Volume/value of intra-African trade in certified goods, reduction in border rejection/re-testing incidents, stakeholder satisfaction levels.
+•	Financial Sustainability: Revenue vs. budget, reserve fund level.
+
+13.3.3 Reporting: KPI dashboards shall be presented quarterly to the ARSO Central Secretariat management and annually to the ARSO Council.
+13.4 Process for Periodic Review of this Policy Document
+13.4.1 Scheduled Review: This comprehensive policy document shall be reviewed in its entirety by CACO at least every three (3) years, or sooner if significant changes in the operational environment warrant it.
+13.4.2 Review Triggering Events:
+•	Changes in AfCFTA TBT Annex or related protocols.
+•	Changes in core international standards (ISO/IEC 17000 series).
+•	Systemic issues identified through management review or stakeholder feedback.
+•	Technological advancements requiring system adaptation.
+13.4.3 Review Process: Includes stakeholder consultation, impact assessment of proposed changes, approval by CACO, and ratification by the ARSO Council per the amendment procedure (14.4).
+13.5 Corrective and Preventive Action (CAPA) Process
+13.5.1 Corrective Action: Addressing the root cause of an existing non-conformity to prevent recurrence.
+•	Steps: Identify non-conformity → Investigate root cause → Plan and implement corrective action → Verify effectiveness → Review.
+•	Applies to non-conformities found in audits, complaints, appeals, and KPI deviations.
+13.5.2 Preventive Action: Proactive steps to eliminate the cause of a potential non-conformity.
+•	Steps: Analyze data (trends, risk assessments) to identify potential issues → Plan and implement preventive action → Review effectiveness.
+13.5.3 Records: All CAPA activities shall be recorded, demonstrating a closed-loop process that drives continual improvement.
