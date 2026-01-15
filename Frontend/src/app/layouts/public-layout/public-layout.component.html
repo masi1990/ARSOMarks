@@ -1,0 +1,76 @@
+<div class="min-h-screen bg-slate-50 flex flex-col">
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-lg font-semibold text-white">
+            AR
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">ARSO Marks</p>
+            <p class="text-xs text-slate-500">ACAP Portal</p>
+          </div>
+        </div>
+
+        <!-- Navigation & Login -->
+        <div class="flex items-center gap-4">
+          <button
+            (click)="navigateToLogin()"
+            class="inline-flex items-center px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- About -->
+        <div>
+          <h3 class="text-sm font-semibold text-slate-900 mb-3">About ARSO Marks</h3>
+          <p class="text-sm text-slate-600">
+            The African Organisation for Standardisation (ARSO) ACAP Portal provides traceability for certified products
+            using ARSO quality and eco marks.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-sm font-semibold text-slate-900 mb-3">Quick Links</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li>
+              <a routerLink="/" class="hover:text-slate-900">Product Registry</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Login -->
+        <div>
+          <h3 class="text-sm font-semibold text-slate-900 mb-3">Account</h3>
+          <button
+            (click)="navigateToLogin()"
+            class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
+          >
+            Login to Portal
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-8 border-t border-slate-200 text-center text-sm text-slate-500">
+        <p>&copy; {{ currentYear }} ARSO. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+

@@ -4,6 +4,7 @@ import { AuthGuard } from './modules/auth/guards/auth.guard';
 import { RoleGuard } from './modules/auth/guards/role.guard';
 import { UserRole } from './shared/models/user.model';
 import { AuthenticatedLayoutComponent } from './layouts/authenticated-layout/authenticated-layout.component';
+import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 
 const routes: Routes = [
@@ -13,6 +14,16 @@ const routes: Routes = [
   },
   {
     path: '',
+    component: PublicLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./pages/consumer/consumer.module').then((m) => m.ConsumerModule),
+      },
+    ],
+  },
+  {
+    path: 'portal',
     component: AuthenticatedLayoutComponent,
     canActivate: [AuthGuard],
     children: [
@@ -196,7 +207,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/dashboard',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
     ],
@@ -204,15 +215,6 @@ const routes: Routes = [
   {
     path: 'unauthorized',
     component: UnauthorizedComponent,
-  },
-  {
-    path: '',
-    redirectTo: '/dashboard',
-    pathMatch: 'full',
-  },
-  {
-    path: '**',
-    redirectTo: '/dashboard',
   },
 ];
 

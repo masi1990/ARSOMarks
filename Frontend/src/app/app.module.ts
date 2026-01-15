@@ -8,10 +8,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthenticatedLayoutComponent } from './layouts/authenticated-layout/authenticated-layout.component';
+import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 
 @NgModule({
-  declarations: [AppComponent, AuthenticatedLayoutComponent, UnauthorizedComponent],
+  declarations: [AppComponent, AuthenticatedLayoutComponent, PublicLayoutComponent, UnauthorizedComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
