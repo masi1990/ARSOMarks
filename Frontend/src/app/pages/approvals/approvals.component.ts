@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { finalize, forkJoin } from 'rxjs';
+import { finalize, forkJoin, of } from 'rxjs';
 import { AuthService } from '../../modules/auth/services/auth.service';
 import { NsbRegistrationRequestService } from '../../modules/nsb-management/services/nsb-registration-request.service';
+import { MarkLicenseApplicationService } from '../../modules/mark-licensing/services/mark-license-application.service';
 import { RoleRequest, RoleRequestStatus, UserRole } from '../../shared/models/user.model';
 import { NsbRegistrationRequest, NsbRegistrationRequestStatus } from '../../shared/models/nsb-registration-request.model';
+import { MarkLicenseApplication } from '../../shared/models/mark-license.model';
 
 // Unified Interface
 export interface ApprovalItem {
   id: string;
-  type: 'ROLE_REQUEST' | 'NSB_REGISTRATION';
+  type: 'ROLE_REQUEST' | 'NSB_REGISTRATION' | 'MARK_LICENSE';
   title: string;
   subtitle: string;
   requesterName: string;
@@ -19,7 +21,7 @@ export interface ApprovalItem {
   reviewedBy?: string;
   reviewedAt?: string;
   notes?: string;
-  originalRequest: RoleRequest | NsbRegistrationRequest;
+  originalRequest: RoleRequest | NsbRegistrationRequest | MarkLicenseApplication;
 }
 
 @Component({
@@ -33,6 +35,7 @@ export class ApprovalsComponent implements OnInit {
   filteredItems: ApprovalItem[] = [];
   loading = false;
   error = '';
+  isAdminUser = false;
 
   // Filters
   filterForm: FormGroup;
@@ -48,6 +51,7 @@ export class ApprovalsComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private nsbService: NsbRegistrationRequestService,
+    private markLicenseService: MarkLicenseApplicationService,
     private fb: FormBuilder
   ) {
     this.filterForm = this.fb.group({
@@ -57,6 +61,9 @@ export class ApprovalsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const user = this.authService.currentUserValue;
+    const roles = user?.roles || (user?.role ? [user.role] : []);
+    this.isAdminUser = roles.includes(UserRole.SUPER_ADMIN) || roles.includes(UserRole.ARSO_SECRETARIAT);
     this.loadData();
     this.setupFilters();
   }
@@ -67,7 +74,10 @@ export class ApprovalsComponent implements OnInit {
 
     forkJoin({
       roleRequests: this.authService.listRoleRequests(),
-      nsbRequests: this.nsbService.list({ limit: 100 }) // Fetch reasonable amount
+      nsbRequests: this.nsbService.list({ limit: 100 }), // Fetch reasonable amount
+      markLicenseApplications: this.isAdminUser
+        ? this.markLicenseService.getAllApplications(true)
+        : of([]),
     }).pipe(
       finalize(() => {
         this.loading = false;
@@ -76,8 +86,11 @@ export class ApprovalsComponent implements OnInit {
       next: (res) => {
         const roleItems = (res.roleRequests || []).map(r => this.mapRoleRequest(r));
         const nsbItems = (res.nsbRequests.data || []).map(r => this.mapNsbRequest(r));
+        const licenseItems = (res.markLicenseApplications || []).map((app: MarkLicenseApplication) =>
+          this.mapMarkLicenseApplication(app),
+        );
         
-        this.items = [...roleItems, ...nsbItems].sort((a, b) => 
+        this.items = [...roleItems, ...nsbItems, ...licenseItems].sort((a, b) =>
           new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
         );
         
@@ -121,6 +134,23 @@ export class ApprovalsComponent implements OnInit {
       reviewedAt: req.reviewedAt,
       notes: req.remarks,
       originalRequest: req
+    };
+  }
+
+  mapMarkLicenseApplication(app: MarkLicenseApplication): ApprovalItem {
+    return {
+      id: app.id,
+      type: 'MARK_LICENSE',
+      title: 'Mark License Application',
+      subtitle: `${app.applicationNumber || 'Pending Reference'} • ${app.nsbApplicantName}`,
+      requesterName: app.declarationSignatory || app.nsbApplicantName,
+      requesterEmail: app.signatoryEmail || 'N/A',
+      status: app.status,
+      submittedAt: app.submittedAt || app.createdAt,
+      reviewedBy: undefined,
+      reviewedAt: app.reviewedAt || undefined,
+      notes: app.rejectionReason || undefined,
+      originalRequest: app
     };
   }
 
@@ -208,6 +238,16 @@ export class ApprovalsComponent implements OnInit {
           next: () => this.handleSuccess(),
           error: (err) => this.modalError = err.error?.message || 'Failed to process request.'
         });
+    } else if (this.selectedItem.type === 'MARK_LICENSE') {
+      const obs = this.actionType === 'approve'
+        ? this.markLicenseService.approveApplication(this.selectedItem.id)
+        : this.markLicenseService.rejectApplication(this.selectedItem.id, this.decisionNote);
+
+      obs.pipe(finalize(() => this.processing = false))
+        .subscribe({
+          next: () => this.handleSuccess(),
+          error: (err) => this.modalError = err.error?.message || 'Failed to process request.'
+        });
     }
   }
 
@@ -231,7 +271,13 @@ export class ApprovalsComponent implements OnInit {
   }
 
   getTypeLabel(type: string): string {
-    return type === 'ROLE_REQUEST' ? 'Role Request' : 'NSB Registration';
+    if (type === 'ROLE_REQUEST') {
+      return 'Role Request';
+    }
+    if (type === 'NSB_REGISTRATION') {
+      return 'NSB Registration';
+    }
+    return 'Mark License';
   }
 }
 

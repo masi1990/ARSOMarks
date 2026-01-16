@@ -1,552 +1,1199 @@
-<div class="w-full max-w-6xl mx-auto">
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <!-- Header -->
-    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
-      <h1 class="text-2xl font-bold text-slate-900">ARSO Mark License Application</h1>
-      <p class="mt-1 text-sm font-medium text-slate-600">Form NSB-004-1: Application for ARSO Mark License - NSB Institutional Use</p>
-      <p class="mt-1 text-sm text-slate-500">Complete all required fields and upload supporting documents</p>
+<div class="flex flex-col h-full bg-gray-50 min-h-screen">
+  <!-- Header / Stepper -->
+  <div class="bg-white shadow-sm border-b px-4 md:px-8 py-4">
+    <div class="flex flex-col gap-4 md:gap-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <h1 class="text-2xl font-bold text-gray-800">ARSO Mark License Application</h1>
+        <div class="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1">
+          <button type="button" (click)="switchView('new')"
+                  class="px-4 py-2 text-sm font-medium rounded-md transition"
+                  [ngClass]="viewMode === 'new' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-800'">
+            New Application
+          </button>
+          <button type="button" (click)="switchView('draft')"
+                  class="px-4 py-2 text-sm font-medium rounded-md transition"
+                  [ngClass]="viewMode === 'draft' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-800'">
+            Draft Applications
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
-      <p class="font-semibold">{{ successMessage }}</p>
-    </div>
+    <div *ngIf="viewMode === 'new'" class="mt-4">
+      <!-- Progress Steps -->
+      <div class="overflow-x-auto pb-2">
+        <div class="flex items-center justify-between min-w-max mx-auto">
+          <!-- Step 1 -->
+          <div class="flex flex-col items-center relative z-10 cursor-pointer group" (click)="goToStep(1)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-sm"
+                 [ngClass]="{
+                   'bg-blue-600 text-white shadow-blue-200': currentStep >= 1, 
+                   'bg-white border-2 border-blue-200 text-blue-600': currentStep < 1 && currentStep !== 1,
+                   'border-2 border-blue-500 bg-white text-blue-600': currentStep === 1
+                 }">
+              <span class="text-sm">1</span>
+            </div>
+            <span class="text-xs mt-2 font-medium text-center max-w-[80px] leading-tight" 
+                  [ngClass]="{
+                    'text-blue-600': currentStep >= 1, 
+                    'text-gray-500': currentStep < 1
+                  }">NSB Profile</span>
+            <div class="absolute top-4 -right-4 md:-right-6 w-8 md:w-12 h-0.5 bg-gray-200" *ngIf="currentStep < 6"></div>
+          </div>
 
-    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-      {{ error }}
-    </div>
+          <!-- Step 2 -->
+          <div class="flex flex-col items-center relative z-10 cursor-pointer group" (click)="goToStep(2)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-sm"
+                 [ngClass]="{
+                   'bg-blue-600 text-white shadow-blue-200': currentStep >= 2, 
+                   'bg-white border-2 border-blue-200 text-blue-600': currentStep < 2 && currentStep !== 2,
+                   'border-2 border-blue-500 bg-white text-blue-600': currentStep === 2
+                 }">
+              <span class="text-sm">2</span>
+            </div>
+            <span class="text-xs mt-2 font-medium text-center max-w-[80px] leading-tight" 
+                  [ngClass]="{
+                    'text-blue-600': currentStep >= 2, 
+                    'text-gray-500': currentStep < 2
+                  }">License Type</span>
+            <div class="absolute top-4 -right-4 md:-right-6 w-8 md:w-12 h-0.5 bg-gray-200" *ngIf="currentStep < 6"></div>
+          </div>
 
-    <form [formGroup]="form" class="p-8 space-y-10" *ngIf="!loading">
-      <!-- Section A: Applicant & License Type Information -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section A: Applicant & License Type Information</h2>
+          <!-- Step 3 -->
+          <div class="flex flex-col items-center relative z-10 cursor-pointer group" (click)="goToStep(3)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-sm"
+                 [ngClass]="{
+                   'bg-blue-600 text-white shadow-blue-200': currentStep >= 3, 
+                   'bg-white border-2 border-blue-200 text-blue-600': currentStep < 3 && currentStep !== 3,
+                   'border-2 border-blue-500 bg-white text-blue-600': currentStep === 3
+                 }">
+              <span class="text-sm">3</span>
+            </div>
+            <span class="text-xs mt-2 font-medium text-center max-w-[80px] leading-tight" 
+                  [ngClass]="{
+                    'text-blue-600': currentStep >= 3, 
+                    'text-gray-500': currentStep < 3
+                  }">Mark Selection</span>
+            <div class="absolute top-4 -right-4 md:-right-6 w-8 md:w-12 h-0.5 bg-gray-200" *ngIf="currentStep < 6"></div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="flex flex-col items-center relative z-10 cursor-pointer group" (click)="goToStep(4)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-sm"
+                 [ngClass]="{
+                   'bg-blue-600 text-white shadow-blue-200': currentStep >= 4, 
+                   'bg-white border-2 border-blue-200 text-blue-600': currentStep < 4 && currentStep !== 4,
+                   'border-2 border-blue-500 bg-white text-blue-600': currentStep === 4
+                 }">
+              <span class="text-sm">4</span>
+            </div>
+            <span class="text-xs mt-2 font-medium text-center max-w-[80px] leading-tight" 
+                  [ngClass]="{
+                    'text-blue-600': currentStep >= 4, 
+                    'text-gray-500': currentStep < 4
+                  }">Compliance</span>
+            <div class="absolute top-4 -right-4 md:-right-6 w-8 md:w-12 h-0.5 bg-gray-200" *ngIf="currentStep < 6"></div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="flex flex-col items-center relative z-10 cursor-pointer group" (click)="goToStep(5)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-sm"
+                 [ngClass]="{
+                   'bg-blue-600 text-white shadow-blue-200': currentStep >= 5, 
+                   'bg-white border-2 border-blue-200 text-blue-600': currentStep < 5 && currentStep !== 5,
+                   'border-2 border-blue-500 bg-white text-blue-600': currentStep === 5
+                 }">
+              <span class="text-sm">5</span>
+            </div>
+            <span class="text-xs mt-2 font-medium text-center max-w-[80px] leading-tight" 
+                  [ngClass]="{
+                    'text-blue-600': currentStep >= 5, 
+                    'text-gray-500': currentStep < 5
+                  }">Documents</span>
+            <div class="absolute top-4 -right-4 md:-right-6 w-8 md:w-12 h-0.5 bg-gray-200" *ngIf="currentStep < 6"></div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="flex flex-col items-center relative z-10 cursor-pointer group" (click)="goToStep(6)">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-sm"
+                 [ngClass]="{
+                   'bg-blue-600 text-white shadow-blue-200': currentStep >= 6, 
+                   'bg-white border-2 border-blue-200 text-blue-600': currentStep < 6 && currentStep !== 6,
+                   'border-2 border-blue-500 bg-white text-blue-600': currentStep === 6
+                 }">
+              <span class="text-sm">6</span>
+            </div>
+            <span class="text-xs mt-2 font-medium text-center max-w-[80px] leading-tight" 
+                  [ngClass]="{
+                    'text-blue-600': currentStep >= 6, 
+                    'text-gray-500': currentStep < 6
+                  }">Review & Submit</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Progress Bar -->
+      <div class="mt-4">
+        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div class="h-full bg-blue-600 transition-all duration-500 ease-out" 
+               [style.width]="((currentStep-1)/5)*100 + '%'"></div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 mt-1">
+          <span>Step {{currentStep}} of 6</span>
+          <span>{{ progressPercent }}% Complete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Main Form Area -->
+    <div class="flex-1 overflow-y-auto p-4 md:p-8">
+      <div class="max-w-4xl mx-auto">
+        <!-- Error Display -->
+        <div *ngIf="error" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 animate-fade-in">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            {{ error }}
+          </div>
+        </div>
+
+        <!-- Success Display -->
+        <div *ngIf="successMessage" class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 animate-fade-in">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            {{ successMessage }}
+          </div>
+        </div>
         
-        <div class="grid gap-6 md:grid-cols-2">
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">NSB Name</label>
-            <input
-              type="text"
-              [value]="nsb?.name || ''"
-              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none cursor-default"
-              readonly
-            />
+        <div *ngIf="viewMode === 'draft'" class="space-y-6">
+          <div class="bg-white rounded-xl shadow-sm border p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-1">Draft Application Registration</h2>
+                <p class="text-sm text-gray-600">Select an NSB to view all draft applications. You can have multiple drafts per NSB.</p>
+              </div>
+              <button type="button" (click)="switchView('new')"
+                      class="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                Start New Application
+              </button>
+            </div>
+
+            <div class="mt-6" [formGroup]="applicationForm">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Select NSB</label>
+              <select
+                formControlName="nsbId"
+                (change)="onNsbChange($event.target.value)"
+                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+              >
+                <option value="" disabled>Select your National Standards Body</option>
+                <option *ngFor="let nsb of nsbOptions" [value]="nsb.id">
+                  {{ nsb.name }} - {{ nsb.country?.name || 'N/A' }}
+                </option>
+              </select>
+              <p class="text-xs text-gray-500 mt-1">Drafts are loaded for the selected NSB.</p>
+            </div>
           </div>
 
-          <div class="space-y-2">
-            <label for="applicationReference" class="block text-sm font-semibold text-slate-700">Internal Reference Number</label>
-            <input
-              type="text"
-              id="applicationReference"
-              formControlName="applicationReference"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-              placeholder="NSB's internal tracking number"
-            />
+          <div class="bg-white rounded-xl shadow-sm border p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-800">Available Drafts</h3>
+              <button type="button" (click)="loadDrafts()"
+                      class="text-sm text-blue-600 hover:text-blue-800">
+                Refresh
+              </button>
+            </div>
+
+            <div *ngIf="loadingDrafts" class="text-sm text-gray-500">Loading drafts...</div>
+
+            <div *ngIf="!loadingDrafts && !applicationForm.get('nsbId')?.value"
+                 class="text-sm text-gray-500">
+              Select an NSB to view draft applications.
+            </div>
+
+            <div *ngIf="!loadingDrafts && applicationForm.get('nsbId')?.value && draftApplications.length === 0"
+                 class="text-sm text-gray-500">
+              No draft applications found for the selected NSB.
+            </div>
+
+            <div *ngIf="!loadingDrafts && draftApplications.length > 0" class="space-y-4">
+              <div *ngFor="let draft of draftApplications" class="border rounded-lg p-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <div class="text-sm text-gray-500">Application #{{ draft.applicationNumber || 'Draft' }}</div>
+                    <div class="text-lg font-semibold text-gray-800">{{ draft.nsbApplicantName || selectedNsb?.name }}</div>
+                    <div class="text-xs text-gray-500 mt-1">
+                      Created {{ draft.createdAt | date: 'mediumDate' }} · Updated {{ draft.updatedAt | date: 'mediumDate' }}
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button type="button" (click)="applyDraft(draft)"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                      Continue Draft
+                    </button>
+                    <button type="button" (click)="deleteDraft(draft)"
+                            class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition">
+                      Delete Draft
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
+                  <div>
+                    <span class="font-medium">License Types:</span>
+                    <span class="ml-2">{{ draft.licenseTypes?.length ? draft.licenseTypes.join(', ') : 'Not selected' }}</span>
+                  </div>
+                  <div>
+                    <span class="font-medium">Marks Requested:</span>
+                    <span class="ml-2">{{ draft.marksRequested?.length ? draft.marksRequested.join(', ') : 'Not selected' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">License Type(s) Requested <span class="text-red-500">*</span></label>
-          <div class="space-y-2">
-            <label *ngFor="let option of licenseTypeOptions" class="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                [value]="option.value"
-                formControlName="licenseTypes"
-                class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
-              />
-              <span class="text-sm text-slate-700">{{ option.label }}</span>
-            </label>
+        <form *ngIf="viewMode === 'new'" [formGroup]="applicationForm" class="space-y-6">
+          <!-- STEP 1: NSB PROFILE -->
+          <div *ngIf="currentStep === 1" class="animate-fade-in">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">NSB Registration Profile</h2>
+              <p class="text-gray-600">Select your National Standards Body and verify the profile details that will be associated with your license application.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+              <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select NSB <span class="text-red-500">*</span></label>
+                <select
+                  formControlName="nsbId"
+                  (change)="onNsbChange($event.target.value)"
+                  class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                >
+                  <option value="" disabled selected>Select your National Standards Body</option>
+                  <option *ngFor="let nsb of nsbOptions" [value]="nsb.id">
+                    {{ nsb.name }} - {{ nsb.country?.name || 'N/A' }}
+                  </option>
+                </select>
+                <p class="text-xs text-gray-500 mt-1">This selection will pre-fill your organization details</p>
+              </div>
+
+              <div *ngIf="!selectedNsb" class="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
+                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <p class="text-gray-500">Select an NSB to view profile details</p>
+              </div>
+
+              <div *ngIf="selectedNsb" class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
+                <div class="space-y-4">
+                  <div>
+                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Organization Name</label>
+                    <div class="text-lg font-semibold text-gray-800 mt-1">{{ selectedNsb?.name }}</div>
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Country</label>
+                    <div class="text-lg font-semibold text-gray-800 mt-1">{{ selectedNsb?.country?.name }}</div>
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Registration Number</label>
+                    <div class="text-lg font-semibold text-gray-800 mt-1">{{ selectedNsb?.registrationNumber || 'N/A' }}</div>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Official Email</label>
+                    <div class="text-lg font-semibold text-gray-800 mt-1">{{ selectedNsb?.contacts?.[0]?.email || 'N/A' }}</div>
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Address</label>
+                    <div class="text-lg font-semibold text-gray-800 mt-1">
+                      {{ selectedNsb?.locations?.[0]?.addressLine1 || 'N/A' }}
+                      <span *ngIf="selectedNsb?.locations?.[0]?.city">
+                        , {{ selectedNsb?.locations?.[0]?.city }}
+                      </span>
+                      <span *ngIf="selectedNsb?.locations?.[0]?.postalCode">
+                        , {{ selectedNsb?.locations?.[0]?.postalCode }}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Legal Status</label>
+                    <div class="text-lg font-semibold text-gray-800 mt-1">{{ selectedNsb?.legalStatus || 'Registered' }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div></div>
+              <div class="flex gap-3">
+                <button type="button" (click)="saveDraft()" 
+                        class="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                  </svg>
+                  Save Draft
+                </button>
+                <button type="button" (click)="nextStep()" 
+                        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center gap-2">
+                  Continue
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
-          <p *ngIf="form.get('licenseTypes')?.invalid && form.get('licenseTypes')?.touched" class="text-xs text-red-500 mt-1">
-            At least one license type must be selected
-          </p>
-        </div>
 
-        <div class="space-y-2">
-          <label for="licenseDuration" class="block text-sm font-semibold text-slate-700">Requested License Duration <span class="text-red-500">*</span></label>
-          <select
-            id="licenseDuration"
-            formControlName="licenseDuration"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-          >
-            <option value="" disabled>Select duration</option>
-            <option *ngFor="let option of durationOptions" [value]="option.value">{{ option.label }}</option>
-          </select>
-          <p *ngIf="form.get('licenseDuration')?.invalid && form.get('licenseDuration')?.touched" class="text-xs text-red-500 mt-1">
-            License duration is required
-          </p>
-        </div>
+          <!-- STEP 2: LICENSE TYPE SELECTION -->
+          <div *ngIf="currentStep === 2" class="animate-fade-in">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">License Type Selection</h2>
+              <p class="text-gray-600">Select the type(s) of license your NSB is applying for. You may select multiple options if applicable.</p>
+            </div>
 
-        <div *ngIf="isDurationOther()" class="space-y-2">
-          <label for="licenseDurationOther" class="block text-sm font-semibold text-slate-700">Specify Duration <span class="text-red-500">*</span></label>
-          <input
-            type="text"
-            id="licenseDurationOther"
-            formControlName="licenseDurationOther"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            placeholder="e.g., 6 months, Project-specific"
-          />
-        </div>
+            <div class="space-y-6">
+              <!-- Promotional License Card -->
+              <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition">
+                <label class="flex items-start gap-4 cursor-pointer">
+                  <div class="flex-shrink-0 mt-1">
+                    <input type="checkbox" formControlName="promotionalLicense" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-lg text-gray-800">Promotional/Institutional License</span>
+                      <span class="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded">ISO 4.6</span>
+                    </div>
+                    <p class="text-gray-600 mt-2">For organizations wishing to use the ARSO mark for promotional purposes without certifying specific products.</p>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                          <p class="text-sm font-medium text-blue-800">ISO/IEC 17065:2012 Reference</p>
+                          <p class="text-xs text-blue-700 mt-1 italic">"4.6 Publicly available information... a description of the rights and duties of applicants and clients, including requirements, restrictions or limitations on the use of the certification body's name and certification mark..."</p>
+                        </div>
+                      </div>
+                    </div>
 
-        <!-- Promotional License Details -->
-        <div *ngIf="hasLicenseType('PROMOTIONAL_INSTITUTIONAL')" formGroupName="promotionalLicenseDetails" class="p-4 bg-blue-50 rounded-lg border border-blue-200 space-y-4">
-          <h3 class="font-semibold text-slate-900">Promotional/Institutional License Details</h3>
-          
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Primary Purpose <span class="text-red-500">*</span></label>
-            <select formControlName="primaryPurpose" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
-              <option value="" disabled>Select purpose</option>
-              <option *ngFor="let option of promotionalPurposeOptions" [value]="option.value">{{ option.label }}</option>
-            </select>
+                    <!-- Conditional Fields -->
+                    <div *ngIf="applicationForm.get('promotionalLicense')?.value" class="mt-6 animate-fade-in">
+                      <div class="border-t pt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Promotional License Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary Purpose <span class="text-red-500">*</span></label>
+                            <input type="text" formControlName="promotionalPrimaryPurpose" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Other Purpose</label>
+                            <input type="text" formControlName="promotionalPurposeOther" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Geographic Scope <span class="text-red-500">*</span></label>
+                            <input type="text" formControlName="promotionalGeographicScope" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Budget Estimate (USD)</label>
+                            <input type="text" formControlName="promotionalBudgetEstimate" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Target Audience</label>
+                            <input type="text" formControlName="promotionalTargetAudience" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                   placeholder="e.g., Government agencies, Educational institutions, Industry associations">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Certification Body License Card -->
+              <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition">
+                <label class="flex items-start gap-4 cursor-pointer">
+                  <div class="flex-shrink-0 mt-1">
+                    <input type="checkbox" formControlName="certificationBodyLicense" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-lg text-gray-800">Certification Body License</span>
+                      <span class="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded">ACAP 1-3:2025</span>
+                    </div>
+                    <p class="text-gray-600 mt-2">For bodies operating product certification schemes under ARSO's conformity assessment program.</p>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                          <p class="text-sm font-medium text-blue-800">ACAP Reference</p>
+                          <p class="text-xs text-blue-700 mt-1 italic">"The application shall be very clear about the ACAP Certification Scheme selected for the approval." (ACAP 1-3:2025, 4.2.1(b))</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Conditional Fields -->
+                    <div *ngIf="applicationForm.get('certificationBodyLicense')?.value" class="mt-6 animate-fade-in">
+                      <div class="border-t pt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Certification Body Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">CB Unit Name <span class="text-red-500">*</span></label>
+                            <input type="text" formControlName="cbUnitName" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Number</label>
+                            <input type="text" formControlName="cbAccreditationNumber" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Body</label>
+                            <input type="text" formControlName="cbAccreditationBody" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Expiry</label>
+                            <input type="date" formControlName="cbAccreditationExpiry" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Schemes Applying <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              <label *ngFor="let scheme of acapSchemeOptions" class="flex items-start gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700">
+                                <input
+                                  type="checkbox"
+                                  class="mt-0.5 h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                  [checked]="isSchemeSelected(scheme.code)"
+                                  (change)="toggleSchemeSelection(scheme.code, $event.target.checked)"
+                                />
+                                <span>{{ scheme.label }}</span>
+                              </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Select all ACAP schemes you are applying to certify under.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Special Project License Card -->
+              <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition">
+                <label class="flex items-start gap-4 cursor-pointer">
+                  <div class="flex-shrink-0 mt-1">
+                    <input type="checkbox" formControlName="specialProjectLicense" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-lg text-gray-800">Special Project License</span>
+                      <span class="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded">ISO 4.1.2</span>
+                    </div>
+                    <p class="text-gray-600 mt-2">For specific, time-bound projects requiring mark usage under special circumstances.</p>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <div class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                          <p class="text-sm font-medium text-blue-800">ISO Reference</p>
+                          <p class="text-xs text-blue-700 mt-1 italic">"4.1.2 Certification agreement... The certification body shall have a legally enforceable agreement for the provision of certification activities to its clients." (ISO/IEC 17065:2012)</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Conditional Fields -->
+                    <div *ngIf="applicationForm.get('specialProjectLicense')?.value" class="mt-6 animate-fade-in">
+                      <div class="border-t pt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Special Project Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Project Name <span class="text-red-500">*</span></label>
+                            <input type="text" formControlName="projectName" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Project Funder</label>
+                            <input type="text" formControlName="projectFunder" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Start Date <span class="text-red-500">*</span></label>
+                            <input type="date" formControlName="projectDurationStart" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">End Date <span class="text-red-500">*</span></label>
+                            <input type="date" formControlName="projectDurationEnd" 
+                                   class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                          </div>
+                          <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Project Description</label>
+                            <textarea formControlName="projectDescription" rows="3" 
+                                      class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8">
+              <button type="button" (click)="prevStep()" 
+                      class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back
+              </button>
+              <div class="flex gap-3">
+                <button type="button" (click)="saveDraft()" 
+                        class="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                  Save Draft
+                </button>
+                <button type="button" (click)="nextStep()" 
+                        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm">
+                  Continue to Mark Selection
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div *ngIf="isPromotionalPurposeOther()" class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Specify Other Purpose <span class="text-red-500">*</span></label>
-            <input type="text" formControlName="promoPurposeOther" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-          </div>
+          <!-- STEP 3: MARK SELECTION -->
+          <div *ngIf="currentStep === 3" class="animate-fade-in">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">ARSO Mark Selection</h2>
+              <p class="text-gray-600">Select the ARSO mark(s) your NSB wishes to be licensed to use. You may select both if applicable.</p>
+            </div>
 
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Target Audience(s) <span class="text-red-500">*</span></label>
-            <div class="space-y-2">
-              <label *ngFor="let option of targetAudienceOptions" class="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" [value]="option.value" formControlName="targetAudience" class="rounded border-slate-300 text-blue-600" />
-                <span class="text-sm text-slate-700">{{ option.label }}</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <!-- ARSO Quality Mark Card -->
+              <label class="group cursor-pointer">
+                <div class="bg-white rounded-xl shadow-sm border p-6 h-full hover:shadow-md transition"
+                     [ngClass]="{'border-blue-500 ring-2 ring-blue-200': applicationForm.get('arsoQualityMark')?.value}">
+                  <div class="flex items-start gap-4">
+                    <input type="checkbox" formControlName="arsoQualityMark" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-lg text-gray-800">ARSO Quality Mark</span>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <span class="font-bold text-blue-600">QM</span>
+                        </div>
+                      </div>
+                      <p class="text-gray-600 text-sm mb-4">Use for certified products aligned to ARSO African Standards and quality requirements.</p>
+                      <ul class="space-y-2 text-sm text-gray-500">
+                        <li class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          Product certification schemes
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          Quality compliance marking
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          Standard conformity indication
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Eco Mark Africa Card -->
+              <label class="group cursor-pointer">
+                <div class="bg-white rounded-xl shadow-sm border p-6 h-full hover:shadow-md transition"
+                     [ngClass]="{'border-green-500 ring-2 ring-green-200': applicationForm.get('ecoMarkAfrica')?.value}">
+                  <div class="flex items-start gap-4">
+                    <input type="checkbox" formControlName="ecoMarkAfrica" 
+                           class="mt-1 w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-lg text-gray-800">Eco Mark Africa</span>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                          <span class="font-bold text-green-600">EM</span>
+                        </div>
+                      </div>
+                      <p class="text-gray-600 text-sm mb-4">Environmental label for products and services meeting ecological sustainability criteria.</p>
+                      <ul class="space-y-2 text-sm text-gray-500">
+                        <li class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          Environmental sustainability
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          Eco-labeling schemes
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                          </svg>
+                          Green certification
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </label>
             </div>
-          </div>
 
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Geographic Scope <span class="text-red-500">*</span></label>
-            <select formControlName="geographicScope" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
-              <option value="" disabled>Select scope</option>
-              <option *ngFor="let option of geographicScopeOptions" [value]="option.value">{{ option.label }}</option>
-            </select>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Estimated Campaign Budget</label>
-            <input type="text" formControlName="budgetEstimate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="In local currency" />
-          </div>
-        </div>
-
-        <!-- Certification Body License Details -->
-        <div *ngIf="hasLicenseType('CERTIFICATION_BODY')" formGroupName="certificationBodyDetails" class="p-4 bg-green-50 rounded-lg border border-green-200 space-y-4">
-          <h3 class="font-semibold text-slate-900">Certification Body License Details</h3>
-          
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">CB Unit/Department Name <span class="text-red-500">*</span></label>
-            <input type="text" formControlName="cbUnitName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-          </div>
-
-          <div class="grid gap-4 md:grid-cols-2">
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Accreditation Certificate Number <span class="text-red-500">*</span></label>
-              <input type="text" formControlName="cbAccreditationNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Accreditation Body <span class="text-red-500">*</span></label>
-              <input type="text" formControlName="cbAccreditationBody" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Scope of Accreditation <span class="text-red-500">*</span></label>
-            <textarea formControlName="cbAccreditationScope" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
-          </div>
-
-          <div class="grid gap-4 md:grid-cols-2">
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Accreditation Expiry Date <span class="text-red-500">*</span></label>
-              <input type="date" formControlName="cbAccreditationExpiry" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Expected Annual Certifications</label>
-              <input type="text" formControlName="cbExpectedVolume" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">ACAP Scheme(s) Applying For <span class="text-red-500">*</span></label>
-            <input type="text" formControlName="cbSchemesApplying" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="Enter scheme codes separated by commas" />
-          </div>
-        </div>
-
-        <!-- Special Project License Details -->
-        <div *ngIf="hasLicenseType('SPECIAL_PROJECT')" formGroupName="specialProjectDetails" class="p-4 bg-purple-50 rounded-lg border border-purple-200 space-y-4">
-          <h3 class="font-semibold text-slate-900">Special Project License Details</h3>
-          
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Project Name <span class="text-red-500">*</span></label>
-            <input type="text" formControlName="projectName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Project Funder/Donor</label>
-            <input type="text" formControlName="projectFunder" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-          </div>
-
-          <div class="grid gap-4 md:grid-cols-2">
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Project Start Date <span class="text-red-500">*</span></label>
-              <input type="date" formControlName="projectDurationStart" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Project End Date <span class="text-red-500">*</span></label>
-              <input type="date" formControlName="projectDurationEnd" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Project Description <span class="text-red-500">*</span></label>
-            <textarea formControlName="projectDescription" rows="4" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Key Deliverables <span class="text-red-500">*</span></label>
-            <div formArrayName="projectDeliverables" class="space-y-2">
-              <div *ngFor="let deliverable of projectDeliverablesArray.controls; let i = index" class="flex gap-2">
-                <input [formControlName]="i" class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-                <button type="button" (click)="removeProjectDeliverable(i)" class="px-3 py-2 text-red-600 hover:text-red-800">Remove</button>
+            <!-- ACAP Schemes (ARSO Mark) -->
+            <div *ngIf="applicationForm.get('arsoQualityMark')?.value" class="bg-white rounded-xl shadow-sm border p-6 mb-8">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">ACAP Certification Schemes</h3>
+              <p class="text-sm text-gray-600 mb-4">Select the ACAP scheme(s) you are applying to certify under.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <label *ngFor="let scheme of acapSchemeOptions" class="flex items-start gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    class="mt-0.5 h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    [checked]="isAcapSchemeSelected(scheme.code)"
+                    (change)="toggleAcapSchemeSelection(scheme.code, $event.target.checked)"
+                  />
+                  <span>{{ scheme.label }}</span>
+                </label>
               </div>
             </div>
-            <button type="button" (click)="addProjectDeliverable()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">Add Deliverable</button>
-          </div>
 
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">Total Project Budget</label>
-            <input type="text" formControlName="projectBudget" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-          </div>
-        </div>
-      </section>
-
-      <!-- Section B: Intended Use Details -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section B: Intended Use Details</h2>
-        
-        <!-- Media Usage Array -->
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <label class="block text-sm font-semibold text-slate-700">Media & Platforms</label>
-            <button type="button" (click)="addMediaUsage()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">Add Media</button>
-          </div>
-          
-          <div formArrayName="mediaUsage" class="space-y-4">
-            <div *ngFor="let media of mediaUsageArray.controls; let i = index" [formGroupName]="i" class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-slate-900">Media Entry {{ i + 1 }}</h4>
-                <button type="button" (click)="removeMediaUsage(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+            <!-- Eco Mark Africa Requirements -->
+            <div *ngIf="applicationForm.get('ecoMarkAfrica')?.value" class="bg-white rounded-xl shadow-sm border p-6 mb-8">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">Eco Mark Africa Requirements</h3>
+              <p class="text-sm text-gray-600 mb-4">Confirm the sustainability and eco-labelling requirements that apply.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <label *ngFor="let requirement of ecoMarkRequirementOptions" class="flex items-start gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    class="mt-0.5 h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500"
+                    [checked]="isEcoRequirementSelected(requirement)"
+                    (change)="toggleEcoRequirementSelection(requirement, $event.target.checked)"
+                  />
+                  <span>{{ requirement }}</span>
+                </label>
               </div>
-              
-              <div class="grid gap-4 md:grid-cols-2">
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">Media Type <span class="text-red-500">*</span></label>
-                  <select formControlName="mediaType" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
-                    <option value="" disabled>Select media type</option>
-                    <option *ngFor="let option of mediaTypeOptions" [value]="option.value">{{ option.label }}</option>
-                  </select>
+            </div>
+
+            <!-- Usage Scope -->
+            <div class="bg-white rounded-xl shadow-sm border p-6 mb-8">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Mark Usage Scope</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Intended Product Categories</label>
+                  <textarea formControlName="productCategories" rows="3" 
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            placeholder="List the product categories where the mark will be used (e.g., Agricultural products, Processed foods, Textiles, etc.)"></textarea>
                 </div>
-
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">Specific Platform/Channel <span class="text-red-500">*</span></label>
-                  <input type="text" formControlName="mediaSpecific" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="e.g., Facebook, National TV" />
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Geographic Coverage</label>
+                  <div class="flex flex-wrap gap-2">
+                    <label *ngFor="let region of ['National', 'Regional (Africa)', 'International']" 
+                           class="inline-flex items-center">
+                      <input type="checkbox" [value]="region" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                      <span class="ml-2 text-sm text-gray-700">{{region}}</span>
+                    </label>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700">Language(s) <span class="text-red-500">*</span></label>
-                <div class="space-y-2">
-                  <label *ngFor="let option of languageOptions" class="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" [value]="option.value" formControlName="mediaLanguage" class="rounded border-slate-300 text-blue-600" />
-                    <span class="text-sm text-slate-700">{{ option.label }}</span>
+            <div class="flex justify-between items-center">
+              <button type="button" (click)="prevStep()" 
+                      class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Back
+              </button>
+              <div class="flex gap-3">
+                <button type="button" (click)="saveDraft()" 
+                        class="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                  Save Draft
+                </button>
+                <button type="button" (click)="nextStep()" 
+                        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm">
+                  Continue to Compliance
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: COMPLIANCE REQUIREMENTS -->
+          <div *ngIf="currentStep === 4" class="animate-fade-in">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">Compliance Requirements</h2>
+              <p class="text-gray-600">Confirm your NSB's commitment to ARSO's compliance requirements and standards.</p>
+            </div>
+
+            <div class="space-y-6">
+              <!-- ISO/IEC 17065 Compliance -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">ISO/IEC 17065:2012 Compliance</h3>
+                <div class="space-y-4">
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="agreementCompliance" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Certification Agreement Compliance</span>
+                      <div class="mt-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
+                        <p class="font-medium text-gray-700">ISO 4.1.2.2 Requirements:</p>
+                        <p class="mt-1 italic">"the client complies at least, with the following: a) the client always fulfils the certification requirements... b) if the certification applies to ongoing production, the certified product continues to fulfil the product requirements..."</p>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="markUsageCompliance" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Mark Usage Control</span>
+                      <div class="mt-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
+                        <p class="font-medium text-gray-700">ISO 4.1.3.1 Requirements:</p>
+                        <p class="mt-1 italic">"The certification body shall exercise the control as specified by the certification scheme over ownership, use and display of licenses, certificates, marks of conformity, and any other mechanisms for indicating a product is certified."</p>
+                      </div>
+                    </div>
                   </label>
                 </div>
               </div>
 
-              <div class="grid gap-4 md:grid-cols-3">
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">Estimated Audience Reach</label>
-                  <input type="text" formControlName="mediaAudienceSize" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-                </div>
+              <!-- ACAP Compliance -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">ACAP Requirements Compliance</h3>
+                <div class="space-y-4">
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="misleadingStatementsCompliance" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Prevention of Misleading Statements</span>
+                      <div class="mt-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
+                        <p class="font-medium text-gray-700">ACAP 1-1:2025, Annex B, B.8(a):</p>
+                        <p class="mt-1 italic">"The confirmed incorrect or misleading use of the ARSO mark or of the ARSO conformity claim will lead to immediate actions."</p>
+                      </div>
+                    </div>
+                  </label>
 
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">Campaign Duration <span class="text-red-500">*</span></label>
-                  <input type="text" formControlName="mediaDuration" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="e.g., 6 months" />
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="changesCompliance" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Notification of Changes</span>
+                      <div class="mt-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
+                        <p class="font-medium text-gray-700">ACAP 1-1:2025, Annex B, B.7(b)-(c):</p>
+                        <p class="mt-1 italic">"The ARSO mark shall be applied directly on each product, or ... on the accompanying documentation clearly linked to the product."</p>
+                      </div>
+                    </div>
+                  </label>
                 </div>
+              </div>
 
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">Budget Allocation</label>
-                  <input type="text" formControlName="mediaBudgetAllocation" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+              <!-- Commitments -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">NSB Commitments</h3>
+                <div class="space-y-4">
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="annualReportingCommitment" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Annual Reporting Commitment</span>
+                      <p class="text-sm text-gray-500 mt-1">Our NSB commits to submitting annual mark usage reports as required by ARSO and maintaining accurate records of all certified products.</p>
+                    </div>
+                  </label>
+
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="dataSharingConsent" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Data Sharing Consent</span>
+                      <p class="text-sm text-gray-500 mt-1">We consent to necessary data sharing for compliance verification, audit purposes, and ARSO's certification database maintenance.</p>
+                    </div>
+                  </label>
+
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="complianceAuditConsent" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Audit & Inspection Consent</span>
+                      <p class="text-sm text-gray-500 mt-1">We agree to cooperate with ARSO-conducted audits and inspections to verify compliance with mark usage requirements.</p>
+                    </div>
+                  </label>
                 </div>
               </div>
             </div>
+
+            <div class="flex justify-between items-center mt-8">
+              <button type="button" (click)="prevStep()" 
+                      class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Back
+              </button>
+              <div class="flex gap-3">
+                <button type="button" (click)="saveDraft()" 
+                        class="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                  Save Draft
+                </button>
+                <button type="button" (click)="nextStep()" 
+                        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm">
+                  Continue to Documents
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5: DOCUMENTS & ATTACHMENTS -->
+          <div *ngIf="currentStep === 5" class="animate-fade-in">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">Supporting Documents</h2>
+              <p class="text-gray-600">Upload the required supporting documents for your license application.</p>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Required Documents -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Required Documents</h3>
+                <div class="grid gap-6 md:grid-cols-2">
+                  <div *ngFor="let docType of documentTypes" class="bg-gray-50 rounded-lg border border-gray-200 p-5 hover:border-blue-300 transition-colors">
+                    <div class="flex flex-col h-full justify-between gap-4">
+                      <div>
+                        <label class="block text-sm font-bold text-gray-900 mb-1">{{ docType.label }}</label>
+                        <p class="text-xs text-gray-500 mb-3">Accepted formats: {{ docType.allowedExtensions.join(', ') }} (Max {{ docType.maxSizeMb }}MB)</p>
+
+                        <div *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)" class="bg-white border border-emerald-200 rounded p-3 mb-2 flex items-center gap-2">
+                          <div class="h-6 w-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">✓</div>
+                          <div class="min-w-0 flex-1">
+                            <p class="text-xs font-semibold text-emerald-800 truncate">Uploaded</p>
+                            <p class="text-xs text-gray-600 truncate" [title]="getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName">
+                              {{ getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center gap-3">
+                        <input
+                          type="file"
+                          [id]="docType.value"
+                          class="hidden"
+                          (change)="onDocumentSelected($event, docType.value)"
+                          [accept]="getAcceptAttribute(docType.value)"
+                          #fileInput
+                        />
+
+                        <button
+                          type="button"
+                          (click)="fileInput.click()"
+                          class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline"
+                          *ngIf="!selectedFiles[docType.value] && !getUploadedDocument(docType.value)"
+                        >
+                          Upload Document
+                        </button>
+
+                        <ng-container *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)">
+                          <button
+                            type="button"
+                            class="text-xs font-semibold text-gray-600 hover:text-gray-900 border border-gray-300 bg-white px-3 py-1.5 rounded hover:bg-gray-50"
+                            (click)="viewDocument(docType.value); $event.stopPropagation()"
+                          >
+                            View
+                          </button>
+                          <button
+                            type="button"
+                            class="text-xs font-semibold text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1.5 rounded hover:bg-red-100"
+                            (click)="removeDocument(docType.value); fileInput.value = ''"
+                          >
+                            Remove
+                          </button>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Terms & Conditions -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Terms & Conditions</h3>
+                <div class="space-y-4">
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="termsAgreement" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">ARSO License Agreement</span>
+                      <p class="text-sm text-gray-500 mt-1">I agree to abide by the terms and conditions of the ARSO Mark License Agreement, including all provisions in ACAP 1-1 and ACAP 1-3.</p>
+                    </div>
+                  </label>
+
+                  <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" formControlName="feesAgreement" 
+                           class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                    <div class="flex-1">
+                      <span class="font-bold text-gray-800">Fee Payment Agreement</span>
+                      <p class="text-sm text-gray-500 mt-1">I agree to pay all applicable licensing fees and annual maintenance fees as specified in the ARSO Fee Schedule.</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8">
+              <button type="button" (click)="prevStep()" 
+                      class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Back
+              </button>
+              <div class="flex gap-3">
+                <button type="button" (click)="saveDraft()" 
+                        class="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                  Save Draft
+                </button>
+                <button type="button" (click)="nextStep()" 
+                        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm">
+                  Review & Submit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 6: REVIEW & SUBMIT -->
+          <div *ngIf="currentStep === 6" class="animate-fade-in">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">Review & Submit Application</h2>
+              <p class="text-gray-600">Please review all information before final submission. Once submitted, your application will be reviewed by ARSO administrators.</p>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Application Summary -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Application Summary</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-4">
+                    <div>
+                      <h4 class="text-sm font-medium text-gray-500 uppercase">Applicant Information</h4>
+                      <div class="mt-2 space-y-2">
+                        <p class="text-gray-800"><span class="font-medium">NSB:</span> {{ selectedNsb?.name }}</p>
+                        <p class="text-gray-800"><span class="font-medium">Country:</span> {{ selectedNsb?.country?.name }}</p>
+                        <p class="text-gray-800"><span class="font-medium">Contact:</span> {{ selectedNsb?.contacts?.[0]?.email }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="space-y-4">
+                    <div>
+                      <h4 class="text-sm font-medium text-gray-500 uppercase">License Details</h4>
+                      <div class="mt-2 space-y-2">
+                        <p class="text-gray-800"><span class="font-medium">License Types:</span> 
+                          <span class="ml-2">
+                            {{ applicationForm.get('promotionalLicense')?.value ? 'Promotional' : '' }}
+                            {{ applicationForm.get('promotionalLicense')?.value && applicationForm.get('certificationBodyLicense')?.value ? ', ' : '' }}
+                            {{ applicationForm.get('certificationBodyLicense')?.value ? 'Certification Body' : '' }}
+                            {{ (applicationForm.get('promotionalLicense')?.value || applicationForm.get('certificationBodyLicense')?.value) && applicationForm.get('specialProjectLicense')?.value ? ', ' : '' }}
+                            {{ applicationForm.get('specialProjectLicense')?.value ? 'Special Project' : '' }}
+                          </span>
+                        </p>
+                        <p class="text-gray-800"><span class="font-medium">Marks Requested:</span>
+                          <span class="ml-2">
+                            {{ applicationForm.get('arsoQualityMark')?.value ? 'ARSO Quality Mark' : '' }}
+                            {{ applicationForm.get('arsoQualityMark')?.value && applicationForm.get('ecoMarkAfrica')?.value ? ', ' : '' }}
+                            {{ applicationForm.get('ecoMarkAfrica')?.value ? 'Eco Mark Africa' : '' }}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Full Application Preview -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Full Application Preview</h3>
+                <details class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                  <summary class="cursor-pointer text-sm font-medium text-gray-700">
+                    View all application data
+                  </summary>
+                  <pre class="mt-3 text-xs text-gray-600 whitespace-pre-wrap">{{ applicationPreview | json }}</pre>
+                </details>
+                <p class="text-xs text-gray-500 mt-3">Review all captured data before final submission.</p>
+              </div>
+
+              <!-- Compliance Checklist -->
+              <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Compliance Checklist</h3>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-gray-700">NSB Profile Complete</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-gray-700">License Type Selected</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-gray-700">Mark Selection Complete</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-gray-700">Compliance Requirements Accepted</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Final Confirmation -->
+              <div class="bg-blue-50 rounded-xl border border-blue-200 p-6">
+                <div class="flex items-start gap-4">
+                  <svg class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                  </svg>
+                  <div>
+                    <h4 class="font-semibold text-blue-800 mb-2">Important Information</h4>
+                    <ul class="text-sm text-blue-700 space-y-2">
+                      <li>• Your application will be reviewed within 10-15 business days</li>
+                      <li>• You will receive email notifications at each stage of the review process</li>
+                      <li>• Additional documentation may be requested during the review</li>
+                      <li>• License fees will be invoiced upon approval</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8">
+              <button type="button" (click)="prevStep()" 
+                      class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                Back
+              </button>
+              <div class="flex gap-3">
+                <button type="button" (click)="saveDraft()" 
+                        class="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                  Save as Draft
+                </button>
+                <button type="button" (click)="submitApplication()" 
+                        class="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg font-medium flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  Submit Application
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Sidebar - Standards References -->
+    <div *ngIf="viewMode === 'new'" class="hidden lg:block w-80 bg-white border-l shadow-lg overflow-y-auto sticky top-0 h-full">
+      <div class="p-5">
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Standards References</h3>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
+            <span class="text-xs font-medium text-gray-700">ISO/IEC 17065:2012</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 bg-green-600 rounded-full"></div>
+            <span class="text-xs font-medium text-gray-700">ACAP Documents</span>
           </div>
         </div>
-
-        <!-- Campaign Timeline Array -->
+        
         <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <label class="block text-sm font-semibold text-slate-700">Campaign/Usage Timeline</label>
-            <button type="button" (click)="addCampaignTimeline()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">Add Timeline Entry</button>
-          </div>
-          
-          <div formArrayName="campaignTimeline" class="space-y-4">
-            <div *ngFor="let timeline of campaignTimelineArray.controls; let i = index" [formGroupName]="i" class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-slate-900">Timeline Entry {{ i + 1 }}</h4>
-                <button type="button" (click)="removeCampaignTimeline(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
-              </div>
-              
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700">Phase/Activity <span class="text-red-500">*</span></label>
-                <input type="text" formControlName="timelinePhase" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-              </div>
-
-              <div class="grid gap-4 md:grid-cols-2">
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">Start Date <span class="text-red-500">*</span></label>
-                  <input type="date" formControlName="timelineStart" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-                </div>
-
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">End Date <span class="text-red-500">*</span></label>
-                  <input type="date" formControlName="timelineEnd" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-                </div>
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700">Success Metrics</label>
-                <textarea formControlName="timelineMetrics" rows="2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
-              </div>
+          <div class="p-3 bg-gray-50 rounded-lg border border-gray-100 text-xs">
+            <div class="font-bold text-gray-700 mb-1 flex items-center gap-2">
+              <span class="text-blue-600">ISO 4.1.1</span>
+              <span>Legal responsibility</span>
             </div>
+            <p class="text-gray-600 italic mt-1">"The certification body shall be a legal entity, or a defined part of a legal entity, such that the legal entity can be held legally responsible for all its certification activities."</p>
           </div>
-        </div>
 
-        <!-- Expected Impact Metrics -->
-        <div formGroupName="expectedImpactMetrics" class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4">
-          <h3 class="font-semibold text-slate-900">Expected Impact Metrics</h3>
-          
-          <div class="grid gap-4 md:grid-cols-2">
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Industry Awareness Target</label>
-              <input type="text" formControlName="expectedIndustryAwareness" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="e.g., Increase by 30%" />
+          <div class="p-3 bg-gray-50 rounded-lg border border-gray-100 text-xs">
+            <div class="font-bold text-gray-700 mb-1 flex items-center gap-2">
+              <span class="text-green-600">ACAP 1-3:2025</span>
+              <span>Certification Body Approval</span>
             </div>
+            <p class="text-gray-600 italic mt-1">"The application shall be very clear about the ACAP Certification Scheme selected for the approval."</p>
+          </div>
 
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Consumer Awareness Target</label>
-              <input type="text" formControlName="expectedConsumerAwareness" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          <div class="p-3 bg-gray-50 rounded-lg border border-gray-100 text-xs">
+            <div class="font-bold text-gray-700 mb-1 flex items-center gap-2">
+              <span class="text-blue-600">ISO 4.6</span>
+              <span>Public information</span>
             </div>
+            <p class="text-gray-600 italic mt-1">"Publicly available information... a description of the rights and duties of applicants and clients..."</p>
+          </div>
 
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Expected CB Applications Generated</label>
-              <input type="text" formControlName="expectedCbApplications" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+          <div class="p-3 bg-gray-50 rounded-lg border border-gray-100 text-xs">
+            <div class="font-bold text-gray-700 mb-1 flex items-center gap-2">
+              <span class="text-green-600">ACAP 1-1 Annex B</span>
+              <span>Mark Usage</span>
             </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Expected Certifications Issued</label>
-              <input type="text" formControlName="expectedCertifications" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Expected Media Mentions</label>
-              <input type="text" formControlName="expectedMediaCoverage" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
-            </div>
+            <p class="text-gray-600 italic mt-1">"The ARSO mark shall be applied directly on each product, or ... on the accompanying documentation clearly linked to the product."</p>
           </div>
 
-          <div class="space-y-2">
-            <label class="block text-sm font-semibold text-slate-700">How KPIs Will Be Measured</label>
-            <textarea formControlName="kpiMeasurementMethod" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"></textarea>
-          </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
 
-      <!-- Section C: Mark Usage Specifications -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section C: Mark Usage Specifications</h2>
-        
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">Mark(s) Requested <span class="text-red-500">*</span></label>
-          <div class="space-y-2">
-            <label *ngFor="let option of markTypeOptions" class="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                [value]="option.value"
-                formControlName="marksRequested"
-                class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
-              />
-              <span class="text-sm text-slate-700">{{ option.label }}</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">Color Variations Needed</label>
-          <div class="space-y-2">
-            <label *ngFor="let option of colorOptions" class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" [value]="option.value" formControlName="markColorsNeeded" class="rounded border-slate-300 text-blue-600" />
-              <span class="text-sm text-slate-700">{{ option.label }}</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">Size Requirements</label>
-          <textarea formControlName="markSizesNeeded" rows="2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="For print materials"></textarea>
-        </div>
-
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">Accompanying Text Languages <span class="text-red-500">*</span></label>
-          <div class="space-y-2">
-            <label *ngFor="let option of languageOptions" class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" [value]="option.value" formControlName="markLanguages" class="rounded border-slate-300 text-blue-600" />
-              <span class="text-sm text-slate-700">{{ option.label }}</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Placement Examples -->
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">Placement Examples/Mockups</label>
-          <input
-            type="file"
-            (change)="onPlacementFileSelected($event)"
-            multiple
-            accept="image/*,.pdf"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
-          />
-          <div *ngIf="placementFiles.length > 0" class="mt-2 space-y-2">
-            <div *ngFor="let file of placementFiles; let i = index" class="flex items-center justify-between p-2 bg-slate-50 rounded">
-              <span class="text-sm text-slate-700">{{ file.name }}</span>
-              <button type="button" (click)="removePlacementFile(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Compliance with ACAP 1-1 Annex B -->
-        <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 space-y-3">
-          <h3 class="font-semibold text-slate-900">Compliance with ACAP 1-1 Annex B</h3>
-          
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input type="checkbox" formControlName="annexBCompliance" class="rounded border-slate-300 text-blue-600" />
-            <span class="text-sm text-slate-700">I have read and understand ACAP 1-1 Annex B requirements <span class="text-red-500">*</span></span>
-          </label>
-
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input type="checkbox" formControlName="brandGuidelinesAck" class="rounded border-slate-300 text-blue-600" />
-            <span class="text-sm text-slate-700">Will follow ARSO brand guidelines <span class="text-red-500">*</span></span>
-          </label>
-
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input type="checkbox" formControlName="modificationPolicyAcceptance" class="rounded border-slate-300 text-blue-600" />
-            <span class="text-sm text-slate-700">Will not modify marks without approval <span class="text-red-500">*</span></span>
-          </label>
-        </div>
-      </section>
-
-      <!-- Section D: Supporting Documents & Declarations -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Section D: Supporting Documents & Declarations</h2>
-        
-        <div class="space-y-2">
-          <label class="block text-sm font-semibold text-slate-700">Supporting Documents</label>
-          <div class="space-y-2">
-            <div *ngFor="let docType of documentTypeOptions" class="flex gap-2">
-              <select class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
-                <option [value]="docType.value">{{ docType.label }}</option>
-              </select>
-              <input
-                type="file"
-                (change)="onSupportingDocumentSelected($event, docType.value)"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm"
-              />
-            </div>
-          </div>
-          <div *ngIf="supportingDocuments.length > 0" class="mt-2 space-y-2">
-            <div *ngFor="let doc of supportingDocuments; let i = index" class="flex items-center justify-between p-2 bg-slate-50 rounded">
-              <span class="text-sm text-slate-700">{{ doc.file.name }} ({{ doc.type }})</span>
-              <button type="button" (click)="removeSupportingDocument(i)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid gap-6 md:grid-cols-2">
-          <div class="space-y-2">
-            <label for="declarationSignatory" class="block text-sm font-semibold text-slate-700">Declaration Signatory <span class="text-red-500">*</span></label>
-            <input
-              type="text"
-              id="declarationSignatory"
-              formControlName="declarationSignatory"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            />
-          </div>
-
-          <div class="space-y-2">
-            <label for="signatoryTitle" class="block text-sm font-semibold text-slate-700">Signatory Title <span class="text-red-500">*</span></label>
-            <input
-              type="text"
-              id="signatoryTitle"
-              formControlName="signatoryTitle"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            />
-          </div>
-        </div>
-
-        <div class="space-y-2">
-          <label for="signatoryEmail" class="block text-sm font-semibold text-slate-700">Signatory Email <span class="text-red-500">*</span></label>
-          <input
-            type="email"
-            id="signatoryEmail"
-            formControlName="signatoryEmail"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-          />
-        </div>
-
-        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input type="checkbox" formControlName="auditRightsAcceptance" class="rounded border-slate-300 text-blue-600" />
-            <span class="text-sm text-slate-700">Accept audit rights <span class="text-red-500">*</span></span>
-          </label>
-
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input type="checkbox" formControlName="annualReportingCommitment" class="rounded border-slate-300 text-blue-600" />
-            <span class="text-sm text-slate-700">Commit to submit annual usage reports <span class="text-red-500">*</span></span>
-          </label>
-
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input type="checkbox" formControlName="dataSharingConsent" class="rounded border-slate-300 text-blue-600" />
-            <span class="text-sm text-slate-700">Consent to share success metrics in ARSO reports <span class="text-red-500">*</span></span>
-          </label>
-        </div>
-      </section>
-
-      <!-- Form Actions -->
-      <div class="flex gap-4 justify-end pt-6 border-t border-slate-200">
-        <button
-          type="button"
-          (click)="saveDraft()"
-          [disabled]="saving || submitting"
-          class="px-6 py-2.5 bg-slate-600 text-white rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <span *ngIf="!saving">Save as Draft</span>
-          <span *ngIf="saving">Saving...</span>
+  <!-- Mobile Navigation -->
+  <div *ngIf="viewMode === 'new'" class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
+    <div class="flex justify-between items-center">
+      <button type="button" (click)="prevStep()" [disabled]="currentStep === 1"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
+        Back
+      </button>
+      <div class="flex gap-2">
+        <button type="button" (click)="saveDraft()"
+                class="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg text-sm">
+          Save
         </button>
-        <button
-          type="button"
-          (click)="submitApplication()"
-          [disabled]="saving || submitting || !existingApplication"
-          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <span *ngIf="!submitting">Submit Application</span>
-          <span *ngIf="submitting">Submitting...</span>
+        <button type="button" (click)="nextStep()" *ngIf="currentStep < 6"
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm">
+          Continue
+        </button>
+        <button type="button" (click)="submitApplication()" *ngIf="currentStep === 6"
+                class="px-6 py-2 bg-green-600 text-white rounded-lg text-sm">
+          Submit
         </button>
       </div>
-    </form>
-
-    <div *ngIf="loading" class="p-8 text-center">
-      <p class="text-slate-600">Loading...</p>
     </div>
   </div>
 </div>
-

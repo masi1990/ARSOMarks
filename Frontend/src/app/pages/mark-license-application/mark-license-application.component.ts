@@ -1,434 +1,332 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { MarkLicenseApplicationService } from '../../modules/mark-licensing/services/mark-license-application.service';
-import { NsbService } from '../../modules/nsb-management/services/nsb.service';
+import { MarkLicenseApplicationService } from 'src/app/modules/mark-licensing/services/mark-license-application.service';
+import { NsbService } from 'src/app/modules/nsb-management/services/nsb.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import {
-  MarkLicenseType,
-  MarkType,
-  LicenseDurationType,
-  MediaType,
   CreateMarkLicenseApplicationRequest,
+  LicenseDurationType,
   MarkLicenseApplication,
-} from '../../shared/models/mark-license.model';
-import { Nsb } from '../../shared/models/nsb.model';
-import { AuthService } from '../../modules/auth/services/auth.service';
+  MarkLicenseStatus,
+  MarkType,
+  MarkLicenseType,
+  SupportingDocument,
+} from 'src/app/shared/models/mark-license.model';
+import { Nsb } from 'src/app/shared/models/nsb.model';
+import { UserRole } from 'src/app/shared/models/user.model';
+import { CommunicationLogService } from 'src/app/shared/services/communication-log.service';
 
 @Component({
   selector: 'app-mark-license-application',
   templateUrl: './mark-license-application.component.html',
-  styleUrls: ['./mark-license-application.component.scss'],
+  styleUrls: ['./mark-license-application.component.scss']
 })
 export class MarkLicenseApplicationComponent implements OnInit {
-  form: FormGroup;
+  currentStep = 1;
+  applicationForm: FormGroup;
+  nsbOptions: Nsb[] = [];
+  selectedNsb: Nsb | null = null;
   loading = false;
+  loadingNsbs = false;
+  loadingDrafts = false;
   saving = false;
   submitting = false;
   error = '';
-  success = false;
   successMessage = '';
-  nsb: Nsb | null = null;
+  existingSupportingDocuments: SupportingDocument[] = [];
+  selectedFiles: { [key: string]: File | null } = {};
+  documentTypes = [
+    {
+      value: 'NSB_REGISTRATION_CERTIFICATE',
+      label: 'NSB Registration Certificate',
+      allowedExtensions: ['.pdf', '.png', '.jpg', '.jpeg'],
+      maxSizeMb: 10,
+    },
+    {
+      value: 'LETTER_OF_AUTHORIZATION',
+      label: 'Letter of Authorization',
+      allowedExtensions: ['.pdf', '.doc', '.docx'],
+      maxSizeMb: 10,
+    },
+    {
+      value: 'NSB_ORGANIZATIONAL_STRUCTURE',
+      label: 'NSB Organizational Structure',
+      allowedExtensions: ['.pdf', '.doc', '.docx'],
+      maxSizeMb: 10,
+    },
+    {
+      value: 'ADDITIONAL_SUPPORTING_DOCUMENT',
+      label: 'Additional Supporting Document',
+      allowedExtensions: ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.jpg', '.jpeg', '.png'],
+      maxSizeMb: 10,
+    },
+  ];
   existingApplication: MarkLicenseApplication | null = null;
-
-  // License type options
-  licenseTypeOptions = [
-    { value: MarkLicenseType.PROMOTIONAL_INSTITUTIONAL, label: 'Promotional/Institutional License' },
-    { value: MarkLicenseType.CERTIFICATION_BODY, label: 'Certification Body License' },
-    { value: MarkLicenseType.SPECIAL_PROJECT, label: 'Special Project License' },
+  draftApplications: MarkLicenseApplication[] = [];
+  viewMode: 'new' | 'draft' = 'new';
+  acapSchemeOptions = [
+    { code: 'A1', label: 'Scheme A1: Primary production (single farmers)' },
+    { code: 'A2', label: 'Scheme A2: Primary production (groups of farmers)' },
+    { code: 'B', label: 'Scheme B: Food processing' },
+    { code: 'C', label: 'Scheme C: Chain of custody' },
+    { code: 'D1', label: 'Scheme D1: Sustainability (single legal entity)' },
+    { code: 'D2', label: 'Scheme D2: Sustainability (groups/multisite)' },
+    { code: 'E', label: 'Scheme E: African traditional medicine' },
+    { code: 'F', label: 'Scheme F: Sustainable capture fisheries' },
+    { code: 'G', label: 'Scheme G: Good financial grant practice' },
+    { code: 'H', label: 'Scheme H: Cosmetology and wellness' },
+    { code: 'J', label: 'Scheme J: Sustainable mining' },
+    { code: 'K', label: 'Scheme K: Ecological organic agriculture' },
+    { code: 'L', label: 'Scheme L: Made in Africa' },
   ];
-
-  // Duration options
-  durationOptions = [
-    { value: LicenseDurationType.ONE_YEAR, label: '1 Year' },
-    { value: LicenseDurationType.TWO_YEARS, label: '2 Years' },
-    { value: LicenseDurationType.THREE_YEARS, label: '3 Years' },
-    { value: LicenseDurationType.PROJECT_BASED, label: 'Project-based (specify)' },
-    { value: LicenseDurationType.OTHER, label: 'Other' },
+  ecoMarkRequirementOptions = [
+    'Sustainability and eco-labelling standard compliance (ARS/AES)',
+    'Environmental management plan and impact monitoring',
+    'Social responsibility and labor compliance',
+    'Traceability and product identity controls',
+    'Annual surveillance audits and reporting',
   ];
-
-  // Mark type options
-  markTypeOptions = [
-    { value: MarkType.ARSO_QUALITY_MARK, label: 'ARSO Quality Mark' },
-    { value: MarkType.ECO_MARK_AFRICA, label: 'Eco Mark Africa (EMA)' },
-    { value: MarkType.BOTH, label: 'Both' },
-  ];
-
-  // Media type options
-  mediaTypeOptions = [
-    { value: MediaType.DIGITAL_ONLINE, label: 'Digital/Online' },
-    { value: MediaType.PRINT, label: 'Print' },
-    { value: MediaType.BROADCAST, label: 'Broadcast' },
-    { value: MediaType.OUTDOOR, label: 'Outdoor' },
-    { value: MediaType.EVENTS, label: 'Events' },
-    { value: MediaType.SOCIAL_MEDIA, label: 'Social Media' },
-    { value: MediaType.OTHER, label: 'Other' },
-  ];
-
-  // Promotional purpose options
-  promotionalPurposeOptions = [
-    { value: 'NATIONAL_AWARENESS_CAMPAIGN', label: 'National Awareness Campaign' },
-    { value: 'GOVERNMENT_PUBLICATIONS', label: 'Government Publications' },
-    { value: 'TRAINING_MATERIALS', label: 'Training Materials' },
-    { value: 'WEBSITE_PROMOTION', label: 'Website Promotion' },
-    { value: 'EVENT_MATERIALS', label: 'Event Materials' },
-    { value: 'OTHER', label: 'Other' },
-  ];
-
-  // Target audience options
-  targetAudienceOptions = [
-    { value: 'INDUSTRY', label: 'Industry' },
-    { value: 'CONSUMERS', label: 'Consumers' },
-    { value: 'GOVERNMENT_OFFICIALS', label: 'Government Officials' },
-    { value: 'STUDENTS', label: 'Students' },
-    { value: 'MEDIA', label: 'Media' },
-    { value: 'GENERAL_PUBLIC', label: 'General Public' },
-  ];
-
-  // Geographic scope options
-  geographicScopeOptions = [
-    { value: 'NATIONAL', label: 'National' },
-    { value: 'REGIONAL', label: 'Regional' },
-    { value: 'SPECIFIC_STATES_PROVINCES', label: 'Specific States/Provinces' },
-    { value: 'LOCAL_CAMPAIGN', label: 'Local Campaign' },
-  ];
-
-  // Language options
-  languageOptions = [
-    { value: 'ENGLISH', label: 'English' },
-    { value: 'FRENCH', label: 'French' },
-    { value: 'PORTUGUESE', label: 'Portuguese' },
-    { value: 'ARABIC', label: 'Arabic' },
-    { value: 'LOCAL_LANGUAGE', label: 'Local Language(s)' },
-  ];
-
-  // Color variation options
-  colorOptions = [
-    { value: 'FULL_COLOR', label: 'Full Color' },
-    { value: 'BLACK_WHITE', label: 'Black & White' },
-    { value: 'GRAYSCALE', label: 'Grayscale' },
-    { value: 'REVERSED', label: 'Reversed (white on dark)' },
-    { value: 'PANTONE', label: 'Specific Pantone Colors' },
-  ];
-
-  // Document type options
-  documentTypeOptions = [
-    { value: 'ACCREDITATION_CERTIFICATE', label: 'Accreditation Certificate' },
-    { value: 'NSB_BOARD_RESOLUTION', label: 'NSB Board/Management Resolution' },
-    { value: 'CAMPAIGN_PROPOSAL', label: 'Campaign Proposal' },
-    { value: 'BUDGET_APPROVAL', label: 'Budget Approval' },
-    { value: 'PROJECT_DOCUMENT', label: 'Project Document' },
-    { value: 'OTHER', label: 'Other' },
-  ];
-
-  // File uploads
-  placementFiles: File[] = [];
-  supportingDocuments: { file: File; type: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private applicationService: MarkLicenseApplicationService,
     private nsbService: NsbService,
-    private router: Router,
     private authService: AuthService,
+    private licenseService: MarkLicenseApplicationService,
+    private communicationLogService: CommunicationLogService,
+    private router: Router
   ) {
-    this.form = this.createForm();
+    this.initForm();
+  }
+
+  get progressPercent(): number {
+    return Math.round(((this.currentStep - 1) / 5) * 100);
   }
 
   ngOnInit(): void {
-    this.loadNsb();
-    this.checkExistingApplication();
+    this.loadNsbs();
   }
 
-  createForm(): FormGroup {
-    return this.fb.group({
-      // Section A: Applicant & License Type Information
-      nsbId: ['', [Validators.required]],
-      applicationReference: [''],
-      licenseTypes: [[], [Validators.required, this.arrayNotEmptyValidator]],
-      licenseDuration: ['', [Validators.required]],
-      licenseDurationOther: [''],
+  initForm(): void {
+    this.applicationForm = this.fb.group({
+      nsbId: [''],
+      // License Types - Default unchecked
+      promotionalLicense: [false],
+      certificationBodyLicense: [false],
+      specialProjectLicense: [false],
+      arsoQualityMark: [false],
+      ecoMarkAfrica: [false],
+      promotionalPrimaryPurpose: [''],
+      promotionalPurposeOther: [''],
+      promotionalTargetAudience: [''],
+      promotionalGeographicScope: [''],
+      promotionalBudgetEstimate: [''],
+      cbUnitName: [''],
+      cbAccreditationNumber: [''],
+      cbAccreditationBody: [''],
+      cbAccreditationScope: [''],
+      cbAccreditationExpiry: [''],
+      cbSchemesApplying: [[]],
+      cbExpectedVolume: [''],
+      acapSchemesApplying: [[]],
+      ecoMarkRequirements: [[]],
+      projectName: [''],
+      projectFunder: [''],
+      projectDurationStart: [''],
+      projectDurationEnd: [''],
+      projectDescription: [''],
+      projectDeliverables: [''],
+      projectBudget: [''],
+      usageChannels: [''],
+      annualUsageVolume: [''],
+      targetMarkets: [''],
+      usageDescription: [''],
+      controlProcedures: [''],
+      qualityManager: [''],
+      qualityContactEmail: [''],
+      finalConfirmation: [false],
+      productCategories: [''],
+      termsAgreement: [false],
+      feesAgreement: [false],
 
-      // Promotional License Details
-      promotionalLicenseDetails: this.fb.group({
-        primaryPurpose: [''],
-        promoPurposeOther: [''],
-        targetAudience: [[], [Validators.required]],
-        geographicScope: [''],
-        budgetEstimate: [''],
-      }),
-
-      // Certification Body License Details
-      certificationBodyDetails: this.fb.group({
-        cbUnitName: [''],
-        cbAccreditationNumber: [''],
-        cbAccreditationBody: [''],
-        cbAccreditationScope: [''],
-        cbAccreditationExpiry: [''],
-        cbSchemesApplying: [[], [Validators.required]],
-        cbExpectedVolume: [''],
-      }),
-
-      // Special Project License Details
-      specialProjectDetails: this.fb.group({
-        projectName: [''],
-        projectFunder: [''],
-        projectDurationStart: [''],
-        projectDurationEnd: [''],
-        projectDescription: [''],
-        projectDeliverables: this.fb.array([]),
-        projectBudget: [''],
-      }),
-
-      // Section B: Intended Use Details
-      mediaUsage: this.fb.array([]),
-      campaignTimeline: this.fb.array([]),
-      expectedImpactMetrics: this.fb.group({
-        expectedIndustryAwareness: [''],
-        expectedConsumerAwareness: [''],
-        expectedCbApplications: [''],
-        expectedCertifications: [''],
-        expectedMediaCoverage: [''],
-        kpiMeasurementMethod: [''],
-      }),
-
-      // Section C: Mark Usage Specifications
-      marksRequested: [[], [Validators.required, this.arrayNotEmptyValidator]],
-      markColorsNeeded: [[]],
-      markSizesNeeded: [''],
-      markLanguages: [[], [Validators.required]],
-
-      // Compliance Declarations
-      annexBCompliance: [false, [Validators.requiredTrue]],
-      brandGuidelinesAck: [false, [Validators.requiredTrue]],
-      modificationPolicyAcceptance: [false, [Validators.requiredTrue]],
-
-      // Section D: Declarations
-      declarationSignatory: ['', [Validators.required]],
-      signatoryTitle: ['', [Validators.required]],
-      signatoryEmail: ['', [Validators.required, Validators.email]],
-      auditRightsAcceptance: [false, [Validators.requiredTrue]],
-      annualReportingCommitment: [false, [Validators.requiredTrue]],
-      dataSharingConsent: [false, [Validators.requiredTrue]],
+      // Section C Compliance - Default unchecked
+      agreementCompliance: [false],
+      markUsageCompliance: [false],
+      misleadingStatementsCompliance: [false],
+      changesCompliance: [false],
+      annualReportingCommitment: [false],
+      complianceAuditConsent: [false],
+      dataSharingConsent: [false],
     });
   }
 
-  arrayNotEmptyValidator(control: any) {
-    if (!control.value || !Array.isArray(control.value) || control.value.length === 0) {
-      return { arrayNotEmpty: true };
-    }
-    return null;
-  }
+  loadNsbs(): void {
+    this.loadingNsbs = true;
+    const user = this.authService.currentUserValue;
+    const userRoles = user?.roles || (user?.role ? [user.role] : []);
+    const isAdmin = userRoles.includes(UserRole.SUPER_ADMIN) || userRoles.includes(UserRole.ARSO_SECRETARIAT);
 
-  loadNsb(): void {
-    this.loading = true;
+    if (isAdmin || user?.countryId) {
+      const params = isAdmin
+        ? { limit: 1000 }
+        : { countryId: user?.countryId, limit: 1000 };
+
+      this.nsbService
+        .getNsbList(params)
+        .pipe(
+          finalize(() => {
+            this.loadingNsbs = false;
+          }),
+        )
+        .subscribe({
+          next: (response) => {
+            this.nsbOptions = response?.data || [];
+          },
+          error: () => {
+            this.error = 'Unable to load NSB list.';
+          },
+        });
+      return;
+    }
+
     this.nsbService
       .getMyNsb()
       .pipe(
         finalize(() => {
-          this.loading = false;
+          this.loadingNsbs = false;
         }),
       )
       .subscribe({
         next: (nsb) => {
-          this.nsb = nsb;
-          this.form.patchValue({ nsbId: nsb.id });
+          this.nsbOptions = nsb ? [nsb] : [];
         },
         error: () => {
-          this.error = 'Failed to load NSB information. Please ensure you have an NSB profile.';
+          this.error = 'Unable to load NSB list.';
         },
       });
   }
 
-  checkExistingApplication(): void {
-    if (!this.nsb) return;
-
-    this.applicationService.getApplicationsByNsb(this.nsb.id, true).subscribe({
-      next: (applications) => {
-        const draft = applications.find((app) => app.status === 'DRAFT');
-        if (draft) {
-          this.existingApplication = draft;
-          this.loadApplicationData(draft);
-        }
-      },
-      error: () => {
-        // Ignore error, proceed with new application
-      },
-    });
-  }
-
-  loadApplicationData(application: MarkLicenseApplication): void {
-    // Load existing application data into form
-    this.form.patchValue({
-      applicationReference: application.applicationReference,
-      licenseTypes: application.licenseTypes,
-      licenseDuration: application.licenseDuration,
-      licenseDurationOther: application.licenseDurationOther,
-      marksRequested: application.marksRequested,
-      markColorsNeeded: application.markColorsNeeded,
-      markSizesNeeded: application.markSizesNeeded,
-      markLanguages: application.markLanguages,
-      declarationSignatory: application.declarationSignatory,
-      signatoryTitle: application.signatoryTitle,
-      signatoryEmail: application.signatoryEmail,
-      annexBCompliance: application.annexBCompliance,
-      brandGuidelinesAck: application.brandGuidelinesAck,
-      modificationPolicyAcceptance: application.modificationPolicyAcceptance,
-      auditRightsAcceptance: application.auditRightsAcceptance,
-      annualReportingCommitment: application.annualReportingCommitment,
-      dataSharingConsent: application.dataSharingConsent,
-    });
-
-    // Load nested objects
-    if (application.promotionalLicenseDetails) {
-      this.form.get('promotionalLicenseDetails')?.patchValue(application.promotionalLicenseDetails);
-    }
-    if (application.certificationBodyDetails) {
-      this.form.get('certificationBodyDetails')?.patchValue(application.certificationBodyDetails);
-    }
-    if (application.specialProjectDetails) {
-      this.form.get('specialProjectDetails')?.patchValue(application.specialProjectDetails);
-      // Load deliverables array
-      if (application.specialProjectDetails.projectDeliverables) {
-        const deliverablesArray = this.form.get('specialProjectDetails.projectDeliverables') as FormArray;
-        application.specialProjectDetails.projectDeliverables.forEach((deliverable) => {
-          deliverablesArray.push(this.fb.control(deliverable));
-        });
-      }
-    }
-    if (application.expectedImpactMetrics) {
-      this.form.get('expectedImpactMetrics')?.patchValue(application.expectedImpactMetrics);
-    }
-
-    // Load media usage array
-    if (application.mediaUsage) {
-      application.mediaUsage.forEach((media) => {
-        this.addMediaUsage();
-        const lastIndex = this.mediaUsageArray.length - 1;
-        this.mediaUsageArray.at(lastIndex).patchValue(media);
-      });
-    }
-
-    // Load campaign timeline array
-    if (application.campaignTimeline) {
-      application.campaignTimeline.forEach((timeline) => {
-        this.addCampaignTimeline();
-        const lastIndex = this.campaignTimelineArray.length - 1;
-        this.campaignTimelineArray.at(lastIndex).patchValue(timeline);
-      });
+  onNsbChange(nsbId: string): void {
+    const selected = this.nsbOptions.find((nsb) => nsb.id === nsbId) || null;
+    this.selectedNsb = selected;
+    this.applicationForm.patchValue({ nsbId: nsbId || '' });
+    if (this.viewMode === 'draft') {
+      this.loadDrafts();
     }
   }
 
-  // Getters for form arrays
-  get mediaUsageArray(): FormArray {
-    return this.form.get('mediaUsage') as FormArray;
+  goToStep(step: number): void {
+    this.currentStep = step;
   }
 
-  get campaignTimelineArray(): FormArray {
-    return this.form.get('campaignTimeline') as FormArray;
+  nextStep(): void {
+    this.goToStep(this.currentStep + 1);
   }
 
-  get projectDeliverablesArray(): FormArray {
-    return this.form.get('specialProjectDetails.projectDeliverables') as FormArray;
+  prevStep(): void {
+    this.goToStep(this.currentStep - 1);
   }
 
-  // Helper methods for conditional validation
-  hasLicenseType(type: string): boolean {
-    const types = this.form.get('licenseTypes')?.value || [];
-    return types.includes(type);
-  }
-
-  isDurationOther(): boolean {
-    return this.form.get('licenseDuration')?.value === LicenseDurationType.OTHER;
-  }
-
-  isPromotionalPurposeOther(): boolean {
-    return this.form.get('promotionalLicenseDetails.primaryPurpose')?.value === 'OTHER';
-  }
-
-  // Add/Remove array items
-  addMediaUsage(): void {
-    const mediaGroup = this.fb.group({
-      mediaType: ['', [Validators.required]],
-      mediaSpecific: ['', [Validators.required]],
-      mediaLanguage: [[], [Validators.required]],
-      mediaAudienceSize: [''],
-      mediaDuration: ['', [Validators.required]],
-      mediaBudgetAllocation: [''],
-    });
-    this.mediaUsageArray.push(mediaGroup);
-  }
-
-  removeMediaUsage(index: number): void {
-    this.mediaUsageArray.removeAt(index);
-  }
-
-  addCampaignTimeline(): void {
-    const timelineGroup = this.fb.group({
-      timelinePhase: ['', [Validators.required]],
-      timelineStart: ['', [Validators.required]],
-      timelineEnd: ['', [Validators.required]],
-      timelineMetrics: [''],
-    });
-    this.campaignTimelineArray.push(timelineGroup);
-  }
-
-  removeCampaignTimeline(index: number): void {
-    this.campaignTimelineArray.removeAt(index);
-  }
-
-  addProjectDeliverable(): void {
-    this.projectDeliverablesArray.push(this.fb.control('', [Validators.required]));
-  }
-
-  removeProjectDeliverable(index: number): void {
-    this.projectDeliverablesArray.removeAt(index);
-  }
-
-  // File upload handlers
-  onPlacementFileSelected(event: any): void {
-    const files = Array.from(event.target.files) as File[];
-    this.placementFiles = [...this.placementFiles, ...files];
-  }
-
-  removePlacementFile(index: number): void {
-    this.placementFiles.splice(index, 1);
-  }
-
-  onSupportingDocumentSelected(event: any, type: string): void {
-    const file = event.target.files[0] as File;
-    if (file) {
-      this.supportingDocuments.push({ file, type });
-    }
-  }
-
-  removeSupportingDocument(index: number): void {
-    this.supportingDocuments.splice(index, 1);
-  }
-
-  // Form submission
-  saveDraft(): void {
-    if (this.form.invalid) {
-      this.markFormGroupTouched(this.form);
-      this.error = 'Please fill in all required fields correctly.';
+  switchView(mode: 'new' | 'draft'): void {
+    this.viewMode = mode;
+    this.error = '';
+    if (mode === 'new') {
+      this.resetForm();
       return;
     }
+    this.loadDrafts();
+  }
 
+  loadDrafts(): void {
+    const nsbId = this.applicationForm.get('nsbId')?.value;
+    if (!nsbId) {
+      this.draftApplications = [];
+      return;
+    }
+    this.loadingDrafts = true;
+    this.licenseService
+      .getApplicationsByNsb(nsbId, true)
+      .pipe(
+        finalize(() => {
+          this.loadingDrafts = false;
+        }),
+      )
+      .subscribe({
+        next: (applications) => {
+          this.draftApplications = (applications || []).filter((app) => app.status === MarkLicenseStatus.DRAFT);
+        },
+        error: () => {
+          this.error = 'Failed to load drafts.';
+          this.draftApplications = [];
+        },
+      });
+  }
+
+  applyDraft(draft: MarkLicenseApplication): void {
+    this.existingApplication = draft;
+    this.applicationForm.patchValue({
+      nsbId: draft.nsbId,
+      promotionalLicense: draft.licenseTypes?.includes(MarkLicenseType.PROMOTIONAL_INSTITUTIONAL) || false,
+      certificationBodyLicense: draft.licenseTypes?.includes(MarkLicenseType.CERTIFICATION_BODY) || false,
+      specialProjectLicense: draft.licenseTypes?.includes(MarkLicenseType.SPECIAL_PROJECT) || false,
+      arsoQualityMark: draft.marksRequested?.includes(MarkType.ARSO_QUALITY_MARK) || false,
+      ecoMarkAfrica: draft.marksRequested?.includes(MarkType.ECO_MARK_AFRICA) || false,
+      promotionalPrimaryPurpose: draft.promotionalLicenseDetails?.primaryPurpose || '',
+      promotionalPurposeOther: draft.promotionalLicenseDetails?.promoPurposeOther || '',
+      promotionalTargetAudience: draft.promotionalLicenseDetails?.targetAudience?.join(', ') || '',
+      promotionalGeographicScope: draft.promotionalLicenseDetails?.geographicScope || '',
+      promotionalBudgetEstimate: draft.promotionalLicenseDetails?.budgetEstimate || '',
+      cbUnitName: draft.certificationBodyDetails?.cbUnitName || '',
+      cbAccreditationNumber: draft.certificationBodyDetails?.cbAccreditationNumber || '',
+      cbAccreditationBody: draft.certificationBodyDetails?.cbAccreditationBody || '',
+      cbAccreditationScope: draft.certificationBodyDetails?.cbAccreditationScope || '',
+      cbAccreditationExpiry: draft.certificationBodyDetails?.cbAccreditationExpiry || '',
+      cbSchemesApplying: draft.certificationBodyDetails?.cbSchemesApplying || [],
+      cbExpectedVolume: draft.certificationBodyDetails?.cbExpectedVolume || '',
+      acapSchemesApplying: draft.markLanguages || [],
+      ecoMarkRequirements: draft.markColorsNeeded || [],
+      projectName: draft.specialProjectDetails?.projectName || '',
+      projectFunder: draft.specialProjectDetails?.projectFunder || '',
+      projectDurationStart: draft.specialProjectDetails?.projectDurationStart || '',
+      projectDurationEnd: draft.specialProjectDetails?.projectDurationEnd || '',
+      projectDescription: draft.specialProjectDetails?.projectDescription || '',
+      projectDeliverables: draft.specialProjectDetails?.projectDeliverables?.join(', ') || '',
+      projectBudget: draft.specialProjectDetails?.projectBudget || '',
+      agreementCompliance: draft.annexBCompliance ?? false,
+      markUsageCompliance: draft.brandGuidelinesAck ?? false,
+      misleadingStatementsCompliance: draft.modificationPolicyAcceptance ?? false,
+      changesCompliance: draft.auditRightsAcceptance ?? false,
+      annualReportingCommitment: draft.annualReportingCommitment ?? false,
+      dataSharingConsent: draft.dataSharingConsent ?? false,
+    });
+    this.existingSupportingDocuments = draft.supportingDocuments || [];
+    this.viewMode = 'new';
+    this.currentStep = 2;
+  }
+
+  saveDraft(): void {
     this.saving = true;
     this.error = '';
+    this.successMessage = '';
 
-    const formValue = this.form.getRawValue();
-    const payload: CreateMarkLicenseApplicationRequest = {
-      ...formValue,
-      supportingDocuments: this.supportingDocuments.map((doc) => ({
-        documentType: doc.type,
-        fileName: doc.file.name,
-      })),
-    };
+    const nsbId =
+      this.applicationForm.get('nsbId')?.value ||
+      this.selectedNsb?.id ||
+      this.existingApplication?.nsbId;
+    if (!nsbId) {
+      this.saving = false;
+      this.error = 'Please select an NSB before saving.';
+      return;
+    }
+    if (!this.applicationForm.get('nsbId')?.value) {
+      this.applicationForm.patchValue({ nsbId });
+    }
 
+    const payload = this.buildPayload();
     const operation = this.existingApplication
-      ? this.applicationService.updateApplication(this.existingApplication.id, payload)
-      : this.applicationService.createApplication(payload);
+      ? this.licenseService.updateApplication(this.existingApplication.id, payload)
+      : this.licenseService.createApplication(payload);
 
     operation
       .pipe(
@@ -439,25 +337,30 @@ export class MarkLicenseApplicationComponent implements OnInit {
       .subscribe({
         next: (application) => {
           this.existingApplication = application;
-          this.success = true;
-          this.successMessage = 'Application saved as draft successfully.';
-          setTimeout(() => {
-            this.success = false;
-          }, 3000);
+          this.existingSupportingDocuments = application.supportingDocuments || [];
+          this.selectedFiles = {};
+          this.setSuccessMessage('Draft saved successfully.');
+          this.communicationLogService.addLog({
+            type: 'SYSTEM',
+            subject: 'Draft saved',
+            message: `Draft ${application.applicationNumber || ''} saved successfully.`,
+            recipient: this.getRecipientLabel(),
+            status: 'DELIVERED',
+          });
+          this.uploadPendingDocuments();
         },
         error: (err) => {
-          this.error = err.error?.message || 'Failed to save application. Please try again.';
+          const message = err?.error?.message || '';
+          if (err?.status === 400 && message.toLowerCase().includes('draft application')) {
+            this.error = 'A draft already exists. Please update or delete it first.';
+            return;
+          }
+          this.error = 'Failed to save draft.';
         },
       });
   }
 
   submitApplication(): void {
-    if (this.form.invalid) {
-      this.markFormGroupTouched(this.form);
-      this.error = 'Please fill in all required fields correctly before submitting.';
-      return;
-    }
-
     if (!this.existingApplication) {
       this.error = 'Please save the application as draft first.';
       return;
@@ -465,45 +368,432 @@ export class MarkLicenseApplicationComponent implements OnInit {
 
     this.submitting = true;
     this.error = '';
+    this.successMessage = '';
+    this.uploadPendingDocuments().finally(() => {
+      this.licenseService
+        .submitApplication(this.existingApplication!.id)
+        .pipe(
+          finalize(() => {
+            this.submitting = false;
+          }),
+        )
+        .subscribe({
+          next: () => {
+            this.communicationLogService.addLog({
+              type: 'EMAIL',
+              subject: 'Mark license application submitted',
+              message: 'Your mark license application has been submitted. A confirmation email has been sent.',
+              recipient: this.getRecipientLabel(),
+              status: 'DELIVERED',
+            });
+            this.communicationLogService.addLog({
+              type: 'SYSTEM',
+              subject: 'Application submitted',
+              message: 'Mark license application submitted successfully.',
+              recipient: this.getRecipientLabel(),
+              status: 'DELIVERED',
+            });
+            this.setSuccessMessage('Application submitted successfully.');
+            setTimeout(() => {
+              this.router.navigate(['/portal/mark-licenses/dashboard']);
+            }, 800);
+          },
+          error: () => {
+            this.error = 'Failed to submit application.';
+          },
+        });
+    });
+    }
 
-    this.applicationService
-      .submitApplication(this.existingApplication.id)
-      .pipe(
-        finalize(() => {
-          this.submitting = false;
-        }),
-      )
+  deleteDraft(draft: MarkLicenseApplication): void {
+    if (!draft?.id) {
+      return;
+    }
+    const confirmed = window.confirm(
+      `Are you sure you want to delete draft ${draft.applicationNumber || ''}? This action cannot be undone.`,
+    );
+    if (!confirmed) {
+      return;
+    }
+    this.loadingDrafts = true;
+    this.licenseService.deleteDraft(draft.id).subscribe({
+      next: () => {
+        this.communicationLogService.addLog({
+          type: 'SYSTEM',
+          subject: 'Draft deleted',
+          message: `Draft ${draft.applicationNumber || ''} deleted successfully.`,
+          recipient: this.getRecipientLabel(),
+          status: 'DELIVERED',
+        });
+        this.draftApplications = this.draftApplications.filter((item) => item.id !== draft.id);
+        if (this.existingApplication?.id === draft.id) {
+          this.resetForm();
+        }
+        this.loadingDrafts = false;
+      },
+      error: () => {
+        this.error = 'Failed to delete draft.';
+        this.loadingDrafts = false;
+      },
+    });
+  }
+
+  private buildPayload(): CreateMarkLicenseApplicationRequest {
+    return {
+      nsbId: this.applicationForm.get('nsbId')?.value || '',
+      licenseTypes: this.getSelectedLicenseTypes(),
+      licenseDuration: LicenseDurationType.OTHER,
+      licenseDurationOther: '',
+      marksRequested: this.getSelectedMarks(),
+      markColorsNeeded: this.getSelectedEcoRequirements(),
+      markLanguages: this.getSelectedAcapSchemes(),
+      promotionalLicenseDetails: this.isLicenseSelected(MarkLicenseType.PROMOTIONAL_INSTITUTIONAL)
+        ? {
+            primaryPurpose: this.applicationForm.get('promotionalPrimaryPurpose')?.value || '',
+            promoPurposeOther: this.getOptionalValue(this.applicationForm.get('promotionalPurposeOther')?.value),
+            targetAudience: this.parseList(this.applicationForm.get('promotionalTargetAudience')?.value),
+            geographicScope: this.applicationForm.get('promotionalGeographicScope')?.value || '',
+            budgetEstimate: this.getOptionalValue(this.applicationForm.get('promotionalBudgetEstimate')?.value),
+          }
+        : undefined,
+      certificationBodyDetails: this.isLicenseSelected(MarkLicenseType.CERTIFICATION_BODY)
+        ? {
+            cbUnitName: this.applicationForm.get('cbUnitName')?.value || '',
+            cbAccreditationNumber: this.applicationForm.get('cbAccreditationNumber')?.value || '',
+            cbAccreditationBody: this.applicationForm.get('cbAccreditationBody')?.value || '',
+            cbAccreditationScope: this.applicationForm.get('cbAccreditationScope')?.value || '',
+            cbAccreditationExpiry: this.applicationForm.get('cbAccreditationExpiry')?.value || '',
+            cbSchemesApplying: this.getSelectedSchemes(),
+            cbExpectedVolume: this.getOptionalValue(this.applicationForm.get('cbExpectedVolume')?.value),
+          }
+        : undefined,
+      specialProjectDetails: this.isLicenseSelected(MarkLicenseType.SPECIAL_PROJECT)
+        ? {
+            projectName: this.applicationForm.get('projectName')?.value || '',
+            projectFunder: this.getOptionalValue(this.applicationForm.get('projectFunder')?.value),
+            projectDurationStart: this.applicationForm.get('projectDurationStart')?.value || '',
+            projectDurationEnd: this.applicationForm.get('projectDurationEnd')?.value || '',
+            projectDescription: this.applicationForm.get('projectDescription')?.value || '',
+            projectDeliverables: this.parseList(this.applicationForm.get('projectDeliverables')?.value),
+            projectBudget: this.getOptionalValue(this.applicationForm.get('projectBudget')?.value),
+          }
+        : undefined,
+      annexBCompliance: this.applicationForm.get('agreementCompliance')?.value ?? false,
+      brandGuidelinesAck: this.applicationForm.get('markUsageCompliance')?.value ?? false,
+      modificationPolicyAcceptance: this.applicationForm.get('misleadingStatementsCompliance')?.value ?? false,
+      declarationSignatory: '',
+      signatoryTitle: '',
+      signatoryEmail: '',
+      auditRightsAcceptance: this.applicationForm.get('changesCompliance')?.value ?? false,
+      annualReportingCommitment: this.applicationForm.get('annualReportingCommitment')?.value ?? false,
+      dataSharingConsent: this.applicationForm.get('dataSharingConsent')?.value ?? false,
+    };
+  }
+
+  private getSelectedLicenseTypes(): MarkLicenseType[] {
+    const selected: MarkLicenseType[] = [];
+    if (this.applicationForm.get('promotionalLicense')?.value) {
+      selected.push(MarkLicenseType.PROMOTIONAL_INSTITUTIONAL);
+    }
+    if (this.applicationForm.get('certificationBodyLicense')?.value) {
+      selected.push(MarkLicenseType.CERTIFICATION_BODY);
+    }
+    if (this.applicationForm.get('specialProjectLicense')?.value) {
+      selected.push(MarkLicenseType.SPECIAL_PROJECT);
+    }
+    return selected;
+  }
+
+  private getSelectedMarks(): MarkType[] {
+    const selected: MarkType[] = [];
+    if (this.applicationForm.get('arsoQualityMark')?.value) {
+      selected.push(MarkType.ARSO_QUALITY_MARK);
+    }
+    if (this.applicationForm.get('ecoMarkAfrica')?.value) {
+      selected.push(MarkType.ECO_MARK_AFRICA);
+    }
+    return selected;
+  }
+
+  toggleAcapSchemeSelection(code: string, checked: boolean): void {
+    const control = this.applicationForm.get('acapSchemesApplying');
+    const current = (control?.value as string[]) || [];
+    const next = checked
+      ? [...new Set([...current, code])]
+      : current.filter((item) => item !== code);
+    control?.setValue(next);
+  }
+
+  isAcapSchemeSelected(code: string): boolean {
+    const selected = (this.applicationForm.get('acapSchemesApplying')?.value as string[]) || [];
+    return selected.includes(code);
+  }
+
+  private getSelectedAcapSchemes(): string[] {
+    const selected = this.applicationForm.get('acapSchemesApplying')?.value as string[] | null;
+    return (selected || []).filter((item) => item?.trim().length > 0);
+  }
+
+  toggleEcoRequirementSelection(requirement: string, checked: boolean): void {
+    const control = this.applicationForm.get('ecoMarkRequirements');
+    const current = (control?.value as string[]) || [];
+    const next = checked
+      ? [...new Set([...current, requirement])]
+      : current.filter((item) => item !== requirement);
+    control?.setValue(next);
+  }
+
+  isEcoRequirementSelected(requirement: string): boolean {
+    const selected = (this.applicationForm.get('ecoMarkRequirements')?.value as string[]) || [];
+    return selected.includes(requirement);
+  }
+
+  private getSelectedEcoRequirements(): string[] {
+    const selected = this.applicationForm.get('ecoMarkRequirements')?.value as string[] | null;
+    return (selected || []).filter((item) => item?.trim().length > 0);
+  }
+
+  toggleSchemeSelection(code: string, checked: boolean): void {
+    const control = this.applicationForm.get('cbSchemesApplying');
+    const current = (control?.value as string[]) || [];
+    const next = checked
+      ? [...new Set([...current, code])]
+      : current.filter((item) => item !== code);
+    control?.setValue(next);
+  }
+
+  isSchemeSelected(code: string): boolean {
+    const selected = (this.applicationForm.get('cbSchemesApplying')?.value as string[]) || [];
+    return selected.includes(code);
+  }
+
+  private getSelectedSchemes(): string[] {
+    const selected = this.applicationForm.get('cbSchemesApplying')?.value as string[] | null;
+    return (selected || []).filter((item) => item?.trim().length > 0);
+  }
+
+  private isLicenseSelected(type: MarkLicenseType): boolean {
+    return this.getSelectedLicenseTypes().includes(type);
+  }
+
+  private parseList(value: string | null | undefined): string[] {
+    if (!value) {
+      return [];
+    }
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+  }
+
+  private getOptionalValue(value: string | null | undefined): string | undefined {
+    const trimmed = (value || '').trim();
+    return trimmed ? trimmed : undefined;
+  }
+
+  private resetForm(): void {
+    this.applicationForm.reset({
+      nsbId: '',
+      promotionalLicense: false,
+      certificationBodyLicense: false,
+      specialProjectLicense: false,
+      arsoQualityMark: false,
+      ecoMarkAfrica: false,
+      promotionalPrimaryPurpose: '',
+      promotionalPurposeOther: '',
+      promotionalTargetAudience: '',
+      promotionalGeographicScope: '',
+      promotionalBudgetEstimate: '',
+      cbUnitName: '',
+      cbAccreditationNumber: '',
+      cbAccreditationBody: '',
+      cbAccreditationScope: '',
+      cbAccreditationExpiry: '',
+      cbSchemesApplying: [],
+      cbExpectedVolume: '',
+      acapSchemesApplying: [],
+      ecoMarkRequirements: [],
+      projectName: '',
+      projectFunder: '',
+      projectDurationStart: '',
+      projectDurationEnd: '',
+      projectDescription: '',
+      projectDeliverables: '',
+      projectBudget: '',
+      usageChannels: '',
+      annualUsageVolume: '',
+      targetMarkets: '',
+      usageDescription: '',
+      controlProcedures: '',
+      qualityManager: '',
+      qualityContactEmail: '',
+      finalConfirmation: false,
+      productCategories: '',
+      termsAgreement: false,
+      feesAgreement: false,
+      agreementCompliance: false,
+      markUsageCompliance: false,
+      misleadingStatementsCompliance: false,
+      changesCompliance: false,
+      annualReportingCommitment: false,
+      complianceAuditConsent: false,
+      dataSharingConsent: false,
+    });
+    this.selectedNsb = null;
+    this.existingApplication = null;
+    this.existingSupportingDocuments = [];
+    this.selectedFiles = {};
+    this.currentStep = 1;
+  }
+
+  get applicationPreview() {
+    return {
+      ...this.applicationForm.getRawValue(),
+      supportingDocuments: this.existingSupportingDocuments,
+    };
+  }
+
+  onDocumentSelected(event: Event, documentType: string): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const docConfig = this.documentTypes.find((doc) => doc.value === documentType);
+    const maxSize = (docConfig?.maxSizeMb || 10) * 1024 * 1024;
+    if (file.size > maxSize) {
+      this.error = `File size exceeds ${docConfig?.maxSizeMb || 10}MB limit.`;
+      input.value = '';
+      return;
+    }
+
+    const extension = '.' + file.name.split('.').pop()?.toLowerCase();
+    if (docConfig?.allowedExtensions && !docConfig.allowedExtensions.includes(extension)) {
+      this.error = `Invalid file type. Allowed: ${docConfig.allowedExtensions.join(', ')}`;
+      input.value = '';
+      return;
+    }
+
+    this.selectedFiles[documentType] = file;
+    this.error = '';
+
+    if (this.existingApplication?.id) {
+      this.uploadDocument(documentType, file);
+    }
+  }
+
+  uploadDocument(documentType: string, file: File): void {
+    if (!this.existingApplication?.id) {
+      return;
+    }
+
+    this.licenseService
+      .uploadSupportingDocument(this.existingApplication.id, {
+        documentType,
+        fileName: file.name,
+      })
       .subscribe({
-        next: () => {
-          this.success = true;
-          this.successMessage = 'Application submitted successfully!';
-          setTimeout(() => {
-            this.router.navigate(['/mark-licenses/dashboard']);
-          }, 2000);
+        next: (doc) => {
+          this.existingSupportingDocuments = [...this.existingSupportingDocuments, doc];
+          delete this.selectedFiles[documentType];
         },
         error: (err) => {
-          this.error = err.error?.message || 'Failed to submit application. Please try again.';
+          this.error = err?.error?.message || 'Failed to upload document.';
         },
       });
   }
 
-  markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach((key) => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
+  uploadPendingDocuments(): Promise<void> {
+    if (!this.existingApplication?.id) {
+      return Promise.resolve();
+    }
 
-      if (control instanceof FormGroup) {
-        this.markFormGroupTouched(control);
-      } else if (control instanceof FormArray) {
-        control.controls.forEach((arrayControl) => {
-          if (arrayControl instanceof FormGroup) {
-            this.markFormGroupTouched(arrayControl);
-          } else {
-            arrayControl.markAsTouched();
-          }
+    const uploads = this.documentTypes
+      .map((docType) => {
+        const file = this.selectedFiles[docType.value];
+        const alreadyUploaded = this.getUploadedDocument(docType.value);
+        if (!file || alreadyUploaded) {
+          return null;
+        }
+        return new Promise<void>((resolve) => {
+          this.licenseService
+            .uploadSupportingDocument(this.existingApplication!.id, {
+              documentType: docType.value,
+              fileName: file.name,
+            })
+            .subscribe({
+              next: (doc) => {
+                this.existingSupportingDocuments = [...this.existingSupportingDocuments, doc];
+                delete this.selectedFiles[docType.value];
+                resolve();
+              },
+              error: () => {
+                resolve();
+              },
+            });
         });
-      }
+      })
+      .filter(Boolean) as Promise<void>[];
+
+    return Promise.all(uploads).then(() => undefined);
+  }
+
+  removeDocument(documentType: string): void {
+    const uploaded = this.getUploadedDocument(documentType);
+    if (!this.existingApplication?.id || !uploaded?.id) {
+      delete this.selectedFiles[documentType];
+      return;
+    }
+
+    this.licenseService.deleteSupportingDocument(this.existingApplication.id, uploaded.id).subscribe({
+      next: () => {
+        this.existingSupportingDocuments = this.existingSupportingDocuments.filter((doc) => doc.id !== uploaded.id);
+      },
+      error: (err) => {
+        this.error = err?.error?.message || 'Failed to delete document.';
+      },
     });
   }
-}
 
+  viewDocument(documentType: string): void {
+    const file = this.selectedFiles[documentType];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      window.open(url, '_blank');
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+      return;
+    }
+
+    const uploaded = this.getUploadedDocument(documentType);
+    if (uploaded?.filePath) {
+      window.open(uploaded.filePath, '_blank');
+    }
+  }
+
+  getUploadedDocument(documentType: string): SupportingDocument | undefined {
+    return this.existingSupportingDocuments.find((doc) => doc.documentType === documentType);
+  }
+
+  getFileName(documentType: string): string {
+    return this.selectedFiles[documentType]?.name || '';
+  }
+
+  getAcceptAttribute(documentType: string): string {
+    const doc = this.documentTypes.find((item) => item.value === documentType);
+    return doc?.allowedExtensions?.join(',') || '';
+  }
+
+  private setSuccessMessage(message: string): void {
+    this.successMessage = message;
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 4000);
+  }
+
+  private getRecipientLabel(): string {
+    const user = this.authService.currentUserValue;
+    return user?.email || user?.fullName || 'Current user';
+  }
+
+}
