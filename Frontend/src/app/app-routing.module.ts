@@ -20,6 +20,11 @@ const routes: Routes = [
         path: '',
         loadChildren: () => import('./pages/consumer/consumer.module').then((m) => m.ConsumerModule),
       },
+      {
+        path: 'complaints',
+        loadChildren: () =>
+          import('./pages/public-complaint/public-complaint.module').then((m) => m.PublicComplaintModule),
+      },
     ],
   },
   {
@@ -54,10 +59,6 @@ const routes: Routes = [
             loadChildren: () => import('./pages/nsb-dashboard/nsb-dashboard.module').then((m) => m.NsbDashboardModule),
           },
           {
-            path: 'profile-setup',
-            loadChildren: () => import('./pages/nsb-profile-setup/nsb-profile-setup.module').then((m) => m.NsbProfileSetupModule),
-          },
-          {
             path: 'stakeholder-registry',
             loadChildren: () => import('./pages/nsb-stakeholder-registry/nsb-stakeholder-registry.module').then((m) => m.NsbStakeholderRegistryModule),
           },
@@ -66,8 +67,8 @@ const routes: Routes = [
             loadChildren: () => import('./pages/stakeholder-registry-list/stakeholder-registry-list.module').then((m) => m.StakeholderRegistryListModule),
           },
           {
-            path: '',
-            loadChildren: () => import('./pages/nsb-management/nsb-management.module').then((m) => m.NsbManagementModule),
+            path: 'communication',
+            loadChildren: () => import('./pages/communication-history/communication-history.module').then((m) => m.CommunicationHistoryModule),
           },
         ],
       },
@@ -131,6 +132,13 @@ const routes: Routes = [
             loadChildren: () =>
               import('./pages/product-certification/product-certification.module').then(
                 (m) => m.ProductCertificationModule,
+              ),
+          },
+          {
+            path: 'audits',
+            loadChildren: () =>
+              import('./pages/certification-audits/certification-audits.module').then(
+                (m) => m.CertificationAuditsModule,
               ),
           },
           {
@@ -202,6 +210,50 @@ const routes: Routes = [
               import('./pages/mark-license-dashboard/mark-license-dashboard.module').then(
                 (m) => m.MarkLicenseDashboardModule,
               ),
+          },
+          {
+            path: 'misuse',
+            loadChildren: () =>
+              import('./pages/mark-misuse/mark-misuse.module').then((m) => m.MarkMisuseModule),
+          },
+        ],
+      },
+      {
+        path: 'complaints',
+        canActivate: [RoleGuard],
+        data: {
+          roles: [
+            UserRole.SUPER_ADMIN,
+            UserRole.ARSO_SECRETARIAT,
+            UserRole.NSB_ADMIN,
+            UserRole.NSB_USER,
+            UserRole.CB_ADMIN,
+            UserRole.CB_USER,
+            UserRole.OPERATOR,
+            UserRole.PUBLIC,
+          ],
+        },
+        loadChildren: () => import('./pages/complaints/complaints.module').then((m) => m.ComplaintsModule),
+      },
+      {
+        path: 'cb',
+        canActivate: [RoleGuard],
+        data: { roles: [UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC] },
+        children: [
+          {
+            path: 'apply',
+            loadChildren: () =>
+              import('./pages/cb-application/cb-application.module').then((m) => m.CbApplicationModule),
+          },
+          {
+            path: 'compliance',
+            loadChildren: () =>
+              import('./pages/cb-compliance/cb-compliance.module').then((m) => m.CbComplianceModule),
+          },
+          {
+            path: 'applications',
+            loadChildren: () =>
+              import('./pages/cb-application-list/cb-application-list.module').then((m) => m.CbApplicationListModule),
           },
         ],
       },

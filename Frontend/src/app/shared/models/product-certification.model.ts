@@ -193,6 +193,23 @@ export enum VolumeUnit {
   OTHER = 'OTHER',
 }
 
+export enum CertificationAgreementType {
+  CERTIFICATION_AGREEMENT = 'CERTIFICATION_AGREEMENT',
+  SUB_LICENSE_AGREEMENT = 'SUB_LICENSE_AGREEMENT',
+}
+
+export enum CertificationAgreementStatus {
+  PENDING_CB_APPROVAL = 'PENDING_CB_APPROVAL',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum CbChangeRequestStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export interface ProductCertificationApplication {
   id: string;
   applicationNumber?: string;
@@ -203,6 +220,7 @@ export interface ProductCertificationApplication {
   markCombination?: MarkCombinationPreference;
   schemeType: CertificationSchemeType;
   schemeDescription?: string;
+  schemePayload?: any;
   applicationScope: ApplicationScope;
   certificationType: ProductCertificationType;
   estimatedVolume: number;
@@ -221,8 +239,41 @@ export interface ProductCertificationApplication {
   products?: Product[];
   cbSelection?: ProductCertificationCbSelection;
   declaration?: ProductCertificationDeclaration;
+  agreements?: ProductCertificationAgreement[];
+  cbChangeRequests?: ProductCertificationCbChangeRequest[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ProductCertificationAgreement {
+  id?: string;
+  applicationId: string;
+  agreementType: CertificationAgreementType;
+  status: CertificationAgreementStatus;
+  contractStart?: string;
+  contractEnd?: string;
+  signedByName?: string;
+  signedAt?: string;
+  fileName: string;
+  filePath: string;
+  fileHash: string;
+  fileSize: number;
+  mimeType?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ProductCertificationCbChangeRequest {
+  id?: string;
+  applicationId: string;
+  currentCbId?: string;
+  requestedCbId?: string;
+  justification: string;
+  penaltyPolicy?: string;
+  status: CbChangeRequestStatus;
+  decisionReason?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Product {
@@ -343,6 +394,7 @@ export interface CreateProductCertificationApplicationRequest {
     schemeType: CertificationSchemeType;
     applicationScope: ApplicationScope;
     certificationType: ProductCertificationType;
+    schemePayload?: any;
   };
   volumePriority: {
     estimatedVolume: number;

@@ -23,6 +23,7 @@ import {
   AnnualTurnoverRange,
   OwnershipType,
   OwnershipStatus,
+  LegalRegistrationNumberType,
 } from '../../../shared/enums';
 import { TransformEmptyToUndefined } from '../../../shared/decorators/transform-empty-to-undefined.decorator';
 
@@ -52,6 +53,17 @@ export class CompanyInfoDto {
   @MinLength(1)
   @MaxLength(50)
   registrationNumberBusiness: string;
+
+  @TransformEmptyToUndefined()
+  @IsOptional()
+  @IsEnum(LegalRegistrationNumberType)
+  legalRegistrationNumberType?: LegalRegistrationNumberType;
+
+  @TransformEmptyToUndefined()
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  legalRegistrationNumber?: string;
 
   @TransformEmptyToUndefined()
   @IsOptional()
@@ -277,6 +289,24 @@ export class OperatorLocationDto {
   @MaxLength(50)
   gpsCoordinates?: string;
 
+  @IsNumber()
+  @IsOptional()
+  @Min(-90)
+  @Max(90)
+  geoLat?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(-180)
+  @Max(180)
+  geoLng?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Max(10)
+  geoAccuracyM?: number;
+
   @IsBoolean()
   @IsOptional()
   factoryLocationSame?: boolean;
@@ -398,12 +428,12 @@ export class ProductionCapacityDto {
 
   @TransformEmptyToUndefined()
   @IsNotEmpty({ message: 'Quality management status is required' })
-  @IsEnum(['YES', 'NO', 'IN_PROGRESS'])
+  @IsEnum(['YES', 'NO', 'IN_PROGRESS'], { message: 'Quality management status must be one of: YES, NO, IN_PROGRESS' })
   qualityManagement: string;
 
   @TransformEmptyToUndefined()
   @IsNotEmpty({ message: 'QMS type is required' })
-  @IsEnum(['ISO_9001', 'HACCP', 'GMP', 'INTERNAL_SYSTEM', 'NONE', 'IN_PROGRESS'])
+  @IsEnum(['ISO_9001', 'HACCP', 'GMP', 'INTERNAL_SYSTEM', 'NONE', 'IN_PROGRESS'], { message: 'QMS type must be one of: ISO_9001, HACCP, GMP, INTERNAL_SYSTEM, NONE, IN_PROGRESS' })
   qmsType: string;
 
   @IsInt()
@@ -475,12 +505,12 @@ export class AccessibilityDto {
 
   @TransformEmptyToUndefined()
   @IsNotEmpty({ message: 'Internet access type is required' })
-  @IsEnum(['HIGH_SPEED', 'MOBILE_DATA', 'LIMITED', 'INTERMITTENT'])
+  @IsEnum(['HIGH_SPEED', 'MOBILE_DATA', 'LIMITED', 'INTERMITTENT'], { message: 'Internet access type must be one of: HIGH_SPEED, MOBILE_DATA, LIMITED, INTERMITTENT' })
   internetAccess: string;
 
   @TransformEmptyToUndefined()
   @IsNotEmpty({ message: 'Device type is required' })
-  @IsEnum(['DESKTOP', 'LAPTOP', 'SMARTPHONE', 'TABLET', 'FEATURE_PHONE'])
+  @IsEnum(['DESKTOP', 'LAPTOP', 'SMARTPHONE', 'TABLET', 'FEATURE_PHONE'], { message: 'Device type must be one of: DESKTOP, LAPTOP, SMARTPHONE, TABLET, FEATURE_PHONE' })
   deviceType: string;
 }
 
@@ -520,6 +550,25 @@ export class ConsentDto {
   @MinLength(3)
   @MaxLength(100)
   declarationSignature: string;
+}
+
+export class GroupMemberDto {
+  @TransformEmptyToUndefined()
+  @IsNotEmpty({ message: 'Member name is required' })
+  @IsString()
+  @MaxLength(200)
+  memberName: string;
+
+  @TransformEmptyToUndefined()
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  registrationNumberBusiness?: string;
+
+  @TransformEmptyToUndefined()
+  @IsOptional()
+  @IsUUID()
+  countryId?: string;
 }
 
 // Main DTO for creating operator registration
@@ -584,6 +633,21 @@ export class CreateOperatorRegistrationDto {
   @Type(() => ConsentDto)
   @IsOptional()
   consents?: ConsentDto;
+
+  @IsOptional()
+  @IsBoolean()
+  isGroup?: boolean;
+
+  @TransformEmptyToUndefined()
+  @IsOptional()
+  @IsUUID()
+  groupManagerId?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => GroupMemberDto)
+  @IsOptional()
+  groupMembers?: GroupMemberDto[];
 
   // Optional: Link to user account
   @TransformEmptyToUndefined()

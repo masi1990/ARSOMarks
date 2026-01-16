@@ -25,6 +25,8 @@ import { SystemUser } from '../../system-user/system-user.entity';
 import { Product } from './product.entity';
 import { ProductCertificationCbSelection } from './product-certification-cb-selection.entity';
 import { ProductCertificationDeclaration } from './product-certification-declaration.entity';
+import { ProductCertificationAgreement } from './product-certification-agreement.entity';
+import { ProductCertificationCbChangeRequest } from './product-certification-cb-change-request.entity';
 
 @Entity('product_certification_applications')
 export class ProductCertificationApplication {
@@ -60,6 +62,9 @@ export class ProductCertificationApplication {
 
   @Column({ name: 'scheme_description', type: 'text', nullable: true })
   schemeDescription?: string;
+
+  @Column({ name: 'scheme_payload', type: 'jsonb', nullable: true })
+  schemePayload?: Record<string, any>;
 
   @Column({ name: 'application_scope', type: 'enum', enum: ApplicationScope })
   applicationScope: ApplicationScope;
@@ -138,5 +143,11 @@ export class ProductCertificationApplication {
 
   @OneToOne(() => ProductCertificationDeclaration, (declaration) => declaration.application, { cascade: true })
   declaration?: ProductCertificationDeclaration;
+
+  @OneToMany(() => ProductCertificationAgreement, (agreement) => agreement.application, { cascade: true })
+  agreements?: ProductCertificationAgreement[];
+
+  @OneToMany(() => ProductCertificationCbChangeRequest, (request) => request.application, { cascade: true })
+  cbChangeRequests?: ProductCertificationCbChangeRequest[];
 }
 

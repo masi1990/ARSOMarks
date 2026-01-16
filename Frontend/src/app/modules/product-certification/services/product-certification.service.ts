@@ -5,6 +5,9 @@ import {
   ProductCertificationApplication,
   CreateProductCertificationApplicationRequest,
   PagedProductCertificationResponse,
+  ProductCertificationAgreement,
+  CertificationAgreementType,
+  ProductCertificationCbChangeRequest,
 } from '../../../shared/models/product-certification.model';
 import { environment } from '../../../../environments/environment';
 
@@ -43,6 +46,43 @@ export class ProductCertificationService {
 
   submitApplication(id: string): Observable<ProductCertificationApplication> {
     return this.http.post<ProductCertificationApplication>(`${this.baseUrl}/applications/${id}/submit`, {});
+  }
+
+  uploadAgreement(
+    applicationId: string,
+    agreementType: CertificationAgreementType,
+    file: File,
+    payload?: { signedByName?: string; contractStart?: string; contractEnd?: string },
+  ): Observable<ProductCertificationAgreement> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (payload?.signedByName) {
+      formData.append('signedByName', payload.signedByName);
+    }
+    if (payload?.contractStart) {
+      formData.append('contractStart', payload.contractStart);
+    }
+    if (payload?.contractEnd) {
+      formData.append('contractEnd', payload.contractEnd);
+    }
+    return this.http.post<ProductCertificationAgreement>(
+      `${this.baseUrl}/applications/${applicationId}/agreements/${agreementType}/upload`,
+      formData,
+    );
+  }
+
+  listAgreements(applicationId: string): Observable<ProductCertificationAgreement[]> {
+    return this.http.get<ProductCertificationAgreement[]>(`${this.baseUrl}/applications/${applicationId}/agreements`);
+  }
+
+  createCbChangeRequest(
+    applicationId: string,
+    payload: { currentCbId?: string; requestedCbId?: string; justification: string; penaltyPolicy?: string },
+  ): Observable<ProductCertificationCbChangeRequest> {
+    return this.http.post<ProductCertificationCbChangeRequest>(
+      `${this.baseUrl}/applications/${applicationId}/cb-change-requests`,
+      payload,
+    );
   }
 
   deleteApplication(id: string): Observable<void> {

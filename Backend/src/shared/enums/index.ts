@@ -210,6 +210,24 @@ export enum MarkLicenseStatus {
   TERMINATED = 'TERMINATED',
 }
 
+export enum MarkMisuseStatus {
+  OPEN = 'OPEN',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  RESOLVED = 'RESOLVED',
+  DISMISSED = 'DISMISSED',
+}
+
+export enum MarkSanctionType {
+  WARNING = 'WARNING',
+  SUSPENSION = 'SUSPENSION',
+  WITHDRAWAL = 'WITHDRAWAL',
+}
+
+export enum MarkSanctionStatus {
+  ACTIVE = 'ACTIVE',
+  LIFTED = 'LIFTED',
+}
+
 export enum MarkType {
   ARSO_QUALITY_MARK = 'ARSO_QUALITY_MARK',
   ECO_MARK_AFRICA = 'ECO_MARK_AFRICA',
@@ -234,6 +252,23 @@ export enum AgreementStatus {
   ARCHIVED = 'ARCHIVED',
 }
 
+export enum CertificationAgreementType {
+  CERTIFICATION_AGREEMENT = 'CERTIFICATION_AGREEMENT',
+  SUB_LICENSE_AGREEMENT = 'SUB_LICENSE_AGREEMENT',
+}
+
+export enum CertificationAgreementStatus {
+  PENDING_CB_APPROVAL = 'PENDING_CB_APPROVAL',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum CbChangeRequestStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export enum ReportStatus {
   DRAFT = 'DRAFT',
   SUBMITTED = 'SUBMITTED',
@@ -241,6 +276,20 @@ export enum ReportStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
   REQUIRES_REVISION = 'REQUIRES_REVISION',
+}
+
+export enum ComplaintStatus {
+  RECEIVED = 'RECEIVED',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  CLOSED = 'CLOSED',
+  REJECTED = 'REJECTED',
+}
+
+export enum AppealStatus {
+  RECEIVED = 'RECEIVED',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  DECIDED = 'DECIDED',
+  REJECTED = 'REJECTED',
 }
 
 export enum ModificationStatus {
@@ -338,6 +387,13 @@ export enum OwnershipStatus {
   YOUTH_LED = 'YOUTH_LED',
 }
 
+export enum LegalRegistrationNumberType {
+  BUSINESS_REGISTRATION = 'BUSINESS_REGISTRATION',
+  TAX_ID = 'TAX_ID',
+  VAT = 'VAT',
+  OTHER = 'OTHER',
+}
+
 export enum OperatorStatus {
   DRAFT = 'DRAFT',
   SUBMITTED = 'SUBMITTED',
@@ -358,6 +414,31 @@ export enum ApplicationRegistrationStatus {
   ACTIVE = 'ACTIVE',
   SUSPENDED = 'SUSPENDED',
   WITHDRAWN = 'WITHDRAWN',
+}
+
+export enum CbApplicationStatus {
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  APPROVED = 'APPROVED',
+  PROVISIONAL = 'PROVISIONAL',
+  SUSPENDED = 'SUSPENDED',
+  WITHDRAWN = 'WITHDRAWN',
+  REJECTED = 'REJECTED',
+}
+
+export enum CbAccreditationStandard {
+  ISO_IEC_17065 = 'ISO_IEC_17065',
+  ISO_IEC_17021_1 = 'ISO_IEC_17021_1',
+  OTHER = 'OTHER',
+}
+
+export enum CbDocumentType {
+  LEGAL_REGISTRATION = 'LEGAL_REGISTRATION',
+  ACCREDITATION_CERTIFICATE = 'ACCREDITATION_CERTIFICATE',
+  ACCREDITATION_SCOPE = 'ACCREDITATION_SCOPE',
+  ACKNOWLEDGEMENT_OF_APPLICATION = 'ACKNOWLEDGEMENT_OF_APPLICATION',
+  OTHER = 'OTHER',
 }
 
 export enum OperatorContactType {
@@ -665,6 +746,46 @@ export enum AuditTeamSize {
   ONE_AUDITOR = 'ONE_AUDITOR',
   TWO_AUDITORS = 'TWO_AUDITORS',
   FLEXIBLE = 'FLEXIBLE',
+}
+
+export enum CertificationAuditType {
+  DOCUMENT_REVIEW = 'DOCUMENT_REVIEW',
+  INITIAL = 'INITIAL',
+  SURVEILLANCE = 'SURVEILLANCE',
+  RECERTIFICATION = 'RECERTIFICATION',
+  FOLLOW_UP = 'FOLLOW_UP',
+  UNANNOUNCED = 'UNANNOUNCED',
+}
+
+export enum AuditFindingType {
+  MAJOR = 'MAJOR',
+  MINOR = 'MINOR',
+  OBSERVATION = 'OBSERVATION',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum AuditFindingStatus {
+  OPEN = 'OPEN',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  CLOSED = 'CLOSED',
+}
+
+export enum CorrectiveActionStatus {
+  PENDING = 'PENDING',
+  VERIFIED = 'VERIFIED',
+  REJECTED = 'REJECTED',
+}
+
+export enum SamplingStatus {
+  PENDING = 'PENDING',
+  COLLECTED = 'COLLECTED',
+  TESTED = 'TESTED',
+}
+
+export enum TestResultStatus {
+  PASS = 'PASS',
+  FAIL = 'FAIL',
+  CONDITIONAL_PASS = 'CONDITIONAL_PASS',
 }
 
 export enum VolumeUnit {

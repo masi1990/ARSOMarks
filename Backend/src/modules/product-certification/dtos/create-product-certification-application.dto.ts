@@ -68,6 +68,9 @@ export class CertificationSchemeDto {
 
   @IsEnum(ProductCertificationType)
   certificationType: ProductCertificationType;
+
+  @IsOptional()
+  schemePayload?: Record<string, any>;
 }
 
 // Section A3: Volume & Priority

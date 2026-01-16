@@ -12,6 +12,7 @@ import {
   OwnershipType,
   OwnershipStatus,
   OperatorStatus,
+  LegalRegistrationNumberType,
   CreateOperatorRegistrationRequest,
 } from '../../shared/models/operator.model';
 import { Country } from '../../shared/models/reference-data.model';
@@ -67,6 +68,11 @@ export class OperatorRegistrationComponent implements OnInit {
   }));
 
   ownershipStatuses = Object.values(OwnershipStatus).map((value) => ({
+    value,
+    label: value.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+  }));
+
+  legalRegistrationTypes = Object.values(LegalRegistrationNumberType).map((value) => ({
     value,
     label: value.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
   }));
@@ -128,6 +134,8 @@ export class OperatorRegistrationComponent implements OnInit {
         companyLegalName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
         tradingName: ['', Validators.maxLength(150)],
         registrationNumberBusiness: ['', [Validators.required, Validators.maxLength(50)]],
+        legalRegistrationNumberType: ['', Validators.required],
+        legalRegistrationNumber: ['', [Validators.required, Validators.maxLength(100)]],
         taxId: ['', Validators.maxLength(30)],
         vatNumber: ['', Validators.maxLength(30)],
         yearEstablished: [
@@ -231,6 +239,10 @@ export class OperatorRegistrationComponent implements OnInit {
         declarationSignature: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       }),
 
+      isGroup: [false],
+      groupManagerId: [''],
+      groupMembers: this.fb.array([]),
+
       countryId: ['', Validators.required],
     });
   }
@@ -246,11 +258,22 @@ export class OperatorRegistrationComponent implements OnInit {
       regionState: ['', [Validators.required, Validators.maxLength(100)]],
       countryId: ['', Validators.required],
       gpsCoordinates: ['', Validators.maxLength(50)],
+      geoLat: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      geoLng: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+      geoAccuracyM: [null, [Validators.required, Validators.min(0), Validators.max(10)]],
       factoryLocationSame: [null],
       factoryName: ['', Validators.maxLength(200)],
       factoryType: [''],
       factorySize: [null, Validators.min(0)],
       isPrimary: [true],
+    });
+  }
+
+  createGroupMemberFormGroup(): FormGroup {
+    return this.fb.group({
+      memberName: ['', [Validators.required, Validators.maxLength(200)]],
+      registrationNumberBusiness: ['', Validators.maxLength(100)],
+      countryId: [''],
     });
   }
 
@@ -273,6 +296,10 @@ export class OperatorRegistrationComponent implements OnInit {
     return this.registrationForm.get('businessSectors') as FormArray;
   }
 
+  get groupMembersFormArray(): FormArray {
+    return this.registrationForm.get('groupMembers') as FormArray;
+  }
+
   addLocation(): void {
     this.locationsFormArray.push(this.createLocationFormGroup());
   }
@@ -291,6 +318,14 @@ export class OperatorRegistrationComponent implements OnInit {
     if (this.businessSectorsFormArray.length > 1) {
       this.businessSectorsFormArray.removeAt(index);
     }
+  }
+
+  addGroupMember(): void {
+    this.groupMembersFormArray.push(this.createGroupMemberFormGroup());
+  }
+
+  removeGroupMember(index: number): void {
+    this.groupMembersFormArray.removeAt(index);
   }
 
   loadCountries(): void {
@@ -515,6 +550,9 @@ export class OperatorRegistrationComponent implements OnInit {
       preferences: cleanedValue.preferences,
       accessibility: cleanedValue.accessibility,
       consents: cleanedValue.consents,
+      isGroup: cleanedValue.isGroup,
+      groupManagerId: cleanedValue.groupManagerId,
+      groupMembers: cleanedValue.groupMembers,
       countryId: cleanedValue.countryId,
     };
 
@@ -627,6 +665,9 @@ export class OperatorRegistrationComponent implements OnInit {
       preferences: cleanedValue.preferences,
       accessibility: cleanedValue.accessibility,
       consents: cleanedValue.consents,
+      isGroup: cleanedValue.isGroup,
+      groupManagerId: cleanedValue.groupManagerId,
+      groupMembers: cleanedValue.groupMembers,
       countryId: cleanedValue.countryId,
     };
 

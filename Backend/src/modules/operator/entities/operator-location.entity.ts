@@ -23,29 +23,29 @@ export class OperatorLocation {
   @JoinColumn({ name: 'operator_id' })
   operator: Operator;
 
-  @Column({ name: 'location_type', type: 'enum', enum: OperatorLocationType, default: OperatorLocationType.REGISTERED_ADDRESS })
-  locationType: OperatorLocationType;
+  @Column({ name: 'location_type', type: 'enum', enum: OperatorLocationType, nullable: true })
+  locationType?: OperatorLocationType;
 
-  @Column({ name: 'physical_address', type: 'text' })
-  physicalAddress: string;
+  @Column({ name: 'physical_address', type: 'text', nullable: true })
+  physicalAddress?: string;
 
-  @Column({ name: 'address_line1', length: 100 })
-  addressLine1: string;
+  @Column({ name: 'address_line1', length: 100, nullable: true })
+  addressLine1?: string;
 
   @Column({ name: 'address_line2', length: 100, nullable: true })
   addressLine2?: string;
 
-  @Column({ name: 'postal_code', length: 20 })
-  postalCode: string;
+  @Column({ name: 'postal_code', length: 20, nullable: true })
+  postalCode?: string;
 
-  @Column({ name: 'city_town', length: 100 })
-  cityTown: string;
+  @Column({ name: 'city_town', length: 100, nullable: true })
+  cityTown?: string;
 
-  @Column({ name: 'region_state', length: 100 })
-  regionState: string;
+  @Column({ name: 'region_state', length: 100, nullable: true })
+  regionState?: string;
 
-  @Column({ name: 'country_id', type: 'uuid' })
-  countryId: string;
+  @Column({ name: 'country_id', type: 'uuid', nullable: true })
+  countryId?: string;
 
   @ManyToOne(() => Country, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'country_id' })
@@ -53,6 +53,15 @@ export class OperatorLocation {
 
   @Column({ name: 'gps_coordinates', length: 50, nullable: true })
   gpsCoordinates?: string;
+
+  @Column({ name: 'geo_lat', type: 'decimal', precision: 10, scale: 7, nullable: true })
+  geoLat?: number;
+
+  @Column({ name: 'geo_lng', type: 'decimal', precision: 10, scale: 7, nullable: true })
+  geoLng?: number;
+
+  @Column({ name: 'geo_accuracy_m', type: 'decimal', precision: 8, scale: 2, nullable: true })
+  geoAccuracyM?: number;
 
   @Column({ name: 'factory_location_same', type: 'boolean', nullable: true })
   factoryLocationSame?: boolean;

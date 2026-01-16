@@ -8,10 +8,19 @@ import {
   ProductEnvironmentalClaim,
   ProductCertificationCbSelection,
   ProductCertificationDeclaration,
+  ProductCertificationAgreement,
+  ProductCertificationCbChangeRequest,
 } from '../entities';
 import { CreateProductCertificationApplicationDto, UpdateProductCertificationApplicationDto } from '../dtos';
-import { ProductCertificationStatus, MarkRequestedType } from '../../../shared/enums';
+import {
+  ProductCertificationStatus,
+  MarkRequestedType,
+  CertificationAgreementType,
+  CertificationAgreementStatus,
+  CbChangeRequestStatus,
+} from '../../../shared/enums';
 import { Operator } from '../../operator/entities/operator.entity';
+import { ProductCertificationAgreementUploadService } from './product-certification-agreement-upload.service';
 
 @Injectable()
 export class ProductCertificationService {
@@ -28,9 +37,14 @@ export class ProductCertificationService {
     private readonly cbSelectionRepository: Repository<ProductCertificationCbSelection>,
     @InjectRepository(ProductCertificationDeclaration)
     private readonly declarationRepository: Repository<ProductCertificationDeclaration>,
+    @InjectRepository(ProductCertificationAgreement)
+    private readonly agreementRepository: Repository<ProductCertificationAgreement>,
+    @InjectRepository(ProductCertificationCbChangeRequest)
+    private readonly cbChangeRequestRepository: Repository<ProductCertificationCbChangeRequest>,
     @InjectRepository(Operator)
     private readonly operatorRepository: Repository<Operator>,
     private readonly dataSource: DataSource,
+    private readonly agreementUploadService: ProductCertificationAgreementUploadService,
   ) {}
 
   async createApplication(dto: CreateProductCertificationApplicationDto, userId: string): Promise<ProductCertificationApplication> {
@@ -60,6 +74,7 @@ export class ProductCertificationService {
         schemeType: dto.certificationScheme.schemeType,
         applicationScope: dto.certificationScheme.applicationScope,
         certificationType: dto.certificationScheme.certificationType,
+        schemePayload: dto.certificationScheme.schemePayload,
         estimatedVolume: dto.volumePriority.estimatedVolume,
         volumeUnit: dto.volumePriority.volumeUnit,
         peakMonth: dto.volumePriority.peakMonth,
@@ -163,6 +178,7 @@ export class ProductCertificationService {
           schemeType: dto.certificationScheme.schemeType,
           applicationScope: dto.certificationScheme.applicationScope,
           certificationType: dto.certificationScheme.certificationType,
+          schemePayload: dto.certificationScheme.schemePayload,
         });
       }
 
@@ -309,6 +325,8 @@ export class ProductCertificationService {
         'products.environmentalClaim',
         'cbSelection',
         'declaration',
+        'agreements',
+        'cbChangeRequests',
         'createdByUser',
         'updatedByUser',
       ],
@@ -373,6 +391,114 @@ export class ProductCertificationService {
     }
 
     await this.applicationRepository.remove(application);
+  }
+
+  async uploadAgreement(
+    applicationId: string,
+    agreementType: CertificationAgreementType,
+    file: Express.Multer.File,
+    payload: { signedByName?: string; contractStart?: string; contractEnd?: string },
+    userId: string,
+  ) {
+    await this.findById(applicationId);
+
+    const fileMetadata = await this.agreementUploadService.uploadFile(file, applicationId, agreementType);
+
+    const contractStart = payload.contractStart;
+    let contractEnd = payload.contractEnd;
+    if (contractStart && !contractEnd) {
+      const startDate = new Date(contractStart);
+      const endDate = new Date(startDate);
+      endDate.setFullYear(endDate.getFullYear() + 3);
+      contractEnd = endDate.toISOString().slice(0, 10);
+    }
+
+    const agreement = this.agreementRepository.create({
+      applicationId,
+      agreementType,
+      status: CertificationAgreementStatus.PENDING_CB_APPROVAL,
+      contractStart,
+      contractEnd,
+      signedByName: payload.signedByName,
+      signedAt: payload.signedByName ? new Date() : undefined,
+      fileName: fileMetadata.fileName,
+      filePath: fileMetadata.filePath,
+      fileHash: fileMetadata.fileHash,
+      fileSize: fileMetadata.fileSize,
+      mimeType: fileMetadata.mimeType,
+      uploadedBy: userId,
+    });
+
+    return this.agreementRepository.save(agreement);
+  }
+
+  async listAgreements(applicationId: string) {
+    await this.findById(applicationId);
+    return this.agreementRepository.find({
+      where: { applicationId },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async approveAgreement(id: string, userId: string) {
+    const agreement = await this.agreementRepository.findOne({ where: { id } });
+    if (!agreement) {
+      throw new NotFoundException('Agreement not found');
+    }
+    agreement.status = CertificationAgreementStatus.APPROVED;
+    agreement.cbApprovedBy = userId;
+    agreement.cbApprovedAt = new Date();
+    agreement.rejectionReason = undefined;
+    return this.agreementRepository.save(agreement);
+  }
+
+  async rejectAgreement(id: string, reason: string, userId: string) {
+    const agreement = await this.agreementRepository.findOne({ where: { id } });
+    if (!agreement) {
+      throw new NotFoundException('Agreement not found');
+    }
+    agreement.status = CertificationAgreementStatus.REJECTED;
+    agreement.cbApprovedBy = userId;
+    agreement.cbApprovedAt = new Date();
+    agreement.rejectionReason = reason;
+    return this.agreementRepository.save(agreement);
+  }
+
+  async createCbChangeRequest(
+    applicationId: string,
+    payload: { currentCbId?: string; requestedCbId?: string; justification: string; penaltyPolicy?: string },
+    userId: string,
+  ) {
+    await this.findById(applicationId);
+
+    const request = this.cbChangeRequestRepository.create({
+      applicationId,
+      currentCbId: payload.currentCbId,
+      requestedCbId: payload.requestedCbId,
+      justification: payload.justification,
+      penaltyPolicy: payload.penaltyPolicy,
+      status: CbChangeRequestStatus.PENDING,
+      requestedBy: userId,
+    });
+
+    return this.cbChangeRequestRepository.save(request);
+  }
+
+  async reviewCbChangeRequest(
+    id: string,
+    status: CbChangeRequestStatus.APPROVED | CbChangeRequestStatus.REJECTED,
+    decisionReason: string | undefined,
+    userId: string,
+  ) {
+    const request = await this.cbChangeRequestRepository.findOne({ where: { id } });
+    if (!request) {
+      throw new NotFoundException('CB change request not found');
+    }
+    request.status = status;
+    request.reviewedBy = userId;
+    request.reviewedAt = new Date();
+    request.decisionReason = decisionReason;
+    return this.cbChangeRequestRepository.save(request);
   }
 }
 

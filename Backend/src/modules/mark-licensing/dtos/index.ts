@@ -2,6 +2,8 @@
 export { CreateMarkLicenseApplicationDto } from './create-mark-license-application.dto';
 export { UpdateMarkLicenseApplicationDto } from './update-mark-license-application.dto';
 export { SubmitMarkLicenseApplicationDto } from './submit-mark-license-application.dto';
+export { UploadMarkLicenseDocumentDto } from './upload-mark-license-document.dto';
+export { CreateMarkMisuseIncidentDto } from './create-mark-misuse-incident.dto';
 export type {
   PromotionalLicenseDetailsDto,
   CertificationBodyLicenseDetailsDto,

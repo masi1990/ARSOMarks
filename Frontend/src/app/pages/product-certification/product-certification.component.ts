@@ -30,6 +30,8 @@ import {
   AuditTeamSize,
   CreateProductCertificationApplicationRequest,
   ProductCertificationStatus,
+  CertificationAgreementType,
+  CertificationAgreementStatus,
 } from '../../shared/models/product-certification.model';
 import { Operator } from '../../shared/models/operator.model';
 import { Country } from '../../shared/models/reference-data.model';
@@ -51,6 +53,7 @@ export class ProductCertificationComponent implements OnInit {
   existingApplication: ProductCertificationApplication | null = null;
   operator: Operator | null = null;
   applicationId?: string;
+  agreementStatus: Record<string, CertificationAgreementStatus> = {};
 
   // Options for dropdowns
   markRequestedTypes = Object.values(MarkRequestedType).map((value) => ({
@@ -211,6 +214,7 @@ export class ProductCertificationComponent implements OnInit {
         schemeType: ['', Validators.required],
         applicationScope: ['', Validators.required],
         certificationType: ['', Validators.required],
+        schemePayload: [''],
       }),
 
       volumePriority: this.fb.group({
@@ -245,6 +249,12 @@ export class ProductCertificationComponent implements OnInit {
         auditTeamSize: ['', Validators.required],
       }),
 
+      cbChangeRequest: this.fb.group({
+        requestedCbId: [''],
+        justification: ['', [Validators.minLength(10), Validators.maxLength(2000)]],
+        penaltyPolicy: ['', Validators.maxLength(2000)],
+      }),
+
       // Section F: Declarations
       declaration: this.fb.group({
         truthDeclaration: [false, Validators.requiredTrue],
@@ -260,6 +270,12 @@ export class ProductCertificationComponent implements OnInit {
         applicantName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
         applicantPosition: ['', [Validators.required, Validators.maxLength(100)]],
         applicantSignature: [''],
+      }),
+
+      agreementInfo: this.fb.group({
+        contractStart: [''],
+        contractEnd: [''],
+        signedByName: ['', Validators.maxLength(150)],
       }),
     });
   }
@@ -464,6 +480,16 @@ export class ProductCertificationComponent implements OnInit {
     }
 
     // Load other sections
+    if (application.schemeType || application.schemePayload) {
+      this.certificationForm.patchValue({
+        certificationScheme: {
+          schemeType: application.schemeType,
+          applicationScope: application.applicationScope,
+          certificationType: application.certificationType,
+          schemePayload: application.schemePayload ? JSON.stringify(application.schemePayload, null, 2) : '',
+        },
+      });
+    }
     if (application.cbSelection) {
       this.certificationForm.patchValue({
         cbSelection: application.cbSelection,
@@ -473,6 +499,18 @@ export class ProductCertificationComponent implements OnInit {
     if (application.declaration) {
       this.certificationForm.patchValue({
         declaration: application.declaration,
+      });
+    }
+
+    if (application.id) {
+      this.productCertificationService.listAgreements(application.id).subscribe({
+        next: (agreements) => {
+          agreements.forEach((agreement) => {
+            if (agreement.agreementType) {
+              this.agreementStatus[agreement.agreementType] = agreement.status;
+            }
+          });
+        },
       });
     }
   }
@@ -601,11 +639,14 @@ export class ProductCertificationComponent implements OnInit {
 
   saveDraft(): void {
     if (this.existingApplication && this.existingApplication.id) {
+      const payload = this.buildPayload();
+      if (!payload) {
+        return;
+      }
       this.saving = true;
-      this.productCertificationService.updateApplication(this.existingApplication.id, this.certificationForm.value).subscribe({
+      this.productCertificationService.updateApplication(this.existingApplication.id, payload).subscribe({
         next: () => {
           this.saving = false;
-          // Show success message
         },
         error: (error) => {
           this.saving = false;
@@ -630,26 +671,10 @@ export class ProductCertificationComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    const formValue = this.certificationForm.value;
-    const payload: CreateProductCertificationApplicationRequest = {
-      operatorId: this.operator.id,
-      markSelection: {
-        markRequested: formValue.markSelection.markRequested,
-        arsoQualityMark: formValue.markSelection.arsoQualityMark,
-        ecoMarkAfrica: formValue.markSelection.ecoMarkAfrica,
-        markCombination: formValue.markSelection.markCombination,
-      },
-      certificationScheme: formValue.certificationScheme,
-      volumePriority: formValue.volumePriority,
-      products: formValue.products.map((product: any, index: number) => ({
-        ...product,
-        displayOrder: index,
-      })),
-      technicalSpecs: formValue.technicalSpecs,
-      environmentalClaims: this.hasEmaMark() ? formValue.environmentalClaims : undefined,
-      cbSelection: formValue.cbSelection,
-      declaration: formValue.declaration,
-    };
+    const payload = this.buildPayload();
+    if (!payload) {
+      return;
+    }
 
     if (this.existingApplication && this.existingApplication.id) {
       // Update existing
@@ -678,6 +703,47 @@ export class ProductCertificationComponent implements OnInit {
     }
   }
 
+  private buildPayload(): CreateProductCertificationApplicationRequest | null {
+    if (!this.operator) {
+      this.error = 'Operator registration is required';
+      return null;
+    }
+
+    const formValue = this.certificationForm.value;
+    let schemePayload: any = undefined;
+    if (formValue.certificationScheme?.schemePayload) {
+      try {
+        schemePayload = JSON.parse(formValue.certificationScheme.schemePayload);
+      } catch (error) {
+        this.error = 'Scheme payload must be valid JSON.';
+        return null;
+      }
+    }
+
+    return {
+      operatorId: this.operator.id,
+      markSelection: {
+        markRequested: formValue.markSelection.markRequested,
+        arsoQualityMark: formValue.markSelection.arsoQualityMark,
+        ecoMarkAfrica: formValue.markSelection.ecoMarkAfrica,
+        markCombination: formValue.markSelection.markCombination,
+      },
+      certificationScheme: {
+        ...formValue.certificationScheme,
+        schemePayload,
+      },
+      volumePriority: formValue.volumePriority,
+      products: formValue.products.map((product: any, index: number) => ({
+        ...product,
+        displayOrder: index,
+      })),
+      technicalSpecs: formValue.technicalSpecs,
+      environmentalClaims: this.hasEmaMark() ? formValue.environmentalClaims : undefined,
+      cbSelection: formValue.cbSelection,
+      declaration: formValue.declaration,
+    };
+  }
+
   submitApplication(applicationId: string): void {
     this.productCertificationService.submitApplication(applicationId).subscribe({
       next: () => {
@@ -690,6 +756,61 @@ export class ProductCertificationComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         this.error = error.error?.message || 'Failed to submit application';
+      },
+    });
+  }
+
+  uploadAgreement(event: Event, agreementType: CertificationAgreementType): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+    if (!this.existingApplication?.id) {
+      this.error = 'Please save the application before uploading agreements.';
+      return;
+    }
+
+    const agreementInfo = this.certificationForm.get('agreementInfo')?.value || {};
+    if (!agreementInfo.contractStart) {
+      this.error = 'Contract start date is required before uploading agreements.';
+      return;
+    }
+
+    const file = input.files[0];
+    this.productCertificationService
+      .uploadAgreement(this.existingApplication.id, agreementType, file, {
+        signedByName: agreementInfo.signedByName,
+        contractStart: agreementInfo.contractStart,
+        contractEnd: agreementInfo.contractEnd,
+      })
+      .subscribe({
+        next: (agreement) => {
+          this.agreementStatus[agreement.agreementType] = agreement.status;
+        },
+        error: (error) => {
+          this.error = error.error?.message || 'Failed to upload agreement';
+        },
+      });
+  }
+
+  submitCbChangeRequest(): void {
+    if (!this.existingApplication?.id) {
+      this.error = 'Please save the application before requesting a CB change.';
+      return;
+    }
+
+    const cbChangeRequest = this.certificationForm.get('cbChangeRequest')?.value || {};
+    if (!cbChangeRequest.justification || cbChangeRequest.justification.length < 10) {
+      this.error = 'Please provide a justification for the CB change request.';
+      return;
+    }
+
+    this.productCertificationService.createCbChangeRequest(this.existingApplication.id, cbChangeRequest).subscribe({
+      next: () => {
+        this.error = '';
+      },
+      error: (error) => {
+        this.error = error.error?.message || 'Failed to submit CB change request';
       },
     });
   }

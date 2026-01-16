@@ -9,6 +9,8 @@ import {
   MarkLicenseUsageReport,
   MarkLicenseModification,
   MarkLicenseCompliance,
+  MarkMisuseIncident,
+  MarkSanction,
 } from './entities';
 import {
   MarkLicenseApplicationService,
@@ -16,6 +18,7 @@ import {
   MarkUsageReportService,
   MarkLicenseModificationService,
   MarkAssetService,
+  MarkMisuseUploadService,
 } from './services';
 import {
   MarkLicenseApplicationController,
@@ -38,6 +41,8 @@ import { Nsb } from '../nsb-management/entities/nsb.entity';
       MarkLicenseUsageReport,
       MarkLicenseModification,
       MarkLicenseCompliance,
+      MarkMisuseIncident,
+      MarkSanction,
       Nsb,
     ]),
   ],
@@ -55,6 +60,7 @@ import { Nsb } from '../nsb-management/entities/nsb.entity';
     MarkUsageReportService,
     MarkLicenseModificationService,
     MarkAssetService,
+    MarkMisuseUploadService,
   ],
   exports: [
     MarkLicenseApplicationService,

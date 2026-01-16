@@ -73,6 +73,24 @@ export enum LicenseDurationType {
   OTHER = 'OTHER',
 }
 
+export enum MarkMisuseStatus {
+  OPEN = 'OPEN',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  RESOLVED = 'RESOLVED',
+  DISMISSED = 'DISMISSED',
+}
+
+export enum MarkSanctionType {
+  WARNING = 'WARNING',
+  SUSPENSION = 'SUSPENSION',
+  WITHDRAWAL = 'WITHDRAWAL',
+}
+
+export enum MarkSanctionStatus {
+  ACTIVE = 'ACTIVE',
+  LIFTED = 'LIFTED',
+}
+
 export enum AssetDeliveryMethod {
   PORTAL_DOWNLOAD = 'PORTAL_DOWNLOAD',
   EMAIL_DELIVERY = 'EMAIL_DELIVERY',
@@ -144,9 +162,11 @@ export interface PlacementExample {
 }
 
 export interface SupportingDocument {
+  id?: string;
   documentType: string;
   fileName: string;
   filePath?: string;
+  otherDocumentName?: string;
 }
 
 export interface MarkLicenseApplication {
@@ -246,6 +266,28 @@ export interface MarkLicenseAgreement {
   arsoSignerTimestamp?: string;
   agreementStatus: AgreementStatus;
   agreementDocumentPath?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarkMisuseIncident {
+  id: string;
+  licenseId?: string;
+  description: string;
+  status: MarkMisuseStatus;
+  reportedAt: string;
+  updatedAt: string;
+  decisionNotes?: string;
+}
+
+export interface MarkSanction {
+  id: string;
+  incidentId: string;
+  sanctionType: MarkSanctionType;
+  status: MarkSanctionStatus;
+  startDate?: string;
+  endDate?: string;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
 }

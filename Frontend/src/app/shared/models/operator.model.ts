@@ -53,6 +53,13 @@ export enum OwnershipStatus {
   YOUTH_LED = 'YOUTH_LED',
 }
 
+export enum LegalRegistrationNumberType {
+  BUSINESS_REGISTRATION = 'BUSINESS_REGISTRATION',
+  TAX_ID = 'TAX_ID',
+  VAT = 'VAT',
+  OTHER = 'OTHER',
+}
+
 export enum OperatorStatus {
   DRAFT = 'DRAFT',
   SUBMITTED = 'SUBMITTED',
@@ -71,6 +78,8 @@ export interface Operator {
   companyLegalName: string;
   tradingName?: string;
   registrationNumberBusiness: string;
+  legalRegistrationNumberType?: LegalRegistrationNumberType;
+  legalRegistrationNumber?: string;
   taxId?: string;
   vatNumber?: string;
   yearEstablished: number;
@@ -92,6 +101,9 @@ export interface Operator {
   beneficialOwnersCount: number;
   pepInvolved: boolean;
   pepDetails?: string;
+  isGroup?: boolean;
+  groupManagerId?: string;
+  groupMembers?: OperatorGroupMember[];
   status: OperatorStatus;
   submittedAt?: string;
   approvedAt?: string;
@@ -135,11 +147,20 @@ export interface OperatorLocation {
   regionState: string;
   countryId: string;
   gpsCoordinates?: string;
+  geoLat?: number;
+  geoLng?: number;
+  geoAccuracyM?: number;
   factoryLocationSame?: boolean;
   factoryName?: string;
   factoryType?: string;
   factorySize?: number;
   isPrimary?: boolean;
+}
+
+export interface OperatorGroupMember {
+  memberName: string;
+  registrationNumberBusiness?: string;
+  countryId?: string;
 }
 
 export interface OperatorBusinessSector {
@@ -213,6 +234,8 @@ export interface CreateOperatorRegistrationRequest {
     companyLegalName: string;
     tradingName?: string;
     registrationNumberBusiness: string;
+    legalRegistrationNumberType?: LegalRegistrationNumberType;
+    legalRegistrationNumber?: string;
     taxId?: string;
     vatNumber?: string;
     yearEstablished: number;
@@ -245,6 +268,9 @@ export interface CreateOperatorRegistrationRequest {
   preferences: OperatorPreference;
   accessibility: OperatorAccessibility;
   consents: OperatorConsent;
+  isGroup?: boolean;
+  groupManagerId?: string;
+  groupMembers?: OperatorGroupMember[];
   userId?: string;
   countryId?: string;
 }

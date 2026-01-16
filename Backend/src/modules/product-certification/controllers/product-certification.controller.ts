@@ -15,14 +15,24 @@ import {
   CreateProductCertificationApplicationDto,
   UpdateProductCertificationApplicationDto,
   SubmitProductCertificationApplicationDto,
+  UploadCertificationAgreementDto,
+  CreateCbChangeRequestDto,
+  ReviewCbChangeRequestDto,
 } from '../dtos';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
-import { UserRole, ProductCertificationStatus } from '../../../shared/enums';
+import {
+  UserRole,
+  ProductCertificationStatus,
+  CertificationAgreementType,
+  CbChangeRequestStatus,
+} from '../../../shared/enums';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { SystemUser } from '../../system-user/system-user.entity';
 import { OperatorService } from '../../operator/services/operator.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
 
 @Controller('product-certifications')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -144,6 +154,109 @@ export class ProductCertificationController {
     }
 
     return this.productCertificationService.submitApplication(id, user.id);
+  }
+
+  @Post('applications/:id/agreements/:agreementType/upload')
+  @Roles(UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAgreement(
+    @Param('id') id: string,
+    @Param('agreementType') agreementType: CertificationAgreementType,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() dto: UploadCertificationAgreementDto,
+    @CurrentUser() user: SystemUser,
+  ) {
+    const application = await this.productCertificationService.findById(id);
+    const userRoles = user.roles || (user.role ? [user.role] : []);
+    const isAdmin = userRoles.includes(UserRole.SUPER_ADMIN) || userRoles.includes(UserRole.ARSO_SECRETARIAT);
+    if (!isAdmin && userRoles.includes(UserRole.OPERATOR)) {
+      const myOperator = await this.operatorService.findByUserId(user.id);
+      if (!myOperator || application.operatorId !== myOperator.id) {
+        throw new ForbiddenException('You can only upload agreements for your own applications');
+      }
+    }
+
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
+    if (!Object.values(CertificationAgreementType).includes(agreementType)) {
+      throw new BadRequestException('Invalid agreement type');
+    }
+    return this.productCertificationService.uploadAgreement(id, agreementType, file, dto, user.id);
+  }
+
+  @Get('applications/:id/agreements')
+  @Roles(UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.CB_ADMIN, UserRole.CB_USER)
+  async listAgreements(@Param('id') id: string) {
+    return this.productCertificationService.listAgreements(id);
+  }
+
+  @Post('agreements/:agreementId/approve')
+  @Roles(UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  async approveAgreement(@Param('agreementId') agreementId: string, @CurrentUser() user: SystemUser) {
+    return this.productCertificationService.approveAgreement(agreementId, user.id);
+  }
+
+  @Post('agreements/:agreementId/reject')
+  @Roles(UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  async rejectAgreement(
+    @Param('agreementId') agreementId: string,
+    @Body() body: { reason?: string },
+    @CurrentUser() user: SystemUser,
+  ) {
+    if (!body?.reason) {
+      throw new BadRequestException('Rejection reason is required');
+    }
+    return this.productCertificationService.rejectAgreement(agreementId, body.reason, user.id);
+  }
+
+  @Post('applications/:id/cb-change-requests')
+  @Roles(UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  async createCbChangeRequest(
+    @Param('id') id: string,
+    @Body() dto: CreateCbChangeRequestDto,
+    @CurrentUser() user: SystemUser,
+  ) {
+    const application = await this.productCertificationService.findById(id);
+    const userRoles = user.roles || (user.role ? [user.role] : []);
+    const isAdmin = userRoles.includes(UserRole.SUPER_ADMIN) || userRoles.includes(UserRole.ARSO_SECRETARIAT);
+    if (!isAdmin && userRoles.includes(UserRole.OPERATOR)) {
+      const myOperator = await this.operatorService.findByUserId(user.id);
+      if (!myOperator || application.operatorId !== myOperator.id) {
+        throw new ForbiddenException('You can only request CB changes for your own applications');
+      }
+    }
+    return this.productCertificationService.createCbChangeRequest(id, dto, user.id);
+  }
+
+  @Post('cb-change-requests/:requestId/approve')
+  @Roles(UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  async approveCbChangeRequest(
+    @Param('requestId') requestId: string,
+    @Body() dto: ReviewCbChangeRequestDto,
+    @CurrentUser() user: SystemUser,
+  ) {
+    return this.productCertificationService.reviewCbChangeRequest(
+      requestId,
+      CbChangeRequestStatus.APPROVED,
+      dto.decisionReason,
+      user.id,
+    );
+  }
+
+  @Post('cb-change-requests/:requestId/reject')
+  @Roles(UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  async rejectCbChangeRequest(
+    @Param('requestId') requestId: string,
+    @Body() dto: ReviewCbChangeRequestDto,
+    @CurrentUser() user: SystemUser,
+  ) {
+    return this.productCertificationService.reviewCbChangeRequest(
+      requestId,
+      CbChangeRequestStatus.REJECTED,
+      dto.decisionReason,
+      user.id,
+    );
   }
 
   @Delete('applications/:id')
