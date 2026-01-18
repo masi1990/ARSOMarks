@@ -30,23 +30,23 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorContact.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_type', type: 'enum', enum: enums_1.OperatorContactType, default: enums_1.OperatorContactType.PRIMARY }),
+    (0, typeorm_1.Column)({ name: 'contact_type', type: 'enum', enum: enums_1.OperatorContactType, nullable: true }),
     __metadata("design:type", String)
 ], OperatorContact.prototype, "contactType", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'primary_contact', length: 100 }),
+    (0, typeorm_1.Column)({ name: 'primary_contact', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], OperatorContact.prototype, "primaryContact", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_position', length: 100 }),
+    (0, typeorm_1.Column)({ name: 'contact_position', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], OperatorContact.prototype, "contactPosition", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_email', length: 150 }),
+    (0, typeorm_1.Column)({ name: 'contact_email', length: 150, nullable: true }),
     __metadata("design:type", String)
 ], OperatorContact.prototype, "contactEmail", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_email_verified', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'contact_email_verified', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorContact.prototype, "contactEmailVerified", void 0);
 __decorate([
@@ -58,11 +58,11 @@ __decorate([
     __metadata("design:type", Date)
 ], OperatorContact.prototype, "contactEmailVerifiedAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_phone', length: 20 }),
+    (0, typeorm_1.Column)({ name: 'contact_phone', length: 20, nullable: true }),
     __metadata("design:type", String)
 ], OperatorContact.prototype, "contactPhone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'contact_phone_verified', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'contact_phone_verified', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorContact.prototype, "contactPhoneVerified", void 0);
 __decorate([

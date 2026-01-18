@@ -1,0 +1,170 @@
+<div class="page">
+  <h2>Complaints & Appeals</h2>
+
+  <div class="card">
+    <h3>Submit Complaint</h3>
+    <form [formGroup]="complaintForm" (ngSubmit)="submitComplaint()">
+      <div class="form-row">
+        <label>Name</label>
+        <input type="text" formControlName="complainantName" />
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input type="email" formControlName="complainantEmail" />
+      </div>
+      <div class="form-row">
+        <label>Phone (optional)</label>
+        <input type="text" formControlName="complainantPhone" />
+      </div>
+      <div class="form-row">
+        <label>Subject</label>
+        <input type="text" formControlName="subject" />
+      </div>
+      <div class="form-row">
+        <label>Description</label>
+        <textarea rows="4" formControlName="description"></textarea>
+      </div>
+      <div class="form-row">
+        <label>Reference Type</label>
+        <input type="text" formControlName="referenceType" placeholder="MARK_LICENSE, PRODUCT_CERT, etc." />
+      </div>
+      <div class="form-row">
+        <label>Reference ID</label>
+        <input type="text" formControlName="referenceId" />
+      </div>
+      <button type="submit">Submit Complaint</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Submit Appeal</h3>
+    <form [formGroup]="appealForm" (ngSubmit)="submitAppeal()">
+      <div class="form-row">
+        <label>Complaint ID</label>
+        <input type="text" formControlName="complaintId" placeholder="Select from list below" />
+      </div>
+      <div class="form-row">
+        <label>Name</label>
+        <input type="text" formControlName="appellantName" />
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input type="email" formControlName="appellantEmail" />
+      </div>
+      <div class="form-row">
+        <label>Phone (optional)</label>
+        <input type="text" formControlName="appellantPhone" />
+      </div>
+      <div class="form-row">
+        <label>Reason</label>
+        <textarea rows="4" formControlName="reason"></textarea>
+      </div>
+      <button type="submit">Submit Appeal</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Review Complaints</h3>
+    <div class="form-row">
+      <label>Selected Complaint</label>
+      <input type="text" [value]="selectedComplaintId" readonly />
+    </div>
+    <form [formGroup]="reviewComplaintForm" (ngSubmit)="reviewComplaint()">
+      <div class="form-row">
+        <label>Status</label>
+        <select formControlName="status">
+          <option value="">Select status</option>
+          <option *ngFor="let status of complaintStatuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Decision Notes</label>
+        <textarea rows="3" formControlName="decisionNotes"></textarea>
+      </div>
+      <button type="submit">Save Complaint Review</button>
+    </form>
+    <div class="form-row">
+      <label>Evidence File</label>
+      <input type="file" (change)="onEvidenceSelected($event)" />
+    </div>
+    <button type="button" (click)="uploadEvidence()">Upload Evidence</button>
+  </div>
+
+  <div class="card">
+    <h3>Review Appeals</h3>
+    <div class="form-row">
+      <label>Selected Appeal</label>
+      <input type="text" [value]="selectedAppealId" readonly />
+    </div>
+    <form [formGroup]="reviewAppealForm" (ngSubmit)="reviewAppeal()">
+      <div class="form-row">
+        <label>Status</label>
+        <select formControlName="status">
+          <option value="">Select status</option>
+          <option *ngFor="let status of appealStatuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Decision Notes</label>
+        <textarea rows="3" formControlName="decisionNotes"></textarea>
+      </div>
+      <button type="submit">Save Appeal Review</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Complaints List</h3>
+    <div *ngIf="loading">Loading...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <table *ngIf="!loading && complaints.length > 0">
+      <thead>
+        <tr>
+          <th>Complaint #</th>
+          <th>Subject</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let complaint of complaints">
+          <td>{{ complaint.complaintNumber }}</td>
+          <td>{{ complaint.subject }}</td>
+          <td>{{ complaint.status }}</td>
+          <td>{{ complaint.createdAt | date: 'medium' }}</td>
+          <td>
+            <button type="button" (click)="selectComplaint(complaint.id)">Select</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loading && complaints.length === 0">No complaints yet.</div>
+  </div>
+
+  <div class="card">
+    <h3>Appeals List</h3>
+    <table *ngIf="appeals.length > 0">
+      <thead>
+        <tr>
+          <th>Appeal #</th>
+          <th>Complaint</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let appeal of appeals">
+          <td>{{ appeal.appealNumber }}</td>
+          <td>{{ appeal.complaintId }}</td>
+          <td>{{ appeal.status }}</td>
+          <td>{{ appeal.createdAt | date: 'medium' }}</td>
+          <td>
+            <button type="button" (click)="selectAppeal(appeal.id)">Select</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="appeals.length === 0">No appeals yet.</div>
+  </div>
+</div>

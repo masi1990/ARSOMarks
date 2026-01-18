@@ -30,23 +30,23 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorPreference.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'preferred_language', type: 'enum', enum: enums_1.PreferredLanguage, default: enums_1.PreferredLanguage.ENGLISH }),
+    (0, typeorm_1.Column)({ name: 'preferred_language', type: 'enum', enum: enums_1.PreferredLanguage, nullable: true }),
     __metadata("design:type", String)
 ], OperatorPreference.prototype, "preferredLanguage", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'communication_preferences', type: 'enum', enum: enums_1.CommunicationPreference, array: true }),
+    (0, typeorm_1.Column)({ name: 'communication_preferences', type: 'enum', enum: enums_1.CommunicationPreference, array: true, nullable: true }),
     __metadata("design:type", Array)
 ], OperatorPreference.prototype, "communicationPreferences", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'notification_frequency', type: 'enum', enum: enums_1.NotificationFrequency, default: enums_1.NotificationFrequency.DAILY_DIGEST }),
+    (0, typeorm_1.Column)({ name: 'notification_frequency', type: 'enum', enum: enums_1.NotificationFrequency, nullable: true }),
     __metadata("design:type", String)
 ], OperatorPreference.prototype, "notificationFrequency", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 50 }),
+    (0, typeorm_1.Column)({ length: 50, nullable: true }),
     __metadata("design:type", String)
 ], OperatorPreference.prototype, "timezone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 10, default: 'USD' }),
+    (0, typeorm_1.Column)({ length: 10, nullable: true }),
     __metadata("design:type", String)
 ], OperatorPreference.prototype, "currency", void 0);
 __decorate([

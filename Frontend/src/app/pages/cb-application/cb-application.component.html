@@ -1,0 +1,205 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 border-2 border-gray-200">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">CB Application</h1>
+          <p class="text-gray-600">Apply for ACAP Certification Body approval (Annex B)</p>
+        </div>
+        <a
+          routerLink="/portal/cb/applications"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 border-2 border-gray-300 font-medium transition-colors text-sm whitespace-nowrap"
+        >
+          ← Back to List
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="mb-6 p-4 bg-red-50 border-2 border-red-400 text-red-800 rounded-lg">
+      {{ error }}
+    </div>
+
+    <div *ngIf="success" class="mb-6 p-4 bg-green-50 border-2 border-green-400 text-green-800 rounded-lg">
+      Application submitted successfully. Redirecting...
+    </div>
+
+    <form [formGroup]="form" class="bg-white rounded-lg shadow-md p-8 border-2 border-gray-200">
+      <div class="border-b-2 border-gray-200 pb-4 mb-6">
+        <h2 class="text-xl font-bold text-gray-900">Organization & Contact Information</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Legal Name *</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="legalName" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Short Name</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="shortName" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person *</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="contactPersonName" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Designation</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="contactPersonTitle" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+          <input type="email" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="contactEmail" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="contactPhone" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="website" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+          <select class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="countryId">
+            <option value="">Select country...</option>
+            <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Physical Address *</label>
+        <textarea class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" rows="3" formControlName="physicalAddress"></textarea>
+      </div>
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Postal Address</label>
+        <textarea class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" rows="2" formControlName="postalAddress"></textarea>
+      </div>
+
+      <div class="border-b-2 border-gray-200 pb-4 my-6">
+        <h2 class="text-xl font-bold text-gray-900">Regions of Operation</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label *ngFor="let region of regions" class="flex items-center gap-2">
+          <input type="checkbox" [checked]="form.get('regionsOfOperation')?.value?.includes(region.code)" (change)="toggleRegion(region.code)" />
+          <span>{{ region.name }}</span>
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" [checked]="form.get('regionsOfOperation')?.value?.includes('OTHER')" (change)="toggleRegion('OTHER')" />
+          <span>Other</span>
+        </label>
+      </div>
+      <div class="mt-3" *ngIf="form.get('regionsOfOperation')?.value?.includes('OTHER')">
+        <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Specify other regions" formControlName="regionsOther" />
+      </div>
+
+      <div class="border-b-2 border-gray-200 pb-4 my-6">
+        <h2 class="text-xl font-bold text-gray-900">Accreditation Details</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Accredited to ISO/IEC 17065? *</label>
+          <select class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="isAccredited">
+            <option [value]="true">Yes</option>
+            <option [value]="false">No (Provisional)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Standard</label>
+          <select class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="accreditationStandard">
+            <option *ngFor="let standard of accreditationStandards" [value]="standard">{{ standard }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Body</label>
+          <select class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="accreditationBodyId">
+            <option value="">Select accreditation body...</option>
+            <option *ngFor="let body of accreditationBodies" [value]="body.id">
+              {{ body.name }} <span *ngIf="body.isFracMraSignatory"> (AFRAC MRA)</span>
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Body (Manual)</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="accreditationBodyName" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Certificate Number</label>
+          <input class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="accreditationCertificateNumber" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Valid Until</label>
+          <input type="date" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="accreditationValidUntil" />
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Scope</label>
+        <textarea class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" rows="3" formControlName="accreditationScope"></textarea>
+      </div>
+
+      <div class="mt-4" *ngIf="!form.get('isAccredited')?.value">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Application Date *</label>
+        <input type="date" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" formControlName="accreditationApplicationDate" />
+        <label class="block text-sm font-medium text-gray-700 mt-4 mb-2">Progress Updates</label>
+        <textarea class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" rows="2" formControlName="accreditationProgressNotes"></textarea>
+      </div>
+
+      <div class="border-b-2 border-gray-200 pb-4 my-6">
+        <h2 class="text-xl font-bold text-gray-900">ACAP Schemes Applied For</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label *ngFor="let scheme of acapSchemes" class="flex items-center gap-2">
+          <input type="checkbox" [checked]="form.get('appliedSchemes')?.value?.includes(scheme.code)" (change)="toggleScheme(scheme.code)" />
+          <span>{{ scheme.code }} - {{ scheme.name }}</span>
+        </label>
+      </div>
+
+      <div class="border-b-2 border-gray-200 pb-4 my-6">
+        <h2 class="text-xl font-bold text-gray-900">Documents</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Certificate *</label>
+          <input type="file" (change)="onFileSelected($event, cbDocumentTypes.ACCREDITATION_CERTIFICATE)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Accreditation Scope *</label>
+          <input type="file" (change)="onFileSelected($event, cbDocumentTypes.ACCREDITATION_SCOPE)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Legal Registration</label>
+          <input type="file" (change)="onFileSelected($event, cbDocumentTypes.LEGAL_REGISTRATION)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Acknowledgement of Application</label>
+          <input type="file" (change)="onFileSelected($event, cbDocumentTypes.ACKNOWLEDGEMENT_OF_APPLICATION)" />
+        </div>
+      </div>
+
+      <div class="border-b-2 border-gray-200 pb-4 my-6">
+        <h2 class="text-xl font-bold text-gray-900">Declarations</h2>
+      </div>
+      <div formGroupName="declarations" class="space-y-3">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" formControlName="acceptTerms" />
+          <span>I accept the ACAP-CB terms and obligations</span>
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" formControlName="dataSharingConsent" />
+          <span>I consent to data sharing for ACAP oversight</span>
+        </label>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-8 pt-6 border-t-2 border-gray-200">
+        <button type="button" (click)="saveDraft()" [disabled]="saving" class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+          <span *ngIf="!saving">Save Draft</span>
+          <span *ngIf="saving">Saving...</span>
+        </button>
+        <button type="button" (click)="submit()" [disabled]="loading" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          <span *ngIf="!loading">Submit Application</span>
+          <span *ngIf="loading">Submitting...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

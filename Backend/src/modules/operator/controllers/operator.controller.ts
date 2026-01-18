@@ -9,9 +9,11 @@ import {
   Put,
   Query,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { OperatorService } from '../services/operator.service';
-import { CreateOperatorRegistrationDto, CreateOperatorRegistrationDraftDto, UpdateOperatorRegistrationDto, SubmitOperatorRegistrationDto } from '../dtos';
+import { CreateOperatorRegistrationDto, UpdateOperatorRegistrationDto, SubmitOperatorRegistrationDto } from '../dtos';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -28,7 +30,8 @@ export class OperatorController {
 
   @Post('register')
   @UseGuards(JwtAuthGuard)
-  async create(@Body() dto: CreateOperatorRegistrationDraftDto, @CurrentUser() user: SystemUser) {
+  // NO VALIDATION PIPE - Accept any data for draft saves
+  async create(@Body() dto: any, @CurrentUser() user: SystemUser) {
     // Any authenticated user can register as an operator
     // Check if operator already exists for this user
     const existingOperator = await this.operatorService.findByUserId(user.id);
@@ -40,6 +43,7 @@ export class OperatorController {
     dto.userId = user.id;
 
     // Use draft DTO to allow partial data (drafts don't require all fields)
+    // Validation is skipped for draft saves to allow partial data
     return this.operatorService.createOperatorRegistration(dto, user.id);
   }
 

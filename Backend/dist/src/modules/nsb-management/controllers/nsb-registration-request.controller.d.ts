@@ -6,7 +6,7 @@ export declare class NsbRegistrationRequestController {
     private readonly requestService;
     constructor(requestService: NsbRegistrationRequestService);
     create(dto: CreateNsbRegistrationRequestDto, user: SystemUser): Promise<import("../entities/nsb-registration-request.entity").NsbRegistrationRequest>;
-    list(query: any): Promise<{
+    list(query: any, user: SystemUser): Promise<{
         data: import("../entities/nsb-registration-request.entity").NsbRegistrationRequest[];
         total: number;
     }>;
@@ -24,5 +24,8 @@ export declare class NsbRegistrationRequestController {
         documentType: string;
     }, user: SystemUser): Promise<import("../entities/nsb-registration-request-document.entity").NsbRegistrationRequestDocument>;
     deleteDocument(id: string, documentId: string, user: SystemUser): Promise<void>;
+    deleteRequest(id: string): Promise<{
+        message: string;
+    }>;
     viewDocument(id: string, documentId: string, res: Response, user: SystemUser): Promise<void>;
 }

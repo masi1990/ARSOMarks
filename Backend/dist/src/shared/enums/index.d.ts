@@ -182,6 +182,21 @@ export declare enum MarkLicenseStatus {
     WITHDRAWN = "WITHDRAWN",
     TERMINATED = "TERMINATED"
 }
+export declare enum MarkMisuseStatus {
+    OPEN = "OPEN",
+    UNDER_REVIEW = "UNDER_REVIEW",
+    RESOLVED = "RESOLVED",
+    DISMISSED = "DISMISSED"
+}
+export declare enum MarkSanctionType {
+    WARNING = "WARNING",
+    SUSPENSION = "SUSPENSION",
+    WITHDRAWAL = "WITHDRAWAL"
+}
+export declare enum MarkSanctionStatus {
+    ACTIVE = "ACTIVE",
+    LIFTED = "LIFTED"
+}
 export declare enum MarkType {
     ARSO_QUALITY_MARK = "ARSO_QUALITY_MARK",
     ECO_MARK_AFRICA = "ECO_MARK_AFRICA",
@@ -203,6 +218,20 @@ export declare enum AgreementStatus {
     EXECUTED = "EXECUTED",
     ARCHIVED = "ARCHIVED"
 }
+export declare enum CertificationAgreementType {
+    CERTIFICATION_AGREEMENT = "CERTIFICATION_AGREEMENT",
+    SUB_LICENSE_AGREEMENT = "SUB_LICENSE_AGREEMENT"
+}
+export declare enum CertificationAgreementStatus {
+    PENDING_CB_APPROVAL = "PENDING_CB_APPROVAL",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED"
+}
+export declare enum CbChangeRequestStatus {
+    PENDING = "PENDING",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED"
+}
 export declare enum ReportStatus {
     DRAFT = "DRAFT",
     SUBMITTED = "SUBMITTED",
@@ -210,6 +239,18 @@ export declare enum ReportStatus {
     APPROVED = "APPROVED",
     REJECTED = "REJECTED",
     REQUIRES_REVISION = "REQUIRES_REVISION"
+}
+export declare enum ComplaintStatus {
+    RECEIVED = "RECEIVED",
+    UNDER_REVIEW = "UNDER_REVIEW",
+    CLOSED = "CLOSED",
+    REJECTED = "REJECTED"
+}
+export declare enum AppealStatus {
+    RECEIVED = "RECEIVED",
+    UNDER_REVIEW = "UNDER_REVIEW",
+    DECIDED = "DECIDED",
+    REJECTED = "REJECTED"
 }
 export declare enum ModificationStatus {
     PENDING = "PENDING",
@@ -294,6 +335,12 @@ export declare enum OwnershipStatus {
     WOMEN_LED = "WOMEN_LED",
     YOUTH_LED = "YOUTH_LED"
 }
+export declare enum LegalRegistrationNumberType {
+    BUSINESS_REGISTRATION = "BUSINESS_REGISTRATION",
+    TAX_ID = "TAX_ID",
+    VAT = "VAT",
+    OTHER = "OTHER"
+}
 export declare enum OperatorStatus {
     DRAFT = "DRAFT",
     SUBMITTED = "SUBMITTED",
@@ -313,6 +360,29 @@ export declare enum ApplicationRegistrationStatus {
     ACTIVE = "ACTIVE",
     SUSPENDED = "SUSPENDED",
     WITHDRAWN = "WITHDRAWN"
+}
+export declare enum CbApplicationStatus {
+    DRAFT = "DRAFT",
+    SUBMITTED = "SUBMITTED",
+    UNDER_REVIEW = "UNDER_REVIEW",
+    APPROVED = "APPROVED",
+    PROVISIONAL = "PROVISIONAL",
+    SUSPENDED = "SUSPENDED",
+    WITHDRAWN = "WITHDRAWN",
+    REJECTED = "REJECTED"
+}
+export declare enum CbAccreditationStandard {
+    ISO_IEC_17065 = "ISO_IEC_17065",
+    ISO_IEC_17021_1 = "ISO_IEC_17021_1",
+    OTHER = "OTHER"
+}
+export declare enum CbDocumentType {
+    LEGAL_REGISTRATION = "LEGAL_REGISTRATION",
+    ACCREDITATION_CERTIFICATE = "ACCREDITATION_CERTIFICATE",
+    ACCREDITATION_SCOPE = "ACCREDITATION_SCOPE",
+    ACKNOWLEDGEMENT_OF_APPLICATION = "ACKNOWLEDGEMENT_OF_APPLICATION",
+    LICENSE_AGREEMENT = "LICENSE_AGREEMENT",
+    OTHER = "OTHER"
 }
 export declare enum OperatorContactType {
     PRIMARY = "PRIMARY",
@@ -583,6 +653,40 @@ export declare enum AuditTeamSize {
     TWO_AUDITORS = "TWO_AUDITORS",
     FLEXIBLE = "FLEXIBLE"
 }
+export declare enum CertificationAuditType {
+    DOCUMENT_REVIEW = "DOCUMENT_REVIEW",
+    INITIAL = "INITIAL",
+    SURVEILLANCE = "SURVEILLANCE",
+    RECERTIFICATION = "RECERTIFICATION",
+    FOLLOW_UP = "FOLLOW_UP",
+    UNANNOUNCED = "UNANNOUNCED"
+}
+export declare enum AuditFindingType {
+    MAJOR = "MAJOR",
+    MINOR = "MINOR",
+    OBSERVATION = "OBSERVATION",
+    CRITICAL = "CRITICAL"
+}
+export declare enum AuditFindingStatus {
+    OPEN = "OPEN",
+    UNDER_REVIEW = "UNDER_REVIEW",
+    CLOSED = "CLOSED"
+}
+export declare enum CorrectiveActionStatus {
+    PENDING = "PENDING",
+    VERIFIED = "VERIFIED",
+    REJECTED = "REJECTED"
+}
+export declare enum SamplingStatus {
+    PENDING = "PENDING",
+    COLLECTED = "COLLECTED",
+    TESTED = "TESTED"
+}
+export declare enum TestResultStatus {
+    PASS = "PASS",
+    FAIL = "FAIL",
+    CONDITIONAL_PASS = "CONDITIONAL_PASS"
+}
 export declare enum VolumeUnit {
     UNITS = "UNITS",
     KG = "KG",
@@ -674,5 +778,18 @@ export declare enum FileFormat {
     DWG = "DWG",
     AI = "AI",
     EPS = "EPS",
+    OTHER = "OTHER"
+}
+export declare enum EvidenceParentType {
+    COMPLAINT = "COMPLAINT",
+    APPEAL = "APPEAL",
+    CERTIFICATION_AUDIT = "CERTIFICATION_AUDIT",
+    AUDIT_FINDING = "AUDIT_FINDING",
+    CORRECTIVE_ACTION = "CORRECTIVE_ACTION",
+    MARK_MISUSE = "MARK_MISUSE",
+    MARK_LICENSE = "MARK_LICENSE",
+    CB_APPLICATION = "CB_APPLICATION",
+    CB_LICENSE = "CB_LICENSE",
+    OPERATOR_CONTRACT = "OPERATOR_CONTRACT",
     OTHER = "OTHER"
 }

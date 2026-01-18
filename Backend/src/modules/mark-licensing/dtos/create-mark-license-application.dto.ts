@@ -1,17 +1,4 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsObject,
-  IsOptional,
-  IsString,
-  IsUUID,
-  ValidateIf,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 import {
   MarkLicenseType,
   MarkType,
@@ -24,101 +11,66 @@ import {
 // ============================================================================
 
 export class PromotionalLicenseDetailsDto {
-  @IsEnum({
-    NATIONAL_AWARENESS_CAMPAIGN: 'NATIONAL_AWARENESS_CAMPAIGN',
-    GOVERNMENT_PUBLICATIONS: 'GOVERNMENT_PUBLICATIONS',
-    TRAINING_MATERIALS: 'TRAINING_MATERIALS',
-    WEBSITE_PROMOTION: 'WEBSITE_PROMOTION',
-    EVENT_MATERIALS: 'EVENT_MATERIALS',
-    OTHER: 'OTHER',
-  })
-  @IsNotEmpty()
+  @IsOptional()
   primaryPurpose: string;
 
-  @IsString()
-  @ValidateIf((o) => o.primaryPurpose === 'OTHER')
-  @IsNotEmpty()
+  @IsOptional()
   promoPurposeOther?: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
+  @IsOptional()
   targetAudience: string[]; // ['INDUSTRY', 'CONSUMERS', 'GOVERNMENT_OFFICIALS', etc.]
 
-  @IsEnum({
-    NATIONAL: 'NATIONAL',
-    REGIONAL: 'REGIONAL',
-    SPECIFIC_STATES_PROVINCES: 'SPECIFIC_STATES_PROVINCES',
-    LOCAL_CAMPAIGN: 'LOCAL_CAMPAIGN',
-  })
-  @IsNotEmpty()
+  @IsOptional()
   geographicScope: string;
 
-  @IsString()
   @IsOptional()
   budgetEstimate?: string; // Currency as string
 }
 
 export class CertificationBodyLicenseDetailsDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   cbUnitName: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   cbAccreditationNumber: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   cbAccreditationBody: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   cbAccreditationScope: string; // Copy-paste from certificate
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   cbAccreditationExpiry: string; // Date as string
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
+  @IsOptional()
   cbSchemesApplying: string[]; // ACAP scheme codes
 
-  @IsString()
   @IsOptional()
   cbExpectedVolume?: string; // Number as string
 }
 
 export class SpecialProjectLicenseDetailsDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   projectName: string;
 
-  @IsString()
   @IsOptional()
   projectFunder?: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   projectDurationStart: string; // Date as string
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   projectDurationEnd: string; // Date as string
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   projectDescription: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
+  @IsOptional()
   projectDeliverables: string[];
 
-  @IsString()
   @IsOptional()
-  projectBudget?: string; // Currency as string
+  projectBudget?: string;
 }
 
 // ============================================================================
@@ -126,72 +78,55 @@ export class SpecialProjectLicenseDetailsDto {
 // ============================================================================
 
 export class MediaUsageDto {
-  @IsEnum(MediaType)
-  @IsNotEmpty()
+  @IsOptional()
   mediaType: MediaType;
 
-  @IsString()
-  @IsNotEmpty()
-  mediaSpecific: string; // e.g., 'Facebook', 'National TV', 'Trade Magazine'
-
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
-  mediaLanguage: string[]; // ['ENGLISH', 'FRENCH', etc.]
-
-  @IsString()
   @IsOptional()
-  mediaAudienceSize?: string; // Number as string
+  mediaSpecific: string; // e.g., "Facebook", "National TV"
 
-  @IsString()
-  @IsNotEmpty()
-  mediaDuration: string; // e.g., '6 months', 'Ongoing'
-
-  @IsString()
   @IsOptional()
-  mediaBudgetAllocation?: string; // Currency as string
+  mediaLanguage: string[]; // Language(s) used
+
+  @IsOptional()
+  mediaAudienceSize?: string; // Estimated reach
+
+  @IsOptional()
+  mediaDuration: string; // E.g., "3 months"
+
+  @IsOptional()
+  mediaBudgetAllocation?: string; // Optional
 }
 
 export class CampaignTimelineDto {
-  @IsString()
-  @IsNotEmpty()
-  timelinePhase: string; // Activity name
+  @IsOptional()
+  timelinePhase: string; // Phase name
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   timelineStart: string; // Date as string
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   timelineEnd: string; // Date as string
 
-  @IsString()
   @IsOptional()
-  timelineMetrics?: string; // Success metrics
+  timelineMetrics?: string; // Optional KPI
 }
 
 export class ExpectedImpactMetricsDto {
-  @IsString()
   @IsOptional()
-  expectedIndustryAwareness?: string; // Percentage as string
+  expectedIndustryAwareness?: string;
 
-  @IsString()
   @IsOptional()
-  expectedConsumerAwareness?: string; // Percentage as string
+  expectedConsumerAwareness?: string;
 
-  @IsString()
   @IsOptional()
-  expectedCbApplications?: string; // Number as string
+  expectedCbApplications?: string;
 
-  @IsString()
   @IsOptional()
-  expectedCertifications?: string; // Number as string
+  expectedCertifications?: string;
 
-  @IsString()
   @IsOptional()
-  expectedMediaCoverage?: string; // Number as string
+  expectedMediaCoverage?: string;
 
-  @IsString()
   @IsOptional()
   kpiMeasurementMethod?: string;
 }
@@ -201,12 +136,10 @@ export class ExpectedImpactMetricsDto {
 // ============================================================================
 
 export class PlacementExampleDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   fileName: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   description: string; // Where/how mark will appear
 }
 
@@ -215,17 +148,17 @@ export class PlacementExampleDto {
 // ============================================================================
 
 export class SupportingDocumentDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   documentType: string; // 'ACCREDITATION_CERTIFICATE', 'NSB_BOARD_RESOLUTION', etc.
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   fileName: string;
 
-  @IsString()
   @IsOptional()
   filePath?: string; // Will be set by upload service
+
+  @IsOptional()
+  otherDocumentName?: string;
 }
 
 // ============================================================================
@@ -234,128 +167,84 @@ export class SupportingDocumentDto {
 
 export class CreateMarkLicenseApplicationDto {
   // SECTION A: Applicant & License Type Information
-  @IsUUID()
-  @IsNotEmpty()
+  @IsOptional()
   nsbId: string;
 
-  @IsString()
   @IsOptional()
   applicationReference?: string; // NSB's internal tracking number
 
-  @IsArray()
-  @IsEnum(MarkLicenseType, { each: true })
-  @IsNotEmpty()
+  @IsOptional()
   licenseTypes: MarkLicenseType[];
 
-  @IsEnum(LicenseDurationType)
-  @IsNotEmpty()
+  @IsOptional()
   licenseDuration: LicenseDurationType;
 
-  @IsString()
-  @ValidateIf((o) => o.licenseDuration === LicenseDurationType.OTHER)
-  @IsNotEmpty()
+  @IsOptional()
   licenseDurationOther?: string;
 
   // License Type Specific Details (conditional)
-  @ValidateNested()
-  @Type(() => PromotionalLicenseDetailsDto)
-  @ValidateIf((o) => o.licenseTypes?.includes(MarkLicenseType.PROMOTIONAL_INSTITUTIONAL))
   @IsOptional()
   promotionalLicenseDetails?: PromotionalLicenseDetailsDto;
 
-  @ValidateNested()
-  @Type(() => CertificationBodyLicenseDetailsDto)
-  @ValidateIf((o) => o.licenseTypes?.includes(MarkLicenseType.CERTIFICATION_BODY))
   @IsOptional()
   certificationBodyDetails?: CertificationBodyLicenseDetailsDto;
 
-  @ValidateNested()
-  @Type(() => SpecialProjectLicenseDetailsDto)
-  @ValidateIf((o) => o.licenseTypes?.includes(MarkLicenseType.SPECIAL_PROJECT))
   @IsOptional()
   specialProjectDetails?: SpecialProjectLicenseDetailsDto;
 
   // SECTION B: Intended Use Details
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => MediaUsageDto)
   @IsOptional()
   mediaUsage?: MediaUsageDto[];
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CampaignTimelineDto)
   @IsOptional()
   campaignTimeline?: CampaignTimelineDto[];
 
-  @ValidateNested()
-  @Type(() => ExpectedImpactMetricsDto)
   @IsOptional()
   expectedImpactMetrics?: ExpectedImpactMetricsDto;
 
   // SECTION C: Mark Usage Specifications
-  @IsArray()
-  @IsEnum(MarkType, { each: true })
-  @IsNotEmpty()
+  @IsOptional()
   marksRequested: MarkType[];
 
-  @IsArray()
-  @IsString({ each: true })
   @IsOptional()
   markColorsNeeded?: string[];
 
-  @IsString()
   @IsOptional()
   markSizesNeeded?: string;
 
-  @IsArray()
-  @IsString({ each: true })
   @IsOptional()
   markLanguages?: string[];
 
   // SECTION C: Compliance Declarations
-  @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   annexBCompliance: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   brandGuidelinesAck: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   modificationPolicyAcceptance: boolean;
 
   // SECTION D: Supporting Documents
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => SupportingDocumentDto)
   @IsOptional()
   supportingDocuments?: SupportingDocumentDto[];
 
-  // SECTION D: Declarations
-  @IsString()
-  @IsNotEmpty()
+  // SECTION E: Declarations
+  @IsOptional()
   declarationSignatory: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   signatoryTitle: string;
 
-  @IsEmail()
-  @IsNotEmpty()
+  @IsOptional()
   signatoryEmail: string;
 
-  @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   auditRightsAcceptance: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   annualReportingCommitment: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   dataSharingConsent: boolean;
 }
-

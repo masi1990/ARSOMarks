@@ -1,111 +1,115 @@
-import { OperatorType, LegalStructure, EmployeeCountRange, AnnualTurnoverRange, OwnershipType, OwnershipStatus } from '../../../shared/enums';
 export declare class CompanyInfoDraftDto {
-    operatorType?: OperatorType;
-    companyLegalName?: string;
-    tradingName?: string;
-    registrationNumberBusiness?: string;
-    taxId?: string;
-    vatNumber?: string;
-    yearEstablished?: number;
-    legalStructure?: LegalStructure;
-    businessActivity?: string;
+    operatorType?: any;
+    companyLegalName?: any;
+    tradingName?: any;
+    registrationNumberBusiness?: any;
+    legalRegistrationNumberType?: any;
+    legalRegistrationNumber?: any;
+    taxId?: any;
+    vatNumber?: any;
+    yearEstablished?: any;
+    legalStructure?: any;
+    businessActivity?: any;
 }
 export declare class CompanySizeDraftDto {
-    employeeCount?: EmployeeCountRange;
-    annualTurnover?: AnnualTurnoverRange;
-    annualRevenue?: number;
-    exportPercentage?: number;
-    importPercentage?: number;
-    capitalInvestment?: number;
+    employeeCount?: any;
+    annualTurnover?: any;
+    annualRevenue?: any;
+    exportPercentage?: any;
+    importPercentage?: any;
+    capitalInvestment?: any;
 }
 export declare class OwnershipInfoDraftDto {
-    ownershipType?: OwnershipType;
-    majorityOwnerNationality?: string;
-    womenOwned?: OwnershipStatus;
-    youthOwned?: OwnershipStatus;
-    blackOwnedPercentage?: number;
-    beneficialOwnersCount?: number;
-    pepInvolved?: boolean;
-    pepDetails?: string;
+    ownershipType?: any;
+    majorityOwnerNationality?: any;
+    womenOwned?: any;
+    youthOwned?: any;
+    blackOwnedPercentage?: any;
+    beneficialOwnersCount?: any;
+    pepInvolved?: any;
+    pepDetails?: any;
 }
 export declare class OperatorContactDraftDto {
-    contactType?: string;
-    primaryContact?: string;
-    contactPosition?: string;
-    contactEmail?: string;
-    contactPhone?: string;
-    altContact?: string;
-    altEmail?: string;
-    altPhone?: string;
-    isPrimary?: boolean;
+    contactType?: any;
+    primaryContact?: any;
+    contactPosition?: any;
+    contactEmail?: any;
+    contactPhone?: any;
+    altContact?: any;
+    altEmail?: any;
+    altPhone?: any;
+    isPrimary?: any;
 }
 export declare class OperatorLocationDraftDto {
-    locationType?: string;
-    physicalAddress?: string;
-    addressLine1?: string;
-    addressLine2?: string;
-    postalCode?: string;
-    cityTown?: string;
-    regionState?: string;
-    countryId?: string;
-    gpsCoordinates?: string;
-    factoryLocationSame?: boolean;
-    factoryName?: string;
-    factoryType?: string;
-    factorySize?: number;
-    isPrimary?: boolean;
+    locationType?: any;
+    physicalAddress?: any;
+    addressLine1?: any;
+    addressLine2?: any;
+    postalCode?: any;
+    cityTown?: any;
+    regionState?: any;
+    countryId?: any;
+    gpsCoordinates?: any;
+    geoLat?: any;
+    geoLng?: any;
+    geoAccuracyM?: any;
+    factoryLocationSame?: any;
+    factoryName?: any;
+    factoryType?: any;
+    factorySize?: any;
+    isPrimary?: any;
 }
 export declare class BusinessSectorDraftDto {
-    mainSector?: string;
-    subSector?: string[];
-    isicCode?: string;
-    productCategories?: string[];
-    percentageRevenue?: number;
-    sectorStartYear?: number;
+    mainSector?: any;
+    subSector?: any;
+    isicCode?: any;
+    productCategories?: any;
+    percentageRevenue?: any;
+    sectorStartYear?: any;
 }
 export declare class MarketInfoDraftDto {
-    domesticMarkets?: string[];
-    exportMarkets?: string[];
-    primaryExportMarket?: string;
-    exportStartYear?: number;
-    importSources?: string[];
-    afcftaAwareness?: string;
-    tradeChallenges?: string;
+    domesticMarkets?: any;
+    exportMarkets?: any;
+    primaryExportMarket?: any;
+    exportStartYear?: any;
+    importSources?: any;
+    afcftaAwareness?: any;
+    tradeChallenges?: any;
 }
 export declare class ProductionCapacityDraftDto {
-    productionCapacity?: number;
-    capacityUnit?: string;
-    capacityUtilization?: number;
-    qualityManagement?: string;
-    qmsType?: string;
-    certificationCount?: number;
-    existingCertifications?: string;
-    technicalStaff?: number;
+    productionCapacity?: any;
+    capacityUnit?: any;
+    capacityUtilization?: any;
+    qualityManagement?: any;
+    qmsType?: any;
+    certificationCount?: any;
+    existingCertifications?: any;
+    technicalStaff?: any;
 }
 export declare class PreferencesDraftDto {
-    preferredLanguage?: string;
-    communicationPreferences?: string[];
-    notificationFrequency?: string;
-    timezone?: string;
-    currency?: string;
+    preferredLanguage?: any;
+    communicationPreferences?: any;
+    notificationFrequency?: any;
+    timezone?: any;
+    currency?: any;
 }
 export declare class AccessibilityDraftDto {
-    assistiveTech?: boolean;
-    disabilityTypes?: string[];
-    specialAssistance?: string;
-    literacyLevel?: string;
-    internetAccess?: string;
-    deviceType?: string;
+    assistiveTech?: any;
+    disabilityTypes?: any;
+    specialAssistance?: any;
+    literacyLevel?: any;
+    internetAccess?: any;
+    deviceType?: any;
 }
 export declare class ConsentDraftDto {
-    dataConsent?: boolean;
-    dataSharingConsent?: boolean;
-    crossBorderData?: boolean;
-    marketingConsent?: boolean;
-    smsConsent?: boolean;
-    whatsappConsent?: boolean;
-    termsAcceptance?: boolean;
-    declarationSignature?: string;
+    dataConsent?: any;
+    dataSharingConsent?: any;
+    crossBorderData?: any;
+    marketingConsent?: any;
+    smsConsent?: any;
+    whatsappConsent?: any;
+    termsAcceptance?: any;
+    declarationSignature?: any;
 }
 export declare class CreateOperatorRegistrationDraftDto {
     companyInfo?: CompanyInfoDraftDto;
@@ -119,6 +123,11 @@ export declare class CreateOperatorRegistrationDraftDto {
     preferences?: PreferencesDraftDto;
     accessibility?: AccessibilityDraftDto;
     consents?: ConsentDraftDto;
-    userId?: string;
-    countryId?: string;
+    isGroup?: any;
+    groupManagerId?: any;
+    groupMembers?: any;
+    schemeType?: any;
+    schemePayload?: any;
+    userId?: any;
+    countryId?: any;
 }

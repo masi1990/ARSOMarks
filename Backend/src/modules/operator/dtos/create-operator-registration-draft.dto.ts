@@ -180,6 +180,8 @@ export class CreateOperatorRegistrationDraftDto {
   isGroup?: any;
   groupManagerId?: any;
   groupMembers?: any;
+  schemeType?: any;
+  schemePayload?: any;
 
   // Optional: Link to user account
   userId?: any;

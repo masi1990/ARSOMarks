@@ -76,6 +76,10 @@ __decorate([
     __metadata("design:type", Array)
 ], Nsb.prototype, "keyDepartments", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'sectors', type: 'text', array: true, nullable: true }),
+    __metadata("design:type", Array)
+], Nsb.prototype, "sectors", void 0);
+__decorate([
     (0, typeorm_1.Column)({ name: 'national_standards_act_link', length: 500, nullable: true }),
     __metadata("design:type", String)
 ], Nsb.prototype, "nationalStandardsActLink", void 0);

@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorMarket.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'domestic_markets', type: 'enum', enum: enums_1.DomesticMarketType, array: true }),
+    (0, typeorm_1.Column)({ name: 'domestic_markets', type: 'enum', enum: enums_1.DomesticMarketType, array: true, nullable: true }),
     __metadata("design:type", Array)
 ], OperatorMarket.prototype, "domesticMarkets", void 0);
 __decorate([
@@ -56,7 +56,7 @@ __decorate([
     __metadata("design:type", Array)
 ], OperatorMarket.prototype, "importSources", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'afcfta_awareness', length: 20 }),
+    (0, typeorm_1.Column)({ name: 'afcfta_awareness', length: 20, nullable: true }),
     __metadata("design:type", String)
 ], OperatorMarket.prototype, "afcftaAwareness", void 0);
 __decorate([

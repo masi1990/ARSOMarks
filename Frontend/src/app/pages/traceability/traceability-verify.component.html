@@ -1,0 +1,56 @@
+<div class="max-w-3xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold text-slate-900 mb-4">Verify Certificate</h1>
+  <p class="text-slate-600 mb-4">
+    Paste the token or scan the QR code URL. Location signals are captured to deter counterfeiting and aid market surveillance.
+  </p>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-4 mb-4">
+    <label class="text-sm font-semibold text-slate-700 mb-1 block">Verification token or URL</label>
+    <div class="flex flex-col gap-2 md:flex-row">
+      <input
+        [formControl]="tokenControl"
+        placeholder="token string or full verification link"
+        class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+      />
+      <button
+        (click)="verify()"
+        class="md:w-32 text-sm font-semibold text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700"
+      >
+        Verify
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="bg-white border border-slate-200 rounded-xl p-4">Verifying...</div>
+  <div *ngIf="error" class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800">{{ error }}</div>
+
+  <div *ngIf="result" class="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+    <div class="flex items-center gap-2">
+      <span class="badge px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="statusColor(result.status)">
+        {{ result.status }}
+      </span>
+      <span class="font-mono text-sm text-blue-700">{{ result.cocNumber }}</span>
+    </div>
+    <div>
+      <p class="text-lg font-semibold text-slate-900">
+        {{ result.product?.name || 'Product' }} <span class="text-slate-500">({{ result.product?.brand || 'Brand' }})</span>
+      </p>
+      <p class="text-sm text-slate-600">
+        Origin: {{ result.product?.originCountry?.name || 'Not specified' }}
+      </p>
+    </div>
+    <div>
+      <p class="text-sm font-semibold text-slate-700 mb-1">Standards</p>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let s of result.standards" class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">
+          {{ s.code || s.name || 'Standard' }}
+        </span>
+        <span *ngIf="!result.standards?.length" class="text-sm text-slate-500">No standards recorded.</span>
+      </div>
+    </div>
+    <div *ngIf="result.publicUrl" class="flex items-center gap-2">
+      <img [src]="qrImage(result.publicUrl)" alt="QR" class="w-28 h-28 border border-slate-200 rounded" />
+      <div class="text-xs text-slate-600 break-all">{{ result.publicUrl }}</div>
+    </div>
+  </div>
+</div>

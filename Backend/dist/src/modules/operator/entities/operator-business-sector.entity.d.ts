@@ -4,11 +4,11 @@ export declare class OperatorBusinessSector {
     id: string;
     operatorId: string;
     operator: Operator;
-    mainSector: MainBusinessSector;
+    mainSector?: MainBusinessSector;
     subSector?: string[];
     isicCode?: string;
     productCategories?: string[];
-    percentageRevenue: number;
+    percentageRevenue?: number;
     sectorStartYear?: number;
     sectorExperience?: number;
     createdAt: Date;

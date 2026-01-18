@@ -417,7 +417,7 @@ export class MarkUsageReportComponent implements OnInit {
           this.success = true;
           this.successMessage = 'Report submitted successfully!';
           setTimeout(() => {
-            this.router.navigate(['/mark-licenses/dashboard']);
+            this.router.navigate(['/portal/mark-licenses/dashboard']);
           }, 2000);
         },
         error: (err) => {

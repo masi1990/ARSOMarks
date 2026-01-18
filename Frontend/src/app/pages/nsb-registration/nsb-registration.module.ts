@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NsbRegistrationRequestComponent } from './nsb-registration-request.component';
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [NsbRegistrationRequestComponent],
-  imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule.forChild(routes)],
 })
 export class NsbRegistrationModule {}
 

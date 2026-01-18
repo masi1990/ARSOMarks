@@ -1,0 +1,45 @@
+<div class="page">
+  <h2>Submit a Complaint</h2>
+  <p class="help">Use this form to submit a complaint about marks, certifications, or services.</p>
+
+  <div class="card">
+    <form [formGroup]="complaintForm" (ngSubmit)="submitComplaint()">
+      <div class="form-row">
+        <label>Name</label>
+        <input type="text" formControlName="complainantName" />
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input type="email" formControlName="complainantEmail" />
+      </div>
+      <div class="form-row">
+        <label>Phone (optional)</label>
+        <input type="text" formControlName="complainantPhone" />
+      </div>
+      <div class="form-row">
+        <label>Subject</label>
+        <input type="text" formControlName="subject" />
+      </div>
+      <div class="form-row">
+        <label>Description</label>
+        <textarea rows="5" formControlName="description"></textarea>
+      </div>
+      <div class="form-row">
+        <label>Reference Type</label>
+        <input type="text" formControlName="referenceType" placeholder="MARK_LICENSE, PRODUCT_CERT, etc." />
+      </div>
+      <div class="form-row">
+        <label>Reference ID</label>
+        <input type="text" formControlName="referenceId" />
+      </div>
+      <div class="form-row">
+        <label>Evidence (optional)</label>
+        <input type="file" (change)="onEvidenceSelected($event)" />
+      </div>
+      <button type="submit">Submit Complaint</button>
+    </form>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+    <div class="success" *ngIf="success">{{ success }}</div>
+  </div>
+</div>

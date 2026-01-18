@@ -51,6 +51,10 @@ export class Nsb {
   @Column({ name: 'key_departments', type: 'text', array: true, nullable: true })
   keyDepartments?: string[];
 
+  // Sectors/Domains covered by this NSB (e.g., Food & Agriculture, Telecommunications, etc.)
+  @Column({ name: 'sectors', type: 'text', array: true, nullable: true })
+  sectors?: string[];
+
   @Column({ name: 'national_standards_act_link', length: 500, nullable: true })
   nationalStandardsActLink?: string;
 

@@ -258,18 +258,42 @@ export class DashboardComponent implements OnInit {
   }
 
   isNsbAdmin(): boolean {
-    const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
+    const roles = this.getUserRoles();
     return roles.includes(UserRole.NSB_ADMIN) || roles.includes(UserRole.NSB_USER);
   }
 
   isOperator(): boolean {
-    const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
-    return roles.includes(UserRole.OPERATOR) || roles.includes(UserRole.NSB_ADMIN) || roles.includes(UserRole.SUPER_ADMIN) || roles.includes(UserRole.PUBLIC);
+    const roles = this.getUserRoles();
+    return (
+      roles.includes(UserRole.OPERATOR) ||
+      roles.includes(UserRole.NSB_ADMIN) ||
+      roles.includes(UserRole.SUPER_ADMIN) ||
+      roles.includes(UserRole.PUBLIC)
+    );
+  }
+
+  isCbUser(): boolean {
+    const roles = this.getUserRoles();
+    return (
+      roles.includes(UserRole.CB_ADMIN) ||
+      roles.includes(UserRole.CB_USER) ||
+      roles.includes(UserRole.SUPER_ADMIN) ||
+      roles.includes(UserRole.ARSO_SECRETARIAT) ||
+      roles.includes(UserRole.PUBLIC)
+    );
   }
 
   isPublic(): boolean {
-    const roles = this.user?.roles || (this.user?.role ? [this.user.role] : []);
+    const roles = this.getUserRoles();
     return roles.includes(UserRole.PUBLIC);
+  }
+
+  canSeeTools(): boolean {
+    return !!this.user;
+  }
+
+  private getUserRoles(): UserRole[] {
+    return this.user?.roles || (this.user?.role ? [this.user.role] : []);
   }
 
   ngOnInit(): void {

@@ -11,10 +11,13 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const entities_1 = require("./entities");
 const product_certification_service_1 = require("./services/product-certification.service");
+const product_certification_agreement_upload_service_1 = require("./services/product-certification-agreement-upload.service");
 const product_certification_controller_1 = require("./controllers/product-certification.controller");
+const public_certified_products_controller_1 = require("./controllers/public-certified-products.controller");
 const operator_module_1 = require("../operator/operator.module");
 const auth_module_1 = require("../auth/auth.module");
 const operator_entity_1 = require("../operator/entities/operator.entity");
+const traceability_module_1 = require("../traceability/traceability.module");
 let ProductCertificationModule = class ProductCertificationModule {
 };
 exports.ProductCertificationModule = ProductCertificationModule;
@@ -28,13 +31,16 @@ exports.ProductCertificationModule = ProductCertificationModule = __decorate([
                 entities_1.ProductEnvironmentalClaim,
                 entities_1.ProductCertificationCbSelection,
                 entities_1.ProductCertificationDeclaration,
+                entities_1.ProductCertificationAgreement,
+                entities_1.ProductCertificationCbChangeRequest,
                 operator_entity_1.Operator,
             ]),
             operator_module_1.OperatorModule,
             auth_module_1.AuthModule,
+            traceability_module_1.TraceabilityModule,
         ],
-        controllers: [product_certification_controller_1.ProductCertificationController],
-        providers: [product_certification_service_1.ProductCertificationService],
+        controllers: [product_certification_controller_1.ProductCertificationController, public_certified_products_controller_1.PublicCertifiedProductsController],
+        providers: [product_certification_service_1.ProductCertificationService, product_certification_agreement_upload_service_1.ProductCertificationAgreementUploadService],
         exports: [product_certification_service_1.ProductCertificationService],
     })
 ], ProductCertificationModule);

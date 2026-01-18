@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MarkLicenseCompliance = exports.MarkLicenseModification = exports.MarkLicenseUsageReport = exports.MarkLicenseAssetDownload = exports.MarkLicenseAsset = exports.MarkLicenseAgreement = exports.MarkLicensePlacement = exports.MarkLicenseApplication = void 0;
+exports.MarkSanction = exports.MarkMisuseIncident = exports.MarkLicenseCompliance = exports.MarkLicenseModification = exports.MarkLicenseUsageReport = exports.MarkLicenseAssetDownload = exports.MarkLicenseAsset = exports.MarkLicenseAgreement = exports.MarkLicensePlacement = exports.MarkLicenseApplication = void 0;
 var mark_license_application_entity_1 = require("./mark-license-application.entity");
 Object.defineProperty(exports, "MarkLicenseApplication", { enumerable: true, get: function () { return mark_license_application_entity_1.MarkLicenseApplication; } });
 var mark_license_placement_entity_1 = require("./mark-license-placement.entity");
@@ -17,4 +17,8 @@ var mark_license_modification_entity_1 = require("./mark-license-modification.en
 Object.defineProperty(exports, "MarkLicenseModification", { enumerable: true, get: function () { return mark_license_modification_entity_1.MarkLicenseModification; } });
 var mark_license_compliance_entity_1 = require("./mark-license-compliance.entity");
 Object.defineProperty(exports, "MarkLicenseCompliance", { enumerable: true, get: function () { return mark_license_compliance_entity_1.MarkLicenseCompliance; } });
+var mark_misuse_incident_entity_1 = require("./mark-misuse-incident.entity");
+Object.defineProperty(exports, "MarkMisuseIncident", { enumerable: true, get: function () { return mark_misuse_incident_entity_1.MarkMisuseIncident; } });
+var mark_sanction_entity_1 = require("./mark-sanction.entity");
+Object.defineProperty(exports, "MarkSanction", { enumerable: true, get: function () { return mark_sanction_entity_1.MarkSanction; } });
 //# sourceMappingURL=index.js.map

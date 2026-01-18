@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QMSType = exports.DomesticMarketType = exports.MainBusinessSector = exports.FactoryType = exports.OperatorLocationType = exports.VerificationStatus = exports.OperatorContactType = exports.ApplicationRegistrationStatus = exports.OperatorStatus = exports.OwnershipStatus = exports.SMECategory = exports.OwnershipType = exports.AnnualTurnoverRange = exports.EmployeeCountRange = exports.LegalStructure = exports.OperatorType = exports.LicenseDurationType = exports.AssetFileType = exports.AssetDeliveryMethod = exports.ModificationStatus = exports.ReportStatus = exports.AgreementStatus = exports.MediaType = exports.MarkType = exports.MarkLicenseStatus = exports.MarkLicenseType = exports.AccreditationStatus = exports.RegulatoryAgencyType = exports.SystemAccessLevel = exports.MouStatus = exports.MsaJurisdiction = exports.NsbProfileDocumentType = exports.NsbDocumentType = exports.NsbRegistrationRequestStatus = exports.RoleRequestStatus = exports.UserRole = exports.MembershipStatus = exports.DocumentVerificationStatus = exports.DocumentType = exports.ComplianceStatus = exports.ComplianceType = exports.LicenseStatus = exports.LicenseType = exports.ApplicationStatus = exports.ApplicationType = exports.NsbLocationType = exports.NsbContactType = exports.StakeholderRegistryStatus = exports.NsbStatus = exports.NsbClassification = void 0;
-exports.FileFormat = exports.PassFailStatus = exports.TestReportStatus = exports.DocumentVerificationStatusExtended = exports.OperatorDocumentType = exports.DocumentCategory = exports.VolumeUnit = exports.AuditTeamSize = exports.AuditLanguage = exports.TakeBackProgramStatus = exports.EnvironmentalManagementSystem = exports.LifecycleAspect = exports.LifecycleAssessmentType = exports.ThirdPartyVerificationStatus = exports.EnvironmentalBenefit = exports.TraceabilityStatus = exports.TestReportsAvailability = exports.TechnicalDocsStatus = exports.StandardComplianceStatus = exports.PackagingType = exports.TargetConsumerGroup = exports.ProductCategory = exports.ExpectedTimeline = exports.PriorityProcessing = exports.MarkCombinationPreference = exports.MarkRequestedType = exports.ProductCertificationStatus = exports.ProductCertificationType = exports.ApplicationScope = exports.CertificationSchemeType = exports.AssistiveTechType = exports.DeviceType = exports.InternetAccessType = exports.DigitalLiteracyLevel = exports.NotificationFrequency = exports.CommunicationPreference = exports.PreferredLanguage = void 0;
+exports.LegalRegistrationNumberType = exports.OwnershipStatus = exports.SMECategory = exports.OwnershipType = exports.AnnualTurnoverRange = exports.EmployeeCountRange = exports.LegalStructure = exports.OperatorType = exports.LicenseDurationType = exports.AssetFileType = exports.AssetDeliveryMethod = exports.ModificationStatus = exports.AppealStatus = exports.ComplaintStatus = exports.ReportStatus = exports.CbChangeRequestStatus = exports.CertificationAgreementStatus = exports.CertificationAgreementType = exports.AgreementStatus = exports.MediaType = exports.MarkType = exports.MarkSanctionStatus = exports.MarkSanctionType = exports.MarkMisuseStatus = exports.MarkLicenseStatus = exports.MarkLicenseType = exports.AccreditationStatus = exports.RegulatoryAgencyType = exports.SystemAccessLevel = exports.MouStatus = exports.MsaJurisdiction = exports.NsbProfileDocumentType = exports.NsbDocumentType = exports.NsbRegistrationRequestStatus = exports.RoleRequestStatus = exports.UserRole = exports.MembershipStatus = exports.DocumentVerificationStatus = exports.DocumentType = exports.ComplianceStatus = exports.ComplianceType = exports.LicenseStatus = exports.LicenseType = exports.ApplicationStatus = exports.ApplicationType = exports.NsbLocationType = exports.NsbContactType = exports.StakeholderRegistryStatus = exports.NsbStatus = exports.NsbClassification = void 0;
+exports.DocumentCategory = exports.VolumeUnit = exports.TestResultStatus = exports.SamplingStatus = exports.CorrectiveActionStatus = exports.AuditFindingStatus = exports.AuditFindingType = exports.CertificationAuditType = exports.AuditTeamSize = exports.AuditLanguage = exports.TakeBackProgramStatus = exports.EnvironmentalManagementSystem = exports.LifecycleAspect = exports.LifecycleAssessmentType = exports.ThirdPartyVerificationStatus = exports.EnvironmentalBenefit = exports.TraceabilityStatus = exports.TestReportsAvailability = exports.TechnicalDocsStatus = exports.StandardComplianceStatus = exports.PackagingType = exports.TargetConsumerGroup = exports.ProductCategory = exports.ExpectedTimeline = exports.PriorityProcessing = exports.MarkCombinationPreference = exports.MarkRequestedType = exports.ProductCertificationStatus = exports.ProductCertificationType = exports.ApplicationScope = exports.CertificationSchemeType = exports.AssistiveTechType = exports.DeviceType = exports.InternetAccessType = exports.DigitalLiteracyLevel = exports.NotificationFrequency = exports.CommunicationPreference = exports.PreferredLanguage = exports.QMSType = exports.DomesticMarketType = exports.MainBusinessSector = exports.FactoryType = exports.OperatorLocationType = exports.VerificationStatus = exports.OperatorContactType = exports.CbDocumentType = exports.CbAccreditationStandard = exports.CbApplicationStatus = exports.ApplicationRegistrationStatus = exports.OperatorStatus = void 0;
+exports.EvidenceParentType = exports.FileFormat = exports.PassFailStatus = exports.TestReportStatus = exports.DocumentVerificationStatusExtended = exports.OperatorDocumentType = void 0;
 var NsbClassification;
 (function (NsbClassification) {
     NsbClassification["GOVERNMENT_AGENCY"] = "GOVERNMENT_AGENCY";
@@ -212,6 +213,24 @@ var MarkLicenseStatus;
     MarkLicenseStatus["WITHDRAWN"] = "WITHDRAWN";
     MarkLicenseStatus["TERMINATED"] = "TERMINATED";
 })(MarkLicenseStatus || (exports.MarkLicenseStatus = MarkLicenseStatus = {}));
+var MarkMisuseStatus;
+(function (MarkMisuseStatus) {
+    MarkMisuseStatus["OPEN"] = "OPEN";
+    MarkMisuseStatus["UNDER_REVIEW"] = "UNDER_REVIEW";
+    MarkMisuseStatus["RESOLVED"] = "RESOLVED";
+    MarkMisuseStatus["DISMISSED"] = "DISMISSED";
+})(MarkMisuseStatus || (exports.MarkMisuseStatus = MarkMisuseStatus = {}));
+var MarkSanctionType;
+(function (MarkSanctionType) {
+    MarkSanctionType["WARNING"] = "WARNING";
+    MarkSanctionType["SUSPENSION"] = "SUSPENSION";
+    MarkSanctionType["WITHDRAWAL"] = "WITHDRAWAL";
+})(MarkSanctionType || (exports.MarkSanctionType = MarkSanctionType = {}));
+var MarkSanctionStatus;
+(function (MarkSanctionStatus) {
+    MarkSanctionStatus["ACTIVE"] = "ACTIVE";
+    MarkSanctionStatus["LIFTED"] = "LIFTED";
+})(MarkSanctionStatus || (exports.MarkSanctionStatus = MarkSanctionStatus = {}));
 var MarkType;
 (function (MarkType) {
     MarkType["ARSO_QUALITY_MARK"] = "ARSO_QUALITY_MARK";
@@ -236,6 +255,23 @@ var AgreementStatus;
     AgreementStatus["EXECUTED"] = "EXECUTED";
     AgreementStatus["ARCHIVED"] = "ARCHIVED";
 })(AgreementStatus || (exports.AgreementStatus = AgreementStatus = {}));
+var CertificationAgreementType;
+(function (CertificationAgreementType) {
+    CertificationAgreementType["CERTIFICATION_AGREEMENT"] = "CERTIFICATION_AGREEMENT";
+    CertificationAgreementType["SUB_LICENSE_AGREEMENT"] = "SUB_LICENSE_AGREEMENT";
+})(CertificationAgreementType || (exports.CertificationAgreementType = CertificationAgreementType = {}));
+var CertificationAgreementStatus;
+(function (CertificationAgreementStatus) {
+    CertificationAgreementStatus["PENDING_CB_APPROVAL"] = "PENDING_CB_APPROVAL";
+    CertificationAgreementStatus["APPROVED"] = "APPROVED";
+    CertificationAgreementStatus["REJECTED"] = "REJECTED";
+})(CertificationAgreementStatus || (exports.CertificationAgreementStatus = CertificationAgreementStatus = {}));
+var CbChangeRequestStatus;
+(function (CbChangeRequestStatus) {
+    CbChangeRequestStatus["PENDING"] = "PENDING";
+    CbChangeRequestStatus["APPROVED"] = "APPROVED";
+    CbChangeRequestStatus["REJECTED"] = "REJECTED";
+})(CbChangeRequestStatus || (exports.CbChangeRequestStatus = CbChangeRequestStatus = {}));
 var ReportStatus;
 (function (ReportStatus) {
     ReportStatus["DRAFT"] = "DRAFT";
@@ -245,6 +281,20 @@ var ReportStatus;
     ReportStatus["REJECTED"] = "REJECTED";
     ReportStatus["REQUIRES_REVISION"] = "REQUIRES_REVISION";
 })(ReportStatus || (exports.ReportStatus = ReportStatus = {}));
+var ComplaintStatus;
+(function (ComplaintStatus) {
+    ComplaintStatus["RECEIVED"] = "RECEIVED";
+    ComplaintStatus["UNDER_REVIEW"] = "UNDER_REVIEW";
+    ComplaintStatus["CLOSED"] = "CLOSED";
+    ComplaintStatus["REJECTED"] = "REJECTED";
+})(ComplaintStatus || (exports.ComplaintStatus = ComplaintStatus = {}));
+var AppealStatus;
+(function (AppealStatus) {
+    AppealStatus["RECEIVED"] = "RECEIVED";
+    AppealStatus["UNDER_REVIEW"] = "UNDER_REVIEW";
+    AppealStatus["DECIDED"] = "DECIDED";
+    AppealStatus["REJECTED"] = "REJECTED";
+})(AppealStatus || (exports.AppealStatus = AppealStatus = {}));
 var ModificationStatus;
 (function (ModificationStatus) {
     ModificationStatus["PENDING"] = "PENDING";
@@ -339,6 +389,13 @@ var OwnershipStatus;
     OwnershipStatus["WOMEN_LED"] = "WOMEN_LED";
     OwnershipStatus["YOUTH_LED"] = "YOUTH_LED";
 })(OwnershipStatus || (exports.OwnershipStatus = OwnershipStatus = {}));
+var LegalRegistrationNumberType;
+(function (LegalRegistrationNumberType) {
+    LegalRegistrationNumberType["BUSINESS_REGISTRATION"] = "BUSINESS_REGISTRATION";
+    LegalRegistrationNumberType["TAX_ID"] = "TAX_ID";
+    LegalRegistrationNumberType["VAT"] = "VAT";
+    LegalRegistrationNumberType["OTHER"] = "OTHER";
+})(LegalRegistrationNumberType || (exports.LegalRegistrationNumberType = LegalRegistrationNumberType = {}));
 var OperatorStatus;
 (function (OperatorStatus) {
     OperatorStatus["DRAFT"] = "DRAFT";
@@ -361,6 +418,32 @@ var ApplicationRegistrationStatus;
     ApplicationRegistrationStatus["SUSPENDED"] = "SUSPENDED";
     ApplicationRegistrationStatus["WITHDRAWN"] = "WITHDRAWN";
 })(ApplicationRegistrationStatus || (exports.ApplicationRegistrationStatus = ApplicationRegistrationStatus = {}));
+var CbApplicationStatus;
+(function (CbApplicationStatus) {
+    CbApplicationStatus["DRAFT"] = "DRAFT";
+    CbApplicationStatus["SUBMITTED"] = "SUBMITTED";
+    CbApplicationStatus["UNDER_REVIEW"] = "UNDER_REVIEW";
+    CbApplicationStatus["APPROVED"] = "APPROVED";
+    CbApplicationStatus["PROVISIONAL"] = "PROVISIONAL";
+    CbApplicationStatus["SUSPENDED"] = "SUSPENDED";
+    CbApplicationStatus["WITHDRAWN"] = "WITHDRAWN";
+    CbApplicationStatus["REJECTED"] = "REJECTED";
+})(CbApplicationStatus || (exports.CbApplicationStatus = CbApplicationStatus = {}));
+var CbAccreditationStandard;
+(function (CbAccreditationStandard) {
+    CbAccreditationStandard["ISO_IEC_17065"] = "ISO_IEC_17065";
+    CbAccreditationStandard["ISO_IEC_17021_1"] = "ISO_IEC_17021_1";
+    CbAccreditationStandard["OTHER"] = "OTHER";
+})(CbAccreditationStandard || (exports.CbAccreditationStandard = CbAccreditationStandard = {}));
+var CbDocumentType;
+(function (CbDocumentType) {
+    CbDocumentType["LEGAL_REGISTRATION"] = "LEGAL_REGISTRATION";
+    CbDocumentType["ACCREDITATION_CERTIFICATE"] = "ACCREDITATION_CERTIFICATE";
+    CbDocumentType["ACCREDITATION_SCOPE"] = "ACCREDITATION_SCOPE";
+    CbDocumentType["ACKNOWLEDGEMENT_OF_APPLICATION"] = "ACKNOWLEDGEMENT_OF_APPLICATION";
+    CbDocumentType["LICENSE_AGREEMENT"] = "LICENSE_AGREEMENT";
+    CbDocumentType["OTHER"] = "OTHER";
+})(CbDocumentType || (exports.CbDocumentType = CbDocumentType = {}));
 var OperatorContactType;
 (function (OperatorContactType) {
     OperatorContactType["PRIMARY"] = "PRIMARY";
@@ -667,6 +750,46 @@ var AuditTeamSize;
     AuditTeamSize["TWO_AUDITORS"] = "TWO_AUDITORS";
     AuditTeamSize["FLEXIBLE"] = "FLEXIBLE";
 })(AuditTeamSize || (exports.AuditTeamSize = AuditTeamSize = {}));
+var CertificationAuditType;
+(function (CertificationAuditType) {
+    CertificationAuditType["DOCUMENT_REVIEW"] = "DOCUMENT_REVIEW";
+    CertificationAuditType["INITIAL"] = "INITIAL";
+    CertificationAuditType["SURVEILLANCE"] = "SURVEILLANCE";
+    CertificationAuditType["RECERTIFICATION"] = "RECERTIFICATION";
+    CertificationAuditType["FOLLOW_UP"] = "FOLLOW_UP";
+    CertificationAuditType["UNANNOUNCED"] = "UNANNOUNCED";
+})(CertificationAuditType || (exports.CertificationAuditType = CertificationAuditType = {}));
+var AuditFindingType;
+(function (AuditFindingType) {
+    AuditFindingType["MAJOR"] = "MAJOR";
+    AuditFindingType["MINOR"] = "MINOR";
+    AuditFindingType["OBSERVATION"] = "OBSERVATION";
+    AuditFindingType["CRITICAL"] = "CRITICAL";
+})(AuditFindingType || (exports.AuditFindingType = AuditFindingType = {}));
+var AuditFindingStatus;
+(function (AuditFindingStatus) {
+    AuditFindingStatus["OPEN"] = "OPEN";
+    AuditFindingStatus["UNDER_REVIEW"] = "UNDER_REVIEW";
+    AuditFindingStatus["CLOSED"] = "CLOSED";
+})(AuditFindingStatus || (exports.AuditFindingStatus = AuditFindingStatus = {}));
+var CorrectiveActionStatus;
+(function (CorrectiveActionStatus) {
+    CorrectiveActionStatus["PENDING"] = "PENDING";
+    CorrectiveActionStatus["VERIFIED"] = "VERIFIED";
+    CorrectiveActionStatus["REJECTED"] = "REJECTED";
+})(CorrectiveActionStatus || (exports.CorrectiveActionStatus = CorrectiveActionStatus = {}));
+var SamplingStatus;
+(function (SamplingStatus) {
+    SamplingStatus["PENDING"] = "PENDING";
+    SamplingStatus["COLLECTED"] = "COLLECTED";
+    SamplingStatus["TESTED"] = "TESTED";
+})(SamplingStatus || (exports.SamplingStatus = SamplingStatus = {}));
+var TestResultStatus;
+(function (TestResultStatus) {
+    TestResultStatus["PASS"] = "PASS";
+    TestResultStatus["FAIL"] = "FAIL";
+    TestResultStatus["CONDITIONAL_PASS"] = "CONDITIONAL_PASS";
+})(TestResultStatus || (exports.TestResultStatus = TestResultStatus = {}));
 var VolumeUnit;
 (function (VolumeUnit) {
     VolumeUnit["UNITS"] = "UNITS";
@@ -767,4 +890,18 @@ var FileFormat;
     FileFormat["EPS"] = "EPS";
     FileFormat["OTHER"] = "OTHER";
 })(FileFormat || (exports.FileFormat = FileFormat = {}));
+var EvidenceParentType;
+(function (EvidenceParentType) {
+    EvidenceParentType["COMPLAINT"] = "COMPLAINT";
+    EvidenceParentType["APPEAL"] = "APPEAL";
+    EvidenceParentType["CERTIFICATION_AUDIT"] = "CERTIFICATION_AUDIT";
+    EvidenceParentType["AUDIT_FINDING"] = "AUDIT_FINDING";
+    EvidenceParentType["CORRECTIVE_ACTION"] = "CORRECTIVE_ACTION";
+    EvidenceParentType["MARK_MISUSE"] = "MARK_MISUSE";
+    EvidenceParentType["MARK_LICENSE"] = "MARK_LICENSE";
+    EvidenceParentType["CB_APPLICATION"] = "CB_APPLICATION";
+    EvidenceParentType["CB_LICENSE"] = "CB_LICENSE";
+    EvidenceParentType["OPERATOR_CONTRACT"] = "OPERATOR_CONTRACT";
+    EvidenceParentType["OTHER"] = "OTHER";
+})(EvidenceParentType || (exports.EvidenceParentType = EvidenceParentType = {}));
 //# sourceMappingURL=index.js.map

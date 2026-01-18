@@ -1,0 +1,182 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-wide text-slate-500">Role Dashboard</p>
+        <h1 class="text-3xl font-bold text-slate-900">{{ selectedRole | titlecase }}</h1>
+        <p class="text-sm text-slate-600 mt-1">High-level KPIs, trends, alerts, and pending actions.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-3 items-center">
+        <div *ngIf="canView(UserRole.SUPER_ADMIN) || roleOptions.length > 1" class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="roleSelect">Role</label>
+          <select
+            id="roleSelect"
+            [value]="selectedRole"
+            (change)="onRoleChange($event.target?.value)"
+            class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          >
+            <option *ngFor="let role of roleOptions" [value]="role" [disabled]="!canView(role)">
+              {{ role | titlecase }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="regionFilter">Region</label>
+          <input
+            id="regionFilter"
+            [(ngModel)]="region"
+            placeholder="All"
+            class="w-32 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="schemeFilter">Scheme</label>
+          <input
+            id="schemeFilter"
+            [(ngModel)]="scheme"
+            placeholder="All"
+            class="w-32 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="timeframeSelect">Timeframe</label>
+          <select
+            id="timeframeSelect"
+            [(ngModel)]="timeframe"
+            class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          >
+            <option *ngFor="let tf of timeframes" [value]="tf">{{ tf }}</option>
+          </select>
+        </div>
+
+        <button
+          (click)="applyFilters()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="mt-4 p-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="mt-8 bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" role="status" aria-label="Loading dashboard"></div>
+      <p class="mt-4 text-sm text-slate-600">Loading dashboard data...</p>
+    </div>
+
+    <ng-container *ngIf="!loading && data">
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div *ngFor="let kpi of data.kpis" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <p class="text-sm font-semibold text-slate-600">{{ kpi.label }}</p>
+          <p class="text-3xl font-bold text-slate-900 mt-2">{{ kpi.value }}</p>
+          <div class="mt-2 flex items-center gap-2 text-xs">
+            <span
+              *ngIf="kpi.trend"
+              class="inline-flex items-center gap-1 rounded-full px-2 py-1"
+              [ngClass]="{
+                'bg-emerald-50 text-emerald-700': kpi.trend?.direction === 'up',
+                'bg-amber-50 text-amber-700': kpi.trend?.direction === 'flat',
+                'bg-rose-50 text-rose-700': kpi.trend?.direction === 'down'
+              }"
+            >
+              <span>{{ kpi.trend.direction === 'up' ? '▲' : kpi.trend.direction === 'down' ? '▼' : '■' }}</span>
+              <span>{{ kpi.trend.change }}% vs {{ kpi.trend.period }}</span>
+            </span>
+            <span *ngIf="kpi.helperText" class="text-slate-500">{{ kpi.helperText }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-lg font-semibold text-slate-900">Trends</h2>
+              <p class="text-sm text-slate-600">Volume and SLA over the selected timeframe.</p>
+            </div>
+            <span class="text-xs text-slate-500">{{ timeframe }}</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngFor="let trend of data.trends" class="border border-slate-100 rounded-lg p-4">
+              <p class="text-sm font-semibold text-slate-700">{{ trend.label }}</p>
+              <div class="mt-3 flex items-end gap-2">
+                <div *ngFor="let point of trend.points" class="flex flex-col items-center flex-1">
+                  <div class="w-full bg-blue-100 rounded" [style.height]="(point.value || 1) + 'px'"></div>
+                  <span class="text-[11px] text-slate-500 mt-1">{{ point.label }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-slate-900">Alerts</h2>
+            <p class="text-sm text-slate-600 mb-3">Actionable items surfaced by the system.</p>
+            <div *ngIf="!data.alerts.length" class="text-sm text-slate-500">No alerts.</div>
+            <div *ngFor="let alert of data.alerts" class="mt-3 rounded-lg border border-slate-100 p-3">
+              <span
+                class="text-xs font-semibold px-2 py-1 rounded-full"
+                [ngClass]="{
+                  'bg-emerald-50 text-emerald-700': alert.severity === 'info',
+                  'bg-amber-50 text-amber-700': alert.severity === 'warning',
+                  'bg-rose-50 text-rose-700': alert.severity === 'critical'
+                }"
+                >{{ alert.severity | titlecase }}</span
+              >
+              <p class="mt-2 text-sm font-semibold text-slate-800">{{ alert.title }}</p>
+              <p class="text-xs text-slate-600">{{ alert.description }}</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-slate-900">Steps</h2>
+            <p class="text-sm text-slate-600 mb-3">Suggested next actions for this role.</p>
+            <ol class="space-y-2 list-decimal list-inside text-sm text-slate-700">
+              <li *ngFor="let step of steps">{{ step }}</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-slate-900">Pending Actions</h2>
+            <span class="text-xs text-slate-500">Prioritize by due date</span>
+          </div>
+          <div *ngIf="!data.pending.length" class="text-sm text-slate-500">Nothing pending.</div>
+          <div *ngFor="let item of data.pending" class="border border-slate-100 rounded-lg p-4 mb-3 last:mb-0">
+            <div class="flex items-center justify-between">
+              <p class="font-semibold text-slate-800">{{ item.title }}</p>
+              <span class="text-xs text-slate-500" *ngIf="item.dueDate">Due {{ item.dueDate | date: 'mediumDate' }}</span>
+            </div>
+            <p class="text-sm text-slate-600 mt-1">{{ item.description }}</p>
+            <p class="text-xs text-slate-500 mt-1" *ngIf="item.owner">Owner: {{ item.owner }}</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <h2 class="text-lg font-semibold text-slate-900">Breakdowns</h2>
+          <p class="text-sm text-slate-600 mb-3">By role, region, scheme.</p>
+          <div class="space-y-2">
+            <div *ngFor="let b of data.breakdowns" class="flex items-center justify-between border border-slate-100 rounded-lg px-3 py-2">
+              <div>
+                <p class="text-sm font-semibold text-slate-800">{{ b.label }}</p>
+                <p class="text-xs text-slate-500" *ngIf="b.extra">{{ b.extra }}</p>
+              </div>
+              <span class="text-lg font-bold text-slate-900">{{ b.value }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

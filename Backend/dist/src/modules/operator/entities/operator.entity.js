@@ -34,11 +34,11 @@ __decorate([
     __metadata("design:type", String)
 ], Operator.prototype, "registrationNumber", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'operator_type', type: 'enum', enum: enums_1.OperatorType }),
+    (0, typeorm_1.Column)({ name: 'operator_type', type: 'enum', enum: enums_1.OperatorType, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "operatorType", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'company_legal_name', length: 200 }),
+    (0, typeorm_1.Column)({ name: 'company_legal_name', length: 200, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "companyLegalName", void 0);
 __decorate([
@@ -46,9 +46,17 @@ __decorate([
     __metadata("design:type", String)
 ], Operator.prototype, "tradingName", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'registration_number_business', length: 50 }),
+    (0, typeorm_1.Column)({ name: 'registration_number_business', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "registrationNumberBusiness", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'legal_registration_number_type', type: 'enum', enum: enums_1.LegalRegistrationNumberType, nullable: true }),
+    __metadata("design:type", String)
+], Operator.prototype, "legalRegistrationNumberType", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'legal_registration_number', length: 100, nullable: true }),
+    __metadata("design:type", String)
+], Operator.prototype, "legalRegistrationNumber", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'tax_id', length: 30, nullable: true }),
     __metadata("design:type", String)
@@ -58,7 +66,7 @@ __decorate([
     __metadata("design:type", String)
 ], Operator.prototype, "vatNumber", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'year_established', type: 'int' }),
+    (0, typeorm_1.Column)({ name: 'year_established', type: 'int', nullable: true }),
     __metadata("design:type", Number)
 ], Operator.prototype, "yearEstablished", void 0);
 __decorate([
@@ -66,19 +74,19 @@ __decorate([
     __metadata("design:type", Number)
 ], Operator.prototype, "companyAge", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'legal_structure', type: 'enum', enum: enums_1.LegalStructure }),
+    (0, typeorm_1.Column)({ name: 'legal_structure', type: 'enum', enum: enums_1.LegalStructure, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "legalStructure", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'business_activity', type: 'text' }),
+    (0, typeorm_1.Column)({ name: 'business_activity', type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "businessActivity", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'employee_count', type: 'enum', enum: enums_1.EmployeeCountRange }),
+    (0, typeorm_1.Column)({ name: 'employee_count', type: 'enum', enum: enums_1.EmployeeCountRange, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "employeeCount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'annual_turnover', type: 'enum', enum: enums_1.AnnualTurnoverRange }),
+    (0, typeorm_1.Column)({ name: 'annual_turnover', type: 'enum', enum: enums_1.AnnualTurnoverRange, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "annualTurnover", void 0);
 __decorate([
@@ -98,7 +106,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Operator.prototype, "capitalInvestment", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'ownership_type', type: 'enum', enum: enums_1.OwnershipType }),
+    (0, typeorm_1.Column)({ name: 'ownership_type', type: 'enum', enum: enums_1.OwnershipType, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "ownershipType", void 0);
 __decorate([
@@ -106,7 +114,7 @@ __decorate([
     __metadata("design:type", String)
 ], Operator.prototype, "majorityOwnerNationality", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'women_owned', type: 'enum', enum: enums_1.OwnershipStatus }),
+    (0, typeorm_1.Column)({ name: 'women_owned', type: 'enum', enum: enums_1.OwnershipStatus, nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "womenOwned", void 0);
 __decorate([
@@ -122,17 +130,37 @@ __decorate([
     __metadata("design:type", String)
 ], Operator.prototype, "smeCategory", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'beneficial_owners_count', type: 'int' }),
+    (0, typeorm_1.Column)({ name: 'beneficial_owners_count', type: 'int', nullable: true }),
     __metadata("design:type", Number)
 ], Operator.prototype, "beneficialOwnersCount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'pep_involved', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'pep_involved', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], Operator.prototype, "pepInvolved", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'pep_details', type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], Operator.prototype, "pepDetails", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'is_group', type: 'boolean', default: false }),
+    __metadata("design:type", Boolean)
+], Operator.prototype, "isGroup", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'group_manager_id', type: 'uuid', nullable: true }),
+    __metadata("design:type", String)
+], Operator.prototype, "groupManagerId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'group_members', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Array)
+], Operator.prototype, "groupMembers", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'scheme_type', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], Operator.prototype, "schemeType", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'scheme_payload', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Object)
+], Operator.prototype, "schemePayload", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: enums_1.OperatorStatus, default: enums_1.OperatorStatus.DRAFT }),
     __metadata("design:type", String)

@@ -27,8 +27,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    // Get return url from route parameters or default to '/portal/dashboard'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/portal/dashboard';
 
     // Redirect if already logged in
     if (this.authService.isAuthenticated()) {
@@ -57,6 +57,10 @@ export class LoginComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 }
 

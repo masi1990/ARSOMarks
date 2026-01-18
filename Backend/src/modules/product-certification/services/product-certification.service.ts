@@ -500,5 +500,25 @@ export class ProductCertificationService {
     request.decisionReason = decisionReason;
     return this.cbChangeRequestRepository.save(request);
   }
+
+  async publicDirectory() {
+    return this.applicationRepository
+      .createQueryBuilder('application')
+      .leftJoinAndSelect('application.operator', 'operator')
+      .where('application.status = :status', { status: ProductCertificationStatus.CERTIFIED })
+      .select([
+        'application.id',
+        'application.applicationNumber',
+        'application.certifiedAt',
+        'application.certificateNumber',
+        'application.schemeType',
+        'application.schemePayload',
+        'operator.id',
+        'operator.companyLegalName',
+        'operator.tradingName',
+      ])
+      .orderBy('application.certifiedAt', 'DESC')
+      .getMany();
+  }
 }
 

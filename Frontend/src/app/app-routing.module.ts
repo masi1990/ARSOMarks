@@ -20,6 +20,10 @@ const routes: Routes = [
         path: '',
         loadChildren: () => import('./pages/consumer/consumer.module').then((m) => m.ConsumerModule),
       },
+          {
+            path: 'traceability',
+            loadChildren: () => import('./pages/traceability/traceability.module').then((m) => m.TraceabilityModule),
+          },
       {
         path: 'complaints',
         loadChildren: () =>
@@ -35,6 +39,25 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: 'dashboards',
+        canActivate: [RoleGuard],
+        data: { roles: Object.values(UserRole) },
+        loadChildren: () =>
+          import('./pages/role-dashboards/role-dashboards.module').then((m) => m.RoleDashboardsModule),
+      },
+      {
+        path: 'reports',
+        canActivate: [RoleGuard],
+        data: { roles: Object.values(UserRole) },
+        loadChildren: () => import('./pages/role-reports/role-reports.module').then((m) => m.RoleReportsModule),
+      },
+      {
+        path: 'shared-tools',
+        canActivate: [RoleGuard],
+        data: { roles: Object.values(UserRole) },
+        loadChildren: () => import('./pages/shared-tools/shared-tools.module').then((m) => m.SharedToolsModule),
       },
       {
         path: 'reference-data',
@@ -259,7 +282,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'dashboards',
         pathMatch: 'full',
       },
     ],

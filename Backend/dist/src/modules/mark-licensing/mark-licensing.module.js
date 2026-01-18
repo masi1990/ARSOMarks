@@ -28,6 +28,8 @@ exports.MarkLicensingModule = MarkLicensingModule = __decorate([
                 entities_1.MarkLicenseUsageReport,
                 entities_1.MarkLicenseModification,
                 entities_1.MarkLicenseCompliance,
+                entities_1.MarkMisuseIncident,
+                entities_1.MarkSanction,
                 nsb_entity_1.Nsb,
             ]),
         ],
@@ -45,6 +47,7 @@ exports.MarkLicensingModule = MarkLicensingModule = __decorate([
             services_1.MarkUsageReportService,
             services_1.MarkLicenseModificationService,
             services_1.MarkAssetService,
+            services_1.MarkMisuseUploadService,
         ],
         exports: [
             services_1.MarkLicenseApplicationService,

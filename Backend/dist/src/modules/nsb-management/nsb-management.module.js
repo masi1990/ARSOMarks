@@ -21,6 +21,7 @@ const nsb_regulatory_agency_entity_1 = require("./entities/nsb-regulatory-agency
 const nsb_industry_association_entity_1 = require("./entities/nsb-industry-association.entity");
 const nsb_testing_laboratory_entity_1 = require("./entities/nsb-testing-laboratory.entity");
 const country_entity_1 = require("../reference-data/entities/country.entity");
+const system_user_entity_1 = require("../system-user/system-user.entity");
 const nsb_service_1 = require("./services/nsb.service");
 const nsb_registration_request_service_1 = require("./services/nsb-registration-request.service");
 const nsb_document_upload_service_1 = require("./services/nsb-document-upload.service");
@@ -48,6 +49,7 @@ exports.NsbManagementModule = NsbManagementModule = __decorate([
                 nsb_industry_association_entity_1.NsbIndustryAssociation,
                 nsb_testing_laboratory_entity_1.NsbTestingLaboratory,
                 country_entity_1.Country,
+                system_user_entity_1.SystemUser,
             ]),
             auth_module_1.AuthModule,
         ],

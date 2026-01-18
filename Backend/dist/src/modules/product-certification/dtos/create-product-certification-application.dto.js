@@ -51,6 +51,10 @@ __decorate([
     (0, class_validator_1.IsEnum)(enums_1.ProductCertificationType),
     __metadata("design:type", String)
 ], CertificationSchemeDto.prototype, "certificationType", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], CertificationSchemeDto.prototype, "schemePayload", void 0);
 class VolumePriorityDto {
 }
 exports.VolumePriorityDto = VolumePriorityDto;

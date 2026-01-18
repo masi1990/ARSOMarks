@@ -30,19 +30,19 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorProductionCapacity.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'production_capacity', type: 'decimal', precision: 15, scale: 2 }),
+    (0, typeorm_1.Column)({ name: 'production_capacity', type: 'decimal', precision: 15, scale: 2, nullable: true }),
     __metadata("design:type", Number)
 ], OperatorProductionCapacity.prototype, "productionCapacity", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'capacity_unit', length: 20 }),
+    (0, typeorm_1.Column)({ name: 'capacity_unit', length: 20, nullable: true }),
     __metadata("design:type", String)
 ], OperatorProductionCapacity.prototype, "capacityUnit", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'capacity_utilization', type: 'decimal', precision: 5, scale: 2 }),
+    (0, typeorm_1.Column)({ name: 'capacity_utilization', type: 'decimal', precision: 5, scale: 2, nullable: true }),
     __metadata("design:type", Number)
 ], OperatorProductionCapacity.prototype, "capacityUtilization", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'quality_management', length: 20 }),
+    (0, typeorm_1.Column)({ name: 'quality_management', length: 20, nullable: true }),
     __metadata("design:type", String)
 ], OperatorProductionCapacity.prototype, "qualityManagement", void 0);
 __decorate([
@@ -50,7 +50,7 @@ __decorate([
     __metadata("design:type", String)
 ], OperatorProductionCapacity.prototype, "qmsType", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'certification_count', type: 'int', default: 0 }),
+    (0, typeorm_1.Column)({ name: 'certification_count', type: 'int', nullable: true }),
     __metadata("design:type", Number)
 ], OperatorProductionCapacity.prototype, "certificationCount", void 0);
 __decorate([
@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:type", String)
 ], OperatorProductionCapacity.prototype, "existingCertifications", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'technical_staff', type: 'int', default: 0 }),
+    (0, typeorm_1.Column)({ name: 'technical_staff', type: 'int', nullable: true }),
     __metadata("design:type", Number)
 ], OperatorProductionCapacity.prototype, "technicalStaff", void 0);
 __decorate([

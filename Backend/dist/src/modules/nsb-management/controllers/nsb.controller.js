@@ -38,6 +38,11 @@ let NsbController = class NsbController {
         const userRoles = user.roles || (user.role ? [user.role] : []);
         const isAdmin = userRoles.includes(enums_1.UserRole.SUPER_ADMIN) || userRoles.includes(enums_1.UserRole.ARSO_SECRETARIAT);
         if (!isAdmin && (userRoles.includes(enums_1.UserRole.NSB_ADMIN) || userRoles.includes(enums_1.UserRole.NSB_USER))) {
+            const { search, skip = 0, limit = 25 } = query;
+            if (user.countryId) {
+                const filter = { countryId: user.countryId, search, skip: Number(skip), limit: Number(limit) };
+                return this.nsbService.findAll(filter);
+            }
             const myNsb = await this.nsbService.findByUser(user);
             if (myNsb) {
                 return { data: [myNsb], total: 1 };

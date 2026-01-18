@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateOperatorRegistrationDto = exports.ConsentDto = exports.AccessibilityDto = exports.PreferencesDto = exports.ProductionCapacityDto = exports.MarketInfoDto = exports.BusinessSectorDto = exports.OperatorLocationDto = exports.OperatorContactDto = exports.OwnershipInfoDto = exports.CompanySizeDto = exports.CompanyInfoDto = void 0;
+exports.CreateOperatorRegistrationDto = exports.GroupMemberDto = exports.ConsentDto = exports.AccessibilityDto = exports.PreferencesDto = exports.ProductionCapacityDto = exports.MarketInfoDto = exports.BusinessSectorDto = exports.OperatorLocationDto = exports.OperatorContactDto = exports.OwnershipInfoDto = exports.CompanySizeDto = exports.CompanyInfoDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const enums_1 = require("../../../shared/enums");
@@ -46,6 +46,19 @@ __decorate([
     (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], CompanyInfoDto.prototype, "registrationNumberBusiness", void 0);
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enums_1.LegalRegistrationNumberType),
+    __metadata("design:type", String)
+], CompanyInfoDto.prototype, "legalRegistrationNumberType", void 0);
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(100),
+    __metadata("design:type", String)
+], CompanyInfoDto.prototype, "legalRegistrationNumber", void 0);
 __decorate([
     (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
     (0, class_validator_1.IsOptional)(),
@@ -308,6 +321,27 @@ __decorate([
     __metadata("design:type", String)
 ], OperatorLocationDto.prototype, "gpsCoordinates", void 0);
 __decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Min)(-90),
+    (0, class_validator_1.Max)(90),
+    __metadata("design:type", Number)
+], OperatorLocationDto.prototype, "geoLat", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Min)(-180),
+    (0, class_validator_1.Max)(180),
+    __metadata("design:type", Number)
+], OperatorLocationDto.prototype, "geoLng", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Min)(0),
+    (0, class_validator_1.Max)(10),
+    __metadata("design:type", Number)
+], OperatorLocationDto.prototype, "geoAccuracyM", void 0);
+__decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
@@ -450,13 +484,13 @@ __decorate([
 __decorate([
     (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'Quality management status is required' }),
-    (0, class_validator_1.IsEnum)(['YES', 'NO', 'IN_PROGRESS']),
+    (0, class_validator_1.IsEnum)(['YES', 'NO', 'IN_PROGRESS'], { message: 'Quality management status must be one of: YES, NO, IN_PROGRESS' }),
     __metadata("design:type", String)
 ], ProductionCapacityDto.prototype, "qualityManagement", void 0);
 __decorate([
     (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'QMS type is required' }),
-    (0, class_validator_1.IsEnum)(['ISO_9001', 'HACCP', 'GMP', 'INTERNAL_SYSTEM', 'NONE', 'IN_PROGRESS']),
+    (0, class_validator_1.IsEnum)(['ISO_9001', 'HACCP', 'GMP', 'INTERNAL_SYSTEM', 'NONE', 'IN_PROGRESS'], { message: 'QMS type must be one of: ISO_9001, HACCP, GMP, INTERNAL_SYSTEM, NONE, IN_PROGRESS' }),
     __metadata("design:type", String)
 ], ProductionCapacityDto.prototype, "qmsType", void 0);
 __decorate([
@@ -541,13 +575,13 @@ __decorate([
 __decorate([
     (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'Internet access type is required' }),
-    (0, class_validator_1.IsEnum)(['HIGH_SPEED', 'MOBILE_DATA', 'LIMITED', 'INTERMITTENT']),
+    (0, class_validator_1.IsEnum)(['HIGH_SPEED', 'MOBILE_DATA', 'LIMITED', 'INTERMITTENT'], { message: 'Internet access type must be one of: HIGH_SPEED, MOBILE_DATA, LIMITED, INTERMITTENT' }),
     __metadata("design:type", String)
 ], AccessibilityDto.prototype, "internetAccess", void 0);
 __decorate([
     (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'Device type is required' }),
-    (0, class_validator_1.IsEnum)(['DESKTOP', 'LAPTOP', 'SMARTPHONE', 'TABLET', 'FEATURE_PHONE']),
+    (0, class_validator_1.IsEnum)(['DESKTOP', 'LAPTOP', 'SMARTPHONE', 'TABLET', 'FEATURE_PHONE'], { message: 'Device type must be one of: DESKTOP, LAPTOP, SMARTPHONE, TABLET, FEATURE_PHONE' }),
     __metadata("design:type", String)
 ], AccessibilityDto.prototype, "deviceType", void 0);
 class ConsentDto {
@@ -596,6 +630,29 @@ __decorate([
     (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], ConsentDto.prototype, "declarationSignature", void 0);
+class GroupMemberDto {
+}
+exports.GroupMemberDto = GroupMemberDto;
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Member name is required' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(200),
+    __metadata("design:type", String)
+], GroupMemberDto.prototype, "memberName", void 0);
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(100),
+    __metadata("design:type", String)
+], GroupMemberDto.prototype, "registrationNumberBusiness", void 0);
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], GroupMemberDto.prototype, "countryId", void 0);
 class CreateOperatorRegistrationDto {
 }
 exports.CreateOperatorRegistrationDto = CreateOperatorRegistrationDto;
@@ -667,6 +724,35 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", ConsentDto)
 ], CreateOperatorRegistrationDto.prototype, "consents", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateOperatorRegistrationDto.prototype, "isGroup", void 0);
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], CreateOperatorRegistrationDto.prototype, "groupManagerId", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => GroupMemberDto),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateOperatorRegistrationDto.prototype, "groupMembers", void 0);
+__decorate([
+    (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateOperatorRegistrationDto.prototype, "schemeType", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsObject)(),
+    __metadata("design:type", Object)
+], CreateOperatorRegistrationDto.prototype, "schemePayload", void 0);
 __decorate([
     (0, transform_empty_to_undefined_decorator_1.TransformEmptyToUndefined)(),
     (0, class_validator_1.IsUUID)(),

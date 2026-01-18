@@ -192,7 +192,7 @@ export class MarkLicenseModificationComponent implements OnInit {
           this.success = true;
           this.successMessage = 'Modification request submitted successfully!';
           setTimeout(() => {
-            this.router.navigate(['/mark-licenses/dashboard']);
+            this.router.navigate(['/portal/mark-licenses/dashboard']);
           }, 2000);
         },
         error: (err) => {
@@ -232,7 +232,7 @@ export class MarkLicenseModificationComponent implements OnInit {
   }
 
   navigateToDashboard(): void {
-    this.router.navigate(['/mark-licenses/dashboard']);
+    this.router.navigate(['/portal/mark-licenses/dashboard']);
   }
 }
 

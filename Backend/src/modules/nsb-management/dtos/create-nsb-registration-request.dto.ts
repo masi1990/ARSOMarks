@@ -1,113 +1,142 @@
-import {
-  IsArray,
-  IsEmail,
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  Min,
-  MinLength,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 import { NsbDocumentType } from '../../../shared/enums';
 
 export class UploadDocumentDto {
-  @IsEnum(NsbDocumentType)
+  @IsOptional()
   documentType: NsbDocumentType;
-
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   fileName: string;
-
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   filePath: string;
-
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   fileHash: string;
-
-  @IsInt()
-  @Min(0)
+  @IsOptional()
   fileSize: number;
-
-  @IsString()
   @IsOptional()
   mimeType?: string;
 }
 
 export class CreateNsbRegistrationRequestDto {
   // Country Information
-  @IsUUID()
   @IsOptional()
   countryId?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(255)
   countryName?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(255)
   nsbOfficialName?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(50)
   nsbAcronym?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
-  @MinLength(2)
   isoCode?: string;
 
-  // Primary Contact Information
-  @IsString()
+  // Legal Identity & Registration
   @IsOptional()
-  @MaxLength(255)
+  legalStatus?: string;
+
+  @IsOptional()
+  establishmentActName?: string;
+
+  @IsOptional()
+  establishmentActNumber?: string;
+
+  @IsOptional()
+  establishmentActDate?: string;
+
+  @IsOptional()
+  registrationNumber?: string;
+
+  @IsOptional()
+  registrationAuthority?: string;
+
+  @IsOptional()
+  taxIdentificationNumber?: string;
+
+  @IsOptional()
+  vatNumber?: string;
+
+  @IsOptional()
+  yearEstablished?: number;
+
+  @IsOptional()
+  website?: string;
+
+  // Primary Contact Information
+  @IsOptional()
   contactPersonName?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(255)
   contactPersonTitle?: string;
 
-  @IsEmail()
   @IsOptional()
-  @MaxLength(255)
   contactEmail?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(50)
   contactPhone?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(50)
   contactMobile?: string;
 
+  // Leadership & Governance
+  @IsOptional()
+  directorGeneralName?: string;
+
+  @IsOptional()
+  directorGeneralTitle?: string;
+
+  @IsOptional()
+  directorGeneralEmail?: string;
+
+  @IsOptional()
+  directorGeneralPhone?: string;
+
+  @IsOptional()
+  boardChairName?: string;
+
+  @IsOptional()
+  boardChairEmail?: string;
+
+  @IsOptional()
+  boardChairPhone?: string;
+
+  // Addresses
+  @IsOptional()
+  headquartersAddress?: Record<string, any>;
+
+  @IsOptional()
+  postalAddress?: Record<string, any>;
+
+  @IsOptional()
+  additionalAddresses?: Record<string, any>[];
+
+  // Additional Contacts
+  @IsOptional()
+  additionalContacts?: Record<string, any>[];
+
+  @IsOptional()
+  keyOfficials?: Record<string, any>[];
+
+  @IsOptional()
+  internationalMemberships?: Record<string, any>[];
+
+  @IsOptional()
+  mandateAreas?: string[];
+
   // Role Designation
-  @IsInt()
-  @Min(0)
   @IsOptional()
   additionalUserSlotsRequested?: number;
 
-  @IsArray()
-  @IsString({ each: true })
   @IsOptional()
   requestedRoles?: string[];
 
+  // Sectors/Domains covered by this NSB (e.g., Food & Agriculture, Telecommunications, etc.)
+  @IsOptional()
+  sectors?: string[];
+
   // Documents (handled separately via file upload)
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => UploadDocumentDto)
   @IsOptional()
   documents?: UploadDocumentDto[];
 }

@@ -14,6 +14,7 @@ import {
   Min,
   MinLength,
   ValidateNested,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
@@ -648,6 +649,15 @@ export class CreateOperatorRegistrationDto {
   @Type(() => GroupMemberDto)
   @IsOptional()
   groupMembers?: GroupMemberDto[];
+
+  @TransformEmptyToUndefined()
+  @IsOptional()
+  @IsString()
+  schemeType?: string;
+
+  @IsOptional()
+  @IsObject()
+  schemePayload?: Record<string, any>;
 
   // Optional: Link to user account
   @TransformEmptyToUndefined()

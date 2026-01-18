@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { UserRole } from '../../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,11 @@ export class RoleGuard implements CanActivate {
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/auth/login']);
       return false;
+    }
+
+    // Super Admin can access everything
+    if (this.authService.hasRole(UserRole.SUPER_ADMIN)) {
+      return true;
     }
 
     const hasRole = this.authService.hasAnyRole(requiredRoles);

@@ -22,34 +22,34 @@ export class OperatorConsent {
   operator: Operator;
 
   // Required Consents
-  @Column({ name: 'data_consent', type: 'boolean', default: false })
-  dataConsent: boolean;
+  @Column({ name: 'data_consent', type: 'boolean', nullable: true })
+  dataConsent?: boolean;
 
-  @Column({ name: 'data_sharing_consent', type: 'boolean', default: false })
-  dataSharingConsent: boolean;
+  @Column({ name: 'data_sharing_consent', type: 'boolean', nullable: true })
+  dataSharingConsent?: boolean;
 
-  @Column({ name: 'cross_border_data', type: 'boolean', default: false })
-  crossBorderData: boolean;
+  @Column({ name: 'cross_border_data', type: 'boolean', nullable: true })
+  crossBorderData?: boolean;
 
-  @Column({ name: 'terms_acceptance', type: 'boolean', default: false })
-  termsAcceptance: boolean;
+  @Column({ name: 'terms_acceptance', type: 'boolean', nullable: true })
+  termsAcceptance?: boolean;
 
   // Optional Consents
-  @Column({ name: 'marketing_consent', type: 'boolean', default: false, nullable: true })
+  @Column({ name: 'marketing_consent', type: 'boolean', nullable: true })
   marketingConsent?: boolean;
 
-  @Column({ name: 'sms_consent', type: 'boolean', default: false, nullable: true })
+  @Column({ name: 'sms_consent', type: 'boolean', nullable: true })
   smsConsent?: boolean;
 
-  @Column({ name: 'whatsapp_consent', type: 'boolean', default: false, nullable: true })
+  @Column({ name: 'whatsapp_consent', type: 'boolean', nullable: true })
   whatsappConsent?: boolean;
 
   // Declaration
-  @Column({ name: 'declaration_signature', length: 100 })
-  declarationSignature: string;
+  @Column({ name: 'declaration_signature', length: 100, nullable: true })
+  declarationSignature?: string;
 
-  @Column({ name: 'declaration_date', type: 'date', default: () => 'CURRENT_DATE' })
-  declarationDate: Date;
+  @Column({ name: 'declaration_date', type: 'date', nullable: true })
+  declarationDate?: Date;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

@@ -7,16 +7,18 @@ import { NsbDocumentType } from '../../../shared/enums';
 import { NsbService } from './nsb.service';
 import { NsbDocumentUploadService } from './nsb-document-upload.service';
 import { EmailService } from '../../auth/services/email.service';
+import { SystemUser } from '../../system-user/system-user.entity';
 export declare class NsbRegistrationRequestService {
     private readonly requestRepo;
     private readonly documentRepo;
+    private readonly userRepo;
     private readonly nsbService;
     private readonly dataSource;
     private readonly uploadService;
     private readonly emailService;
     private readonly configService;
     private readonly logger;
-    constructor(requestRepo: Repository<NsbRegistrationRequest>, documentRepo: Repository<NsbRegistrationRequestDocument>, nsbService: NsbService, dataSource: DataSource, uploadService: NsbDocumentUploadService, emailService: EmailService, configService: ConfigService);
+    constructor(requestRepo: Repository<NsbRegistrationRequest>, documentRepo: Repository<NsbRegistrationRequestDocument>, userRepo: Repository<SystemUser>, nsbService: NsbService, dataSource: DataSource, uploadService: NsbDocumentUploadService, emailService: EmailService, configService: ConfigService);
     create(dto: CreateNsbRegistrationRequestDto, userId: string): Promise<NsbRegistrationRequest>;
     update(id: string, dto: UpdateNsbRegistrationRequestDto, userId: string, userRole?: string): Promise<NsbRegistrationRequest>;
     submit(id: string, userId: string): Promise<NsbRegistrationRequest>;
@@ -32,4 +34,8 @@ export declare class NsbRegistrationRequestService {
     deleteDocument(requestId: string, documentId: string, userId: string): Promise<void>;
     getDocument(requestId: string, documentId: string): Promise<NsbRegistrationRequestDocument>;
     getDocumentFile(filePath: string): Promise<Buffer>;
+    deleteRequest(id: string): Promise<void>;
+    private logRequestArrays;
+    private sanitizeNsbCollections;
+    private normalizeCollection;
 }

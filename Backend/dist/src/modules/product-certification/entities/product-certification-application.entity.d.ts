@@ -4,6 +4,8 @@ import { SystemUser } from '../../system-user/system-user.entity';
 import { Product } from './product.entity';
 import { ProductCertificationCbSelection } from './product-certification-cb-selection.entity';
 import { ProductCertificationDeclaration } from './product-certification-declaration.entity';
+import { ProductCertificationAgreement } from './product-certification-agreement.entity';
+import { ProductCertificationCbChangeRequest } from './product-certification-cb-change-request.entity';
 export declare class ProductCertificationApplication {
     id: string;
     applicationNumber?: string;
@@ -15,6 +17,7 @@ export declare class ProductCertificationApplication {
     markCombination?: MarkCombinationPreference;
     schemeType: CertificationSchemeType;
     schemeDescription?: string;
+    schemePayload?: Record<string, any>;
     applicationScope: ApplicationScope;
     certificationType: ProductCertificationType;
     estimatedVolume: number;
@@ -39,4 +42,6 @@ export declare class ProductCertificationApplication {
     products?: Product[];
     cbSelection?: ProductCertificationCbSelection;
     declaration?: ProductCertificationDeclaration;
+    agreements?: ProductCertificationAgreement[];
+    cbChangeRequests?: ProductCertificationCbChangeRequest[];
 }

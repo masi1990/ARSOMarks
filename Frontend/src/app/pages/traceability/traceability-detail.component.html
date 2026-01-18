@@ -1,0 +1,37 @@
+<div class="max-w-4xl mx-auto py-8 px-4" *ngIf="product">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+    <div>
+      <p class="text-sm text-slate-500">COC Number</p>
+      <h1 class="text-3xl font-bold text-slate-900">{{ product.cocNumber }}</h1>
+      <p class="text-slate-600 mt-1">
+        {{ product.productName }} — {{ product.brand }} • Origin: {{ product.originCountryName || product.countryOfOrigin || 'N/A' }}
+      </p>
+    </div>
+    <img *ngIf="product.qrUrl" [src]="qrImage(product.qrUrl)" alt="QR code" class="mt-4 md:mt-0 border border-slate-200 rounded-lg p-2 w-40 h-40" />
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <div class="bg-white border border-slate-200 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-slate-900 mb-2">Certification</h2>
+      <p class="text-sm text-slate-700">Issue: {{ formatDate(product.issueDate) }}</p>
+      <p class="text-sm text-slate-700">Expiry: {{ formatDate(product.expiryDate) }}</p>
+      <a
+        class="text-sm text-blue-700 font-semibold inline-block mt-2"
+        [routerLink]="['/traceability/verify']"
+        [queryParams]="{ token: product.qrUrl }"
+        >Verify status</a
+      >
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-slate-900 mb-2">Standards</h2>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let s of product.standards" class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">{{ s }}</span>
+        <span *ngIf="!product.standards?.length" class="text-sm text-slate-600">No standards listed.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="max-w-4xl mx-auto p-6 text-center">Loading product…</div>
+<div *ngIf="error" class="max-w-4xl mx-auto p-6 text-red-700 bg-red-50 border border-red-200 rounded-lg">{{ error }}</div>

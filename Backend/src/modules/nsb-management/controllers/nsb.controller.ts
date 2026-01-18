@@ -52,6 +52,11 @@ export class NsbController {
     
     // NSB_ADMIN and NSB_USER can only see their own NSB
     if (!isAdmin && (userRoles.includes(UserRole.NSB_ADMIN) || userRoles.includes(UserRole.NSB_USER))) {
+      const { search, skip = 0, limit = 25 } = query;
+      if (user.countryId) {
+        const filter = { countryId: user.countryId, search, skip: Number(skip), limit: Number(limit) };
+        return this.nsbService.findAll(filter);
+      }
       const myNsb = await this.nsbService.findByUser(user);
       if (myNsb) {
         return { data: [myNsb], total: 1 };

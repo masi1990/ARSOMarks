@@ -26,20 +26,20 @@ export class OperatorPreference {
   @JoinColumn({ name: 'operator_id' })
   operator: Operator;
 
-  @Column({ name: 'preferred_language', type: 'enum', enum: PreferredLanguage, default: PreferredLanguage.ENGLISH })
-  preferredLanguage: PreferredLanguage;
+  @Column({ name: 'preferred_language', type: 'enum', enum: PreferredLanguage, nullable: true })
+  preferredLanguage?: PreferredLanguage;
 
-  @Column({ name: 'communication_preferences', type: 'enum', enum: CommunicationPreference, array: true })
-  communicationPreferences: CommunicationPreference[];
+  @Column({ name: 'communication_preferences', type: 'enum', enum: CommunicationPreference, array: true, nullable: true })
+  communicationPreferences?: CommunicationPreference[];
 
-  @Column({ name: 'notification_frequency', type: 'enum', enum: NotificationFrequency, default: NotificationFrequency.DAILY_DIGEST })
-  notificationFrequency: NotificationFrequency;
+  @Column({ name: 'notification_frequency', type: 'enum', enum: NotificationFrequency, nullable: true })
+  notificationFrequency?: NotificationFrequency;
 
-  @Column({ length: 50 })
-  timezone: string;
+  @Column({ length: 50, nullable: true })
+  timezone?: string;
 
-  @Column({ length: 10, default: 'USD' })
-  currency: string;
+  @Column({ length: 10, nullable: true })
+  currency?: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

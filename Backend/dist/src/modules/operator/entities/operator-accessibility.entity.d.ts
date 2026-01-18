@@ -4,12 +4,12 @@ export declare class OperatorAccessibility {
     id: string;
     operatorId: string;
     operator: Operator;
-    assistiveTech: boolean;
+    assistiveTech?: boolean;
     disabilityTypes?: AssistiveTechType[];
     specialAssistance?: string;
-    literacyLevel: DigitalLiteracyLevel;
-    internetAccess: InternetAccessType;
-    deviceType: DeviceType;
+    literacyLevel?: DigitalLiteracyLevel;
+    internetAccess?: InternetAccessType;
+    deviceType?: DeviceType;
     createdAt: Date;
     updatedAt: Date;
 }

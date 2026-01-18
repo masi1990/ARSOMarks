@@ -5,13 +5,13 @@ export declare class OperatorMarket {
     id: string;
     operatorId: string;
     operator: Operator;
-    domesticMarkets: DomesticMarketType[];
+    domesticMarkets?: DomesticMarketType[];
     exportMarkets?: string[];
     primaryExportMarketId?: string;
     primaryExportMarket?: Country;
     exportStartYear?: number;
     importSources?: string[];
-    afcftaAwareness: string;
+    afcftaAwareness?: string;
     tradeChallenges?: string;
     createdAt: Date;
     updatedAt: Date;

@@ -44,6 +44,7 @@ export interface Nsb {
   socialMediaHandles?: Record<string, string>;
   totalStaff?: number;
   keyDepartments?: string[];
+  sectors?: string[]; // Sectors/Domains covered by this NSB (e.g., Food & Agriculture, Telecommunications, etc.)
   nationalStandardsActLink?: string;
   nationalConformityAssessmentPolicyLink?: string;
   nationalQualityPolicyLink?: string;

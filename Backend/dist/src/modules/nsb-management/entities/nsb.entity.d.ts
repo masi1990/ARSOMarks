@@ -20,6 +20,7 @@ export declare class Nsb {
     socialMediaHandles?: Record<string, string>;
     totalStaff?: number;
     keyDepartments?: string[];
+    sectors?: string[];
     nationalStandardsActLink?: string;
     nationalConformityAssessmentPolicyLink?: string;
     nationalQualityPolicyLink?: string;

@@ -1,0 +1,38 @@
+<div class="page">
+  <h2>CB Compliance Profile</h2>
+  <p class="help">Provide responsible persons, auditor qualifications, and operational coverage.</p>
+
+  <div class="card">
+    <div class="form-row">
+      <label>CB Application ID (from query param)</label>
+      <input type="text" [value]="cbApplicationId" readonly />
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="saveProfile()">
+      <div class="form-row">
+        <label>Responsible Persons (JSON)</label>
+        <textarea rows="6" formControlName="responsiblePersonsJson"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>Auditor Qualifications (JSON)</label>
+        <textarea rows="6" formControlName="auditorQualificationsJson"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>Countries of Certification (comma-separated)</label>
+        <input type="text" formControlName="countriesOfCertification" />
+      </div>
+
+      <div class="form-row">
+        <label>Local Office Relationships (JSON)</label>
+        <textarea rows="6" formControlName="localOfficesJson"></textarea>
+      </div>
+
+      <button type="submit">Save Profile</button>
+    </form>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+    <div class="success" *ngIf="success">{{ success }}</div>
+  </div>
+</div>

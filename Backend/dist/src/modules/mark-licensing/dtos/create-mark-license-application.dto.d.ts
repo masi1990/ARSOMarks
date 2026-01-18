@@ -54,6 +54,7 @@ export declare class SupportingDocumentDto {
     documentType: string;
     fileName: string;
     filePath?: string;
+    otherDocumentName?: string;
 }
 export declare class CreateMarkLicenseApplicationDto {
     nsbId: string;

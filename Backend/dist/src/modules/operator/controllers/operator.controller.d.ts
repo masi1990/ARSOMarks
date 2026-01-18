@@ -1,10 +1,10 @@
 import { OperatorService } from '../services/operator.service';
-import { CreateOperatorRegistrationDraftDto, UpdateOperatorRegistrationDto } from '../dtos';
+import { UpdateOperatorRegistrationDto } from '../dtos';
 import { SystemUser } from '../../system-user/system-user.entity';
 export declare class OperatorController {
     private readonly operatorService;
     constructor(operatorService: OperatorService);
-    create(dto: CreateOperatorRegistrationDraftDto, user: SystemUser): Promise<import("../entities").Operator>;
+    create(dto: any, user: SystemUser): Promise<import("../entities").Operator>;
     getMyOperator(user: SystemUser): Promise<import("../entities").Operator>;
     list(query: any, user: SystemUser): Promise<{
         data: import("../entities").Operator[];

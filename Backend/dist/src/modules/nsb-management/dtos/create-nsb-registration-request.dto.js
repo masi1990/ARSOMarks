@@ -11,37 +11,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateNsbRegistrationRequestDto = exports.UploadDocumentDto = void 0;
 const class_validator_1 = require("class-validator");
-const class_transformer_1 = require("class-transformer");
 const enums_1 = require("../../../shared/enums");
 class UploadDocumentDto {
 }
 exports.UploadDocumentDto = UploadDocumentDto;
 __decorate([
-    (0, class_validator_1.IsEnum)(enums_1.NsbDocumentType),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UploadDocumentDto.prototype, "documentType", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UploadDocumentDto.prototype, "fileName", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UploadDocumentDto.prototype, "filePath", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UploadDocumentDto.prototype, "fileHash", void 0);
 __decorate([
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(0),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], UploadDocumentDto.prototype, "fileSize", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UploadDocumentDto.prototype, "mimeType", void 0);
@@ -49,81 +43,154 @@ class CreateNsbRegistrationRequestDto {
 }
 exports.CreateNsbRegistrationRequestDto = CreateNsbRegistrationRequestDto;
 __decorate([
-    (0, class_validator_1.IsUUID)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "countryId", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(255),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "countryName", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(255),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "nsbOfficialName", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "nsbAcronym", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(2),
-    (0, class_validator_1.MinLength)(2),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "isoCode", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(255),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "legalStatus", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "establishmentActName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "establishmentActNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "establishmentActDate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "registrationNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "registrationAuthority", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "taxIdentificationNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "vatNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], CreateNsbRegistrationRequestDto.prototype, "yearEstablished", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "website", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "contactPersonName", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(255),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "contactPersonTitle", void 0);
 __decorate([
-    (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(255),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "contactEmail", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "contactPhone", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
 ], CreateNsbRegistrationRequestDto.prototype, "contactMobile", void 0);
 __decorate([
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(0),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "directorGeneralName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "directorGeneralTitle", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "directorGeneralEmail", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "directorGeneralPhone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "boardChairName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "boardChairEmail", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateNsbRegistrationRequestDto.prototype, "boardChairPhone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], CreateNsbRegistrationRequestDto.prototype, "headquartersAddress", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], CreateNsbRegistrationRequestDto.prototype, "postalAddress", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateNsbRegistrationRequestDto.prototype, "additionalAddresses", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateNsbRegistrationRequestDto.prototype, "additionalContacts", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateNsbRegistrationRequestDto.prototype, "keyOfficials", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateNsbRegistrationRequestDto.prototype, "internationalMemberships", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateNsbRegistrationRequestDto.prototype, "mandateAreas", void 0);
+__decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CreateNsbRegistrationRequestDto.prototype, "additionalUserSlotsRequested", void 0);
 __decorate([
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], CreateNsbRegistrationRequestDto.prototype, "requestedRoles", void 0);
 __decorate([
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ValidateNested)({ each: true }),
-    (0, class_transformer_1.Type)(() => UploadDocumentDto),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateNsbRegistrationRequestDto.prototype, "sectors", void 0);
+__decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], CreateNsbRegistrationRequestDto.prototype, "documents", void 0);

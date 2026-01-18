@@ -50,7 +50,10 @@ const mark_license_asset_download_entity_1 = require("./modules/mark-licensing/e
 const mark_license_usage_report_entity_1 = require("./modules/mark-licensing/entities/mark-license-usage-report.entity");
 const mark_license_modification_entity_1 = require("./modules/mark-licensing/entities/mark-license-modification.entity");
 const mark_license_compliance_entity_1 = require("./modules/mark-licensing/entities/mark-license-compliance.entity");
+const mark_misuse_incident_entity_1 = require("./modules/mark-licensing/entities/mark-misuse-incident.entity");
+const mark_sanction_entity_1 = require("./modules/mark-licensing/entities/mark-sanction.entity");
 const mark_licensing_module_1 = require("./modules/mark-licensing/mark-licensing.module");
+const complaints_module_1 = require("./modules/complaints/complaints.module");
 const operator_module_1 = require("./modules/operator/operator.module");
 const product_certification_module_1 = require("./modules/product-certification/product-certification.module");
 const application_registration_module_1 = require("./modules/application-registration/application-registration.module");
@@ -69,7 +72,33 @@ const product_technical_spec_entity_1 = require("./modules/product-certification
 const product_environmental_claim_entity_1 = require("./modules/product-certification/entities/product-environmental-claim.entity");
 const product_certification_cb_selection_entity_1 = require("./modules/product-certification/entities/product-certification-cb-selection.entity");
 const product_certification_declaration_entity_1 = require("./modules/product-certification/entities/product-certification-declaration.entity");
+const product_certification_agreement_entity_1 = require("./modules/product-certification/entities/product-certification-agreement.entity");
+const product_certification_cb_change_request_entity_1 = require("./modules/product-certification/entities/product-certification-cb-change-request.entity");
+const certification_audit_module_1 = require("./modules/certification-audit/certification-audit.module");
+const certification_audit_entity_1 = require("./modules/certification-audit/entities/certification-audit.entity");
+const certification_audit_finding_entity_1 = require("./modules/certification-audit/entities/certification-audit-finding.entity");
+const corrective_action_entity_1 = require("./modules/certification-audit/entities/corrective-action.entity");
+const sampling_record_entity_1 = require("./modules/certification-audit/entities/sampling-record.entity");
+const laboratory_entity_1 = require("./modules/certification-audit/entities/laboratory.entity");
+const test_result_entity_1 = require("./modules/certification-audit/entities/test-result.entity");
 const application_registration_entity_1 = require("./modules/application-registration/entities/application-registration.entity");
+const cb_approval_module_1 = require("./modules/cb-approval/cb-approval.module");
+const cb_application_entity_1 = require("./modules/cb-approval/entities/cb-application.entity");
+const cb_application_document_entity_1 = require("./modules/cb-approval/entities/cb-application-document.entity");
+const complaint_entity_1 = require("./modules/complaints/entities/complaint.entity");
+const appeal_entity_1 = require("./modules/complaints/entities/appeal.entity");
+const cb_compliance_module_1 = require("./modules/cb-compliance/cb-compliance.module");
+const cb_compliance_profile_entity_1 = require("./modules/cb-compliance/entities/cb-compliance-profile.entity");
+const evidence_module_1 = require("./modules/evidence/evidence.module");
+const evidence_file_entity_1 = require("./modules/evidence/entities/evidence-file.entity");
+const traceability_module_1 = require("./modules/traceability/traceability.module");
+const standard_entity_1 = require("./modules/traceability/entities/standard.entity");
+const product_standard_entity_1 = require("./modules/traceability/entities/product-standard.entity");
+const coc_entity_1 = require("./modules/traceability/entities/coc.entity");
+const qr_token_entity_1 = require("./modules/traceability/entities/qr-token.entity");
+const coc_status_history_entity_1 = require("./modules/traceability/entities/coc-status-history.entity");
+const scan_log_entity_1 = require("./modules/traceability/entities/scan-log.entity");
+const search_log_entity_1 = require("./modules/traceability/entities/search-log.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -131,6 +160,8 @@ exports.AppModule = AppModule = __decorate([
                             mark_license_usage_report_entity_1.MarkLicenseUsageReport,
                             mark_license_modification_entity_1.MarkLicenseModification,
                             mark_license_compliance_entity_1.MarkLicenseCompliance,
+                            mark_misuse_incident_entity_1.MarkMisuseIncident,
+                            mark_sanction_entity_1.MarkSanction,
                             operator_entity_1.Operator,
                             operator_contact_entity_1.OperatorContact,
                             operator_location_entity_1.OperatorLocation,
@@ -146,7 +177,28 @@ exports.AppModule = AppModule = __decorate([
                             product_environmental_claim_entity_1.ProductEnvironmentalClaim,
                             product_certification_cb_selection_entity_1.ProductCertificationCbSelection,
                             product_certification_declaration_entity_1.ProductCertificationDeclaration,
+                            product_certification_agreement_entity_1.ProductCertificationAgreement,
+                            product_certification_cb_change_request_entity_1.ProductCertificationCbChangeRequest,
+                            certification_audit_entity_1.CertificationAudit,
+                            certification_audit_finding_entity_1.CertificationAuditFinding,
+                            corrective_action_entity_1.CorrectiveAction,
+                            sampling_record_entity_1.SamplingRecord,
+                            laboratory_entity_1.Laboratory,
+                            test_result_entity_1.TestResult,
                             application_registration_entity_1.ApplicationRegistration,
+                            cb_application_entity_1.CbApplication,
+                            cb_application_document_entity_1.CbApplicationDocument,
+                            complaint_entity_1.Complaint,
+                            appeal_entity_1.Appeal,
+                            cb_compliance_profile_entity_1.CbComplianceProfile,
+                            evidence_file_entity_1.EvidenceFile,
+                            standard_entity_1.Standard,
+                            product_standard_entity_1.ProductStandard,
+                            coc_entity_1.Coc,
+                            qr_token_entity_1.QrToken,
+                            coc_status_history_entity_1.CocStatusHistory,
+                            scan_log_entity_1.ScanLog,
+                            search_log_entity_1.SearchLog,
                         ],
                         synchronize: false,
                         autoLoadEntities: false,
@@ -158,11 +210,17 @@ exports.AppModule = AppModule = __decorate([
             nsb_management_module_1.NsbManagementModule,
             licensing_module_1.LicensingModule,
             mark_licensing_module_1.MarkLicensingModule,
+            complaints_module_1.ComplaintsModule,
             operator_module_1.OperatorModule,
             product_certification_module_1.ProductCertificationModule,
+            certification_audit_module_1.CertificationAuditModule,
             application_registration_module_1.ApplicationRegistrationModule,
+            cb_approval_module_1.CbApprovalModule,
+            cb_compliance_module_1.CbComplianceModule,
             reference_data_module_1.ReferenceDataModule,
             document_management_module_1.DocumentManagementModule,
+            evidence_module_1.EvidenceModule,
+            traceability_module_1.TraceabilityModule,
         ],
         providers: [
             {

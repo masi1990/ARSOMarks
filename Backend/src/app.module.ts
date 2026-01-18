@@ -80,6 +80,16 @@ import { Complaint } from './modules/complaints/entities/complaint.entity';
 import { Appeal } from './modules/complaints/entities/appeal.entity';
 import { CbComplianceModule } from './modules/cb-compliance/cb-compliance.module';
 import { CbComplianceProfile } from './modules/cb-compliance/entities/cb-compliance-profile.entity';
+import { EvidenceModule } from './modules/evidence/evidence.module';
+import { EvidenceFile } from './modules/evidence/entities/evidence-file.entity';
+import { TraceabilityModule } from './modules/traceability/traceability.module';
+import { Standard } from './modules/traceability/entities/standard.entity';
+import { ProductStandard } from './modules/traceability/entities/product-standard.entity';
+import { Coc } from './modules/traceability/entities/coc.entity';
+import { QrToken } from './modules/traceability/entities/qr-token.entity';
+import { CocStatusHistory } from './modules/traceability/entities/coc-status-history.entity';
+import { ScanLog } from './modules/traceability/entities/scan-log.entity';
+import { SearchLog } from './modules/traceability/entities/search-log.entity';
 
 @Module({
   imports: [
@@ -171,6 +181,14 @@ import { CbComplianceProfile } from './modules/cb-compliance/entities/cb-complia
             Complaint,
             Appeal,
             CbComplianceProfile,
+            EvidenceFile,
+            Standard,
+            ProductStandard,
+            Coc,
+            QrToken,
+            CocStatusHistory,
+            ScanLog,
+            SearchLog,
           ],
           synchronize: false,
           autoLoadEntities: false,
@@ -191,6 +209,8 @@ import { CbComplianceProfile } from './modules/cb-compliance/entities/cb-complia
     CbComplianceModule,
     ReferenceDataModule,
     DocumentManagementModule,
+    EvidenceModule,
+    TraceabilityModule,
   ],
   providers: [
     {

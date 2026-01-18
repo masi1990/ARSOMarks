@@ -198,7 +198,18 @@ export class NsbReviewComponent implements OnInit {
           this.loadRequests();
         },
         error: (err) => {
-          this.error = err.error?.message || `Failed to ${this.reviewAction} request. Please try again.`;
+          const errorMessage = err.error?.message || `Failed to ${this.reviewAction} request. Please try again.`;
+          
+          // Handle specific conflict errors
+          if (err.status === 409) {
+            if (errorMessage.includes('NSB already exists')) {
+              this.error = `Multiple NSBs per country are now supported for sector-specific NSBs (e.g., Food & Agriculture, Telecommunications). The system allows multiple active NSBs per country to accommodate different quality infrastructure implementations. Please proceed with approval.`;
+            } else {
+              this.error = errorMessage;
+            }
+          } else {
+            this.error = errorMessage;
+          }
         },
       });
   }

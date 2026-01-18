@@ -12,6 +12,7 @@ import { NsbRegulatoryAgency } from './entities/nsb-regulatory-agency.entity';
 import { NsbIndustryAssociation } from './entities/nsb-industry-association.entity';
 import { NsbTestingLaboratory } from './entities/nsb-testing-laboratory.entity';
 import { Country } from '../reference-data/entities/country.entity';
+import { SystemUser } from '../system-user/system-user.entity';
 import { NsbService } from './services/nsb.service';
 import { NsbRegistrationRequestService } from './services/nsb-registration-request.service';
 import { NsbDocumentUploadService } from './services/nsb-document-upload.service';
@@ -36,6 +37,7 @@ import { AuthModule } from '../auth/auth.module';
       NsbIndustryAssociation,
       NsbTestingLaboratory,
       Country,
+      SystemUser,
     ]),
     AuthModule,
   ],

@@ -37,6 +37,24 @@ export class AuthenticatedLayoutComponent {
       section: 'main',
       icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
     },
+    { 
+      label: 'Role Dashboards', 
+      route: '/portal/dashboards', 
+      section: 'main',
+      icon: 'M4 19h16M5 11h3v8H5zM10.5 7h3v12h-3zM16 13h3v6h-3z'
+    },
+    { 
+      label: 'Role Reports', 
+      route: '/portal/reports', 
+      section: 'main',
+      icon: 'M4 7h16M4 12h10m-10 5h6M9 7V5a2 2 0 012-2h6a2 2 0 012 2v2'
+    },
+    { 
+      label: 'Shared Tools', 
+      route: '/portal/shared-tools', 
+      section: 'main',
+      icon: 'M4 6h16M4 12h16M4 18h16'
+    },
     
     // Operator Registration (Operator, NSB Admin, Super Admin & Public)
     {
@@ -60,6 +78,20 @@ export class AuthenticatedLayoutComponent {
       roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN, UserRole.PUBLIC],
       section: 'operator',
       icon: 'M12 4v16m8-8H4'
+    },
+    {
+      label: 'Product Certification',
+      route: '/portal/product-certification/apply',
+      roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
+      section: 'operator',
+      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+    },
+    {
+      label: 'Document Uploads',
+      route: '/portal/documents',
+      roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
+      section: 'operator',
+      icon: 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
     },
 
     {
@@ -144,6 +176,13 @@ export class AuthenticatedLayoutComponent {
       roles: [UserRole.SUPER_ADMIN, UserRole.NSB_ADMIN, UserRole.NSB_USER],
       section: 'nsb',
       icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+    },
+    {
+      label: 'NSB Dashboard',
+      route: '/portal/nsb/dashboard',
+      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
+      section: 'nsb',
+      icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
     },
     {
       label: 'National Stakeholder Registry',

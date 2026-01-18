@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorAccessibility.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'assistive_tech', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'assistive_tech', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorAccessibility.prototype, "assistiveTech", void 0);
 __decorate([
@@ -42,15 +42,15 @@ __decorate([
     __metadata("design:type", String)
 ], OperatorAccessibility.prototype, "specialAssistance", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'literacy_level', type: 'enum', enum: enums_1.DigitalLiteracyLevel, default: enums_1.DigitalLiteracyLevel.BASIC }),
+    (0, typeorm_1.Column)({ name: 'literacy_level', type: 'enum', enum: enums_1.DigitalLiteracyLevel, nullable: true }),
     __metadata("design:type", String)
 ], OperatorAccessibility.prototype, "literacyLevel", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'internet_access', type: 'enum', enum: enums_1.InternetAccessType }),
+    (0, typeorm_1.Column)({ name: 'internet_access', type: 'enum', enum: enums_1.InternetAccessType, nullable: true }),
     __metadata("design:type", String)
 ], OperatorAccessibility.prototype, "internetAccess", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'device_type', type: 'enum', enum: enums_1.DeviceType }),
+    (0, typeorm_1.Column)({ name: 'device_type', type: 'enum', enum: enums_1.DeviceType, nullable: true }),
     __metadata("design:type", String)
 ], OperatorAccessibility.prototype, "deviceType", void 0);
 __decorate([

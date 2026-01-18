@@ -9,6 +9,7 @@ export declare class CertificationSchemeDto {
     schemeType: CertificationSchemeType;
     applicationScope: ApplicationScope;
     certificationType: ProductCertificationType;
+    schemePayload?: Record<string, any>;
 }
 export declare class VolumePriorityDto {
     estimatedVolume: number;

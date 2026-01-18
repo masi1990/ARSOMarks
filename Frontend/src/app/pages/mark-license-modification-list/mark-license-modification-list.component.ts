@@ -88,11 +88,11 @@ export class MarkLicenseModificationListComponent implements OnInit {
 
   requestModification(agreementId: string): void {
     // Use the agreement ID as the license ID for the modification request
-    this.router.navigate(['/mark-licenses/modifications/new', agreementId]);
+    this.router.navigate(['/portal/mark-licenses/modifications/new', agreementId]);
   }
 
   viewAgreement(agreementId: string): void {
-    this.router.navigate(['/mark-licenses/agreements', agreementId]);
+    this.router.navigate(['/portal/mark-licenses/agreements', agreementId]);
   }
 
   getStatusBadgeClass(status: AgreementStatus | string): string {

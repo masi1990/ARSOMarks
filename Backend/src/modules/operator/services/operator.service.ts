@@ -137,6 +137,8 @@ export class OperatorService {
       if (dto.isGroup !== undefined) operatorData.isGroup = dto.isGroup;
       if (dto.groupManagerId !== undefined) operatorData.groupManagerId = dto.groupManagerId;
       if (dto.groupMembers !== undefined) operatorData.groupMembers = dto.groupMembers as Record<string, any>[];
+      if (dto.schemeType !== undefined) operatorData.schemeType = dto.schemeType;
+      if (dto.schemePayload !== undefined) operatorData.schemePayload = dto.schemePayload as Record<string, any>;
       if (dto.countryId !== undefined) operatorData.countryId = dto.countryId;
 
       const operator = this.operatorRepository.create(operatorData);

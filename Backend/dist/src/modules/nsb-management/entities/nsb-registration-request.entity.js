@@ -48,6 +48,46 @@ __decorate([
     __metadata("design:type", String)
 ], NsbRegistrationRequest.prototype, "isoCode", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'legal_status', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "legalStatus", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'establishment_act_name', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "establishmentActName", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'establishment_act_number', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "establishmentActNumber", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'establishment_act_date', type: 'date', nullable: true }),
+    __metadata("design:type", Date)
+], NsbRegistrationRequest.prototype, "establishmentActDate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'registration_number', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "registrationNumber", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'registration_authority', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "registrationAuthority", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'tax_identification_number', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "taxIdentificationNumber", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'vat_number', type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "vatNumber", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'year_established', type: 'int', nullable: true }),
+    __metadata("design:type", Number)
+], NsbRegistrationRequest.prototype, "yearEstablished", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'website', length: 500, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "website", void 0);
+__decorate([
     (0, typeorm_1.Column)({ name: 'contact_person_name', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], NsbRegistrationRequest.prototype, "contactPersonName", void 0);
@@ -68,6 +108,62 @@ __decorate([
     __metadata("design:type", String)
 ], NsbRegistrationRequest.prototype, "contactMobile", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'director_general_name', length: 255, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "directorGeneralName", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'director_general_title', length: 255, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "directorGeneralTitle", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'director_general_email', length: 255, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "directorGeneralEmail", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'director_general_phone', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "directorGeneralPhone", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'board_chair_name', length: 255, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "boardChairName", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'board_chair_email', length: 255, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "boardChairEmail", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'board_chair_phone', length: 50, nullable: true }),
+    __metadata("design:type", String)
+], NsbRegistrationRequest.prototype, "boardChairPhone", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'headquarters_address', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Object)
+], NsbRegistrationRequest.prototype, "headquartersAddress", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'postal_address', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Object)
+], NsbRegistrationRequest.prototype, "postalAddress", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'additional_addresses', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Array)
+], NsbRegistrationRequest.prototype, "additionalAddresses", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'additional_contacts', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Array)
+], NsbRegistrationRequest.prototype, "additionalContacts", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'key_officials', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Array)
+], NsbRegistrationRequest.prototype, "keyOfficials", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'international_memberships', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Array)
+], NsbRegistrationRequest.prototype, "internationalMemberships", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'mandate_areas', type: 'text', array: true, nullable: true }),
+    __metadata("design:type", Array)
+], NsbRegistrationRequest.prototype, "mandateAreas", void 0);
+__decorate([
     (0, typeorm_1.Column)({ name: 'additional_user_slots_requested', type: 'int', default: 0 }),
     __metadata("design:type", Number)
 ], NsbRegistrationRequest.prototype, "additionalUserSlotsRequested", void 0);
@@ -75,6 +171,10 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'requested_roles', type: 'text', array: true, default: [] }),
     __metadata("design:type", Array)
 ], NsbRegistrationRequest.prototype, "requestedRoles", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', array: true, nullable: true }),
+    __metadata("design:type", Array)
+], NsbRegistrationRequest.prototype, "sectors", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: enums_1.NsbRegistrationRequestStatus, default: enums_1.NsbRegistrationRequestStatus.DRAFT }),
     __metadata("design:type", String)

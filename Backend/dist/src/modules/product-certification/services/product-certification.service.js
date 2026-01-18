@@ -19,16 +19,20 @@ const typeorm_2 = require("typeorm");
 const entities_1 = require("../entities");
 const enums_1 = require("../../../shared/enums");
 const operator_entity_1 = require("../../operator/entities/operator.entity");
+const product_certification_agreement_upload_service_1 = require("./product-certification-agreement-upload.service");
 let ProductCertificationService = class ProductCertificationService {
-    constructor(applicationRepository, productRepository, technicalSpecRepository, environmentalClaimRepository, cbSelectionRepository, declarationRepository, operatorRepository, dataSource) {
+    constructor(applicationRepository, productRepository, technicalSpecRepository, environmentalClaimRepository, cbSelectionRepository, declarationRepository, agreementRepository, cbChangeRequestRepository, operatorRepository, dataSource, agreementUploadService) {
         this.applicationRepository = applicationRepository;
         this.productRepository = productRepository;
         this.technicalSpecRepository = technicalSpecRepository;
         this.environmentalClaimRepository = environmentalClaimRepository;
         this.cbSelectionRepository = cbSelectionRepository;
         this.declarationRepository = declarationRepository;
+        this.agreementRepository = agreementRepository;
+        this.cbChangeRequestRepository = cbChangeRequestRepository;
         this.operatorRepository = operatorRepository;
         this.dataSource = dataSource;
+        this.agreementUploadService = agreementUploadService;
     }
     async createApplication(dto, userId) {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -51,6 +55,7 @@ let ProductCertificationService = class ProductCertificationService {
                 schemeType: dto.certificationScheme.schemeType,
                 applicationScope: dto.certificationScheme.applicationScope,
                 certificationType: dto.certificationScheme.certificationType,
+                schemePayload: dto.certificationScheme.schemePayload,
                 estimatedVolume: dto.volumePriority.estimatedVolume,
                 volumeUnit: dto.volumePriority.volumeUnit,
                 peakMonth: dto.volumePriority.peakMonth,
@@ -119,6 +124,7 @@ let ProductCertificationService = class ProductCertificationService {
                     schemeType: dto.certificationScheme.schemeType,
                     applicationScope: dto.certificationScheme.applicationScope,
                     certificationType: dto.certificationScheme.certificationType,
+                    schemePayload: dto.certificationScheme.schemePayload,
                 });
             }
             if (dto.volumePriority) {
@@ -220,6 +226,8 @@ let ProductCertificationService = class ProductCertificationService {
                 'products.environmentalClaim',
                 'cbSelection',
                 'declaration',
+                'agreements',
+                'cbChangeRequests',
                 'createdByUser',
                 'updatedByUser',
             ],
@@ -265,6 +273,106 @@ let ProductCertificationService = class ProductCertificationService {
         }
         await this.applicationRepository.remove(application);
     }
+    async uploadAgreement(applicationId, agreementType, file, payload, userId) {
+        await this.findById(applicationId);
+        const fileMetadata = await this.agreementUploadService.uploadFile(file, applicationId, agreementType);
+        const contractStart = payload.contractStart;
+        let contractEnd = payload.contractEnd;
+        if (contractStart && !contractEnd) {
+            const startDate = new Date(contractStart);
+            const endDate = new Date(startDate);
+            endDate.setFullYear(endDate.getFullYear() + 3);
+            contractEnd = endDate.toISOString().slice(0, 10);
+        }
+        const agreement = this.agreementRepository.create({
+            applicationId,
+            agreementType,
+            status: enums_1.CertificationAgreementStatus.PENDING_CB_APPROVAL,
+            contractStart,
+            contractEnd,
+            signedByName: payload.signedByName,
+            signedAt: payload.signedByName ? new Date() : undefined,
+            fileName: fileMetadata.fileName,
+            filePath: fileMetadata.filePath,
+            fileHash: fileMetadata.fileHash,
+            fileSize: fileMetadata.fileSize,
+            mimeType: fileMetadata.mimeType,
+            uploadedBy: userId,
+        });
+        return this.agreementRepository.save(agreement);
+    }
+    async listAgreements(applicationId) {
+        await this.findById(applicationId);
+        return this.agreementRepository.find({
+            where: { applicationId },
+            order: { createdAt: 'DESC' },
+        });
+    }
+    async approveAgreement(id, userId) {
+        const agreement = await this.agreementRepository.findOne({ where: { id } });
+        if (!agreement) {
+            throw new common_1.NotFoundException('Agreement not found');
+        }
+        agreement.status = enums_1.CertificationAgreementStatus.APPROVED;
+        agreement.cbApprovedBy = userId;
+        agreement.cbApprovedAt = new Date();
+        agreement.rejectionReason = undefined;
+        return this.agreementRepository.save(agreement);
+    }
+    async rejectAgreement(id, reason, userId) {
+        const agreement = await this.agreementRepository.findOne({ where: { id } });
+        if (!agreement) {
+            throw new common_1.NotFoundException('Agreement not found');
+        }
+        agreement.status = enums_1.CertificationAgreementStatus.REJECTED;
+        agreement.cbApprovedBy = userId;
+        agreement.cbApprovedAt = new Date();
+        agreement.rejectionReason = reason;
+        return this.agreementRepository.save(agreement);
+    }
+    async createCbChangeRequest(applicationId, payload, userId) {
+        await this.findById(applicationId);
+        const request = this.cbChangeRequestRepository.create({
+            applicationId,
+            currentCbId: payload.currentCbId,
+            requestedCbId: payload.requestedCbId,
+            justification: payload.justification,
+            penaltyPolicy: payload.penaltyPolicy,
+            status: enums_1.CbChangeRequestStatus.PENDING,
+            requestedBy: userId,
+        });
+        return this.cbChangeRequestRepository.save(request);
+    }
+    async reviewCbChangeRequest(id, status, decisionReason, userId) {
+        const request = await this.cbChangeRequestRepository.findOne({ where: { id } });
+        if (!request) {
+            throw new common_1.NotFoundException('CB change request not found');
+        }
+        request.status = status;
+        request.reviewedBy = userId;
+        request.reviewedAt = new Date();
+        request.decisionReason = decisionReason;
+        return this.cbChangeRequestRepository.save(request);
+    }
+    async publicDirectory() {
+        return this.applicationRepository
+            .createQueryBuilder('application')
+            .leftJoinAndSelect('application.operator', 'operator')
+            .where('application.status = :status', { status: enums_1.ProductCertificationStatus.CERTIFIED })
+            .select([
+            'application.id',
+            'application.applicationNumber',
+            'application.certifiedAt',
+            'application.certificateNumber',
+            'application.schemeType',
+            'application.schemePayload',
+            'operator.id',
+            'operator.companyLegalName',
+            'operator.tradingName',
+        ])
+            .orderBy('application.certifiedAt', 'DESC')
+            .getMany();
+    }
 };
 exports.ProductCertificationService = ProductCertificationService;
 exports.ProductCertificationService = ProductCertificationService = __decorate([
@@ -275,7 +383,9 @@ exports.ProductCertificationService = ProductCertificationService = __decorate([
     __param(3, (0, typeorm_1.InjectRepository)(entities_1.ProductEnvironmentalClaim)),
     __param(4, (0, typeorm_1.InjectRepository)(entities_1.ProductCertificationCbSelection)),
     __param(5, (0, typeorm_1.InjectRepository)(entities_1.ProductCertificationDeclaration)),
-    __param(6, (0, typeorm_1.InjectRepository)(operator_entity_1.Operator)),
+    __param(6, (0, typeorm_1.InjectRepository)(entities_1.ProductCertificationAgreement)),
+    __param(7, (0, typeorm_1.InjectRepository)(entities_1.ProductCertificationCbChangeRequest)),
+    __param(8, (0, typeorm_1.InjectRepository)(operator_entity_1.Operator)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
@@ -283,6 +393,9 @@ exports.ProductCertificationService = ProductCertificationService = __decorate([
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.DataSource])
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.DataSource,
+        product_certification_agreement_upload_service_1.ProductCertificationAgreementUploadService])
 ], ProductCertificationService);
 //# sourceMappingURL=product-certification.service.js.map

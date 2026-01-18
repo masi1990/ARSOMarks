@@ -1,297 +1,912 @@
-<div class="w-full max-w-5xl mx-auto">
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <!-- Header -->
-    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
-      <h1 class="text-2xl font-bold text-slate-900">NSB Registration Request</h1>
-      <p class="mt-1 text-sm font-medium text-slate-600">Form NSB-001: Initial Registration Request</p>
-      <p class="mt-1 text-sm text-slate-500">Complete all required fields and upload verification documents</p>
+<div class="min-h-screen bg-gray-50 p-6 md:p-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-900">NSB Registration Portal</h1>
+      <p class="text-sm text-gray-500 mt-1">Onboard new National Standards Bodies and manage the central registry.</p>
     </div>
 
-    <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
-      <p class="font-semibold">Request saved successfully!</p>
-      <p *ngIf="existingRequest?.status === 'SUBMITTED'" class="text-sm mt-1">
-        Your request has been submitted for review. You will be notified once reviewed.
-      </p>
-      <p *ngIf="existingRequest?.status === 'DRAFT'" class="text-sm mt-1">Your request has been saved as draft.</p>
+    <!-- Navigation Tabs -->
+    <div class="flex border-b border-gray-200 mb-8 space-x-8">
+      <button 
+        (click)="onTabChange('form')" 
+        [class.border-blue-600]="activeTab === 'form'"
+        [class.text-blue-600]="activeTab === 'form'"
+        class="pb-4 px-1 border-b-2 font-bold text-sm transition-all focus:outline-none"
+        [class.border-transparent]="activeTab !== 'form'"
+        [class.text-gray-400]="activeTab !== 'form'"
+      >
+        <i class="fas fa-plus-circle mr-2"></i> Register New Body
+      </button>
+      <button 
+        (click)="onTabChange('drafts')" 
+        [class.border-blue-600]="activeTab === 'drafts'"
+        [class.text-blue-600]="activeTab === 'drafts'"
+        class="pb-4 px-1 border-b-2 font-bold text-sm transition-all focus:outline-none"
+        [class.border-transparent]="activeTab !== 'drafts'"
+        [class.text-gray-400]="activeTab !== 'drafts'"
+      >
+        <i class="fas fa-file-alt mr-2"></i> Draft NSBs
+      </button>
+      <button 
+        (click)="onTabChange('list')" 
+        [class.border-blue-600]="activeTab === 'list'"
+        [class.text-blue-600]="activeTab === 'list'"
+        class="pb-4 px-1 border-b-2 font-bold text-sm transition-all focus:outline-none"
+        [class.border-transparent]="activeTab !== 'list'"
+        [class.text-gray-400]="activeTab !== 'list'"
+      >
+        <i class="fas fa-list mr-2"></i> Registered NSBs
+      </button>
     </div>
 
-    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-      {{ error }}
-    </div>
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-8 space-y-10" *ngIf="!success || existingRequest?.status === 'DRAFT'">
-      <!-- Section A: Country Information -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Country Information</h2>
-        <div class="grid gap-6 md:grid-cols-2">
-          <div class="space-y-2">
-            <label for="countryId" class="block text-sm font-semibold text-slate-700">Country Name <span class="text-red-500">*</span></label>
-            <select
-              id="countryId"
-              formControlName="countryId"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-              [class.border-red-300]="form.get('countryId')?.invalid && form.get('countryId')?.touched"
-              [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
-            >
-              <option value="" disabled>Select country</option>
-              <option *ngFor="let country of countries" [value]="country.id">
-                {{ country.name }}
-              </option>
-            </select>
-            <p *ngIf="form.get('countryId')?.invalid && form.get('countryId')?.touched" class="text-xs text-red-500 mt-1">
-              Country is required
-            </p>
+    <!-- Tab Content: Registration Form -->
+    <div *ngIf="activeTab === 'form'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="px-8 py-6 border-b border-gray-100 bg-gray-50/50">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">NSB Registration Request</h2>
+            <p class="mt-1 text-sm font-medium text-gray-600">Form NSB-001: Initial Registration Request</p>
+            <p class="mt-1 text-sm text-gray-500">Complete all required fields and upload verification documents</p>
           </div>
-
-          <div class="space-y-2">
-            <label for="isoCode" class="block text-sm font-semibold text-slate-700">ISO Alpha-2 Code <span class="text-red-500">*</span></label>
-            <input
-              type="text"
-              id="isoCode"
-              formControlName="isoCode"
-              class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none cursor-default"
-              readonly
-            />
+          <div *ngIf="existingRequest" class="flex flex-col items-end gap-2">
+            <span [class]="'px-3 py-1 rounded text-xs font-bold ' + (existingRequest.status === 'DRAFT' ? 'bg-amber-100 text-amber-700 border border-amber-200' : existingRequest.status === 'SUBMITTED' ? 'bg-blue-100 text-blue-700 border border-blue-200' : existingRequest.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-gray-100 text-gray-700 border border-gray-200')">
+              {{ existingRequest.status === 'DRAFT' ? 'Draft' : existingRequest.status === 'SUBMITTED' ? 'Submitted' : existingRequest.status === 'APPROVED' ? 'Approved' : existingRequest.status }}
+            </span>
+            <p *ngIf="existingRequest.status === 'DRAFT'" class="text-xs text-gray-500">Saved draft - continue editing below</p>
           </div>
         </div>
+      </div>
 
-        <div class="space-y-2">
-          <label for="nsbOfficialName" class="block text-sm font-semibold text-slate-700">National Standards Body Official Name <span class="text-red-500">*</span></label>
-          <input
-            type="text"
-            id="nsbOfficialName"
-            formControlName="nsbOfficialName"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            placeholder="Enter official NSB name"
-          />
-        </div>
 
-        <div class="space-y-2">
-          <label for="nsbAcronym" class="block text-sm font-semibold text-slate-700">NSB Acronym (Optional)</label>
-          <input
-            type="text"
-            id="nsbAcronym"
-            formControlName="nsbAcronym"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            placeholder="e.g., KEBS"
-          />
-        </div>
-      </section>
+      <div *ngIf="success" class="mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
+        <p class="font-semibold">Request saved successfully!</p>
+        <p *ngIf="existingRequest?.status === 'SUBMITTED'" class="text-sm mt-1">
+          Your request has been submitted for review. You will be notified once reviewed.
+        </p>
+        <p *ngIf="existingRequest?.status === 'DRAFT'" class="text-sm mt-1">
+          Your request has been saved as draft. You can continue editing and submit when ready.
+        </p>
+      </div>
 
-      <!-- Section B: Primary Contact Information -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Primary Contact Information</h2>
-        <div class="grid gap-6 md:grid-cols-2">
-          <div class="space-y-2">
-            <label for="contactPersonName" class="block text-sm font-semibold text-slate-700">Contact Person Name <span class="text-red-500">*</span></label>
-            <input
-              type="text"
-              id="contactPersonName"
-              formControlName="contactPersonName"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-              placeholder="Enter contact person name"
-            />
-          </div>
+      <!-- Workflow Information -->
+      <div class="mx-8 mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <h3 class="text-sm font-semibold text-blue-900 mb-2">NSB Registration Workflow</h3>
+        <ul class="text-xs text-blue-800 space-y-1 list-disc list-inside">
+          <li><strong>Step 1:</strong> Submit initial registration request with required documents</li>
+          <li><strong>Step 2:</strong> After approval, complete detailed NSB profile setup</li>
+          <li><strong>Step 3:</strong> Register national stakeholders in the Stakeholder Registry</li>
+        </ul>
+        <p class="text-xs text-blue-700 mt-2">
+          <strong>Note:</strong> You can save your progress as a draft at any time and continue later. All drafts are automatically saved.
+        </p>
+      </div>
 
-          <div class="space-y-2">
-            <label for="contactPersonTitle" class="block text-sm font-semibold text-slate-700">Official Title/Position</label>
-            <input
-              type="text"
-              id="contactPersonTitle"
-              formControlName="contactPersonTitle"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-              placeholder="e.g., Director General"
-            />
-          </div>
-        </div>
+      <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+        {{ error }}
+      </div>
 
-        <div class="space-y-2">
-          <label for="contactEmail" class="block text-sm font-semibold text-slate-700">Government Email Address <span class="text-red-500">*</span></label>
-          <input
-            type="email"
-            id="contactEmail"
-            formControlName="contactEmail"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            placeholder="name@domain.gov.xx"
-          />
-          <p class="text-xs text-slate-500">Must be a .gov/.go.xx domain</p>
-        </div>
+      <div class="px-8 pb-8">
+        <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8" *ngIf="(!success || existingRequest?.status === 'DRAFT') && activeTab === 'form'">
+            <div class="space-y-3 rounded-lg border border-slate-200 bg-white p-4">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Registration Categories</div>
+              <ol class="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+                <li *ngFor="let step of steps; let i = index">
+                  <div class="space-y-2">
+                    <button
+                      type="button"
+                      (click)="goToStep(i)"
+                      class="w-full rounded-lg border px-3 py-2 text-left transition-colors"
+                      [class.border-slate-900]="activeStep === i"
+                      [class.bg-slate-50]="activeStep === i"
+                      [class.text-slate-900]="activeStep === i"
+                      [class.border-slate-200]="activeStep !== i"
+                      [class.text-slate-500]="activeStep !== i"
+                    >
+                      <div class="text-xs font-semibold">Step {{ i + 1 }}</div>
+                      <div class="text-sm font-semibold">{{ step.label }}</div>
+                    </button>
+                    <button
+                      type="button"
+                      (click)="$event.stopPropagation(); onSubmit()"
+                      [disabled]="saving"
+                      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <span *ngIf="!saving">Save Draft</span>
+                      <span *ngIf="saving">Saving...</span>
+                    </button>
+                  </div>
+                </li>
+              </ol>
+            </div>
 
-        <div class="grid gap-6 md:grid-cols-2">
-          <div class="space-y-2">
-            <label for="contactPhone" class="block text-sm font-semibold text-slate-700">Office Phone Number</label>
-            <input
-              type="tel"
-              id="contactPhone"
-              formControlName="contactPhone"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-              placeholder="+254 20 1234567"
-            />
-          </div>
+            <!-- Step 1: Country & Legal -->
+            <section class="space-y-6" *ngIf="activeStep === 0">
+              <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Country Information</h2>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="countryId" class="block text-sm font-semibold text-slate-700">Country Name <span class="text-red-500">*</span></label>
+                  <select
+                    id="countryId"
+                    formControlName="countryId"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    [class.border-red-300]="form.get('countryId')?.invalid && form.get('countryId')?.touched"
+                    [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
+                  >
+                    <option value="" disabled>Select country</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                  <p *ngIf="form.get('countryId')?.invalid && form.get('countryId')?.touched" class="text-xs text-red-500 mt-1">
+                    Country is required
+                  </p>
+                </div>
 
-          <div class="space-y-2">
-            <label for="contactMobile" class="block text-sm font-semibold text-slate-700">Mobile Phone Number</label>
-            <input
-              type="tel"
-              id="contactMobile"
-              formControlName="contactMobile"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-              placeholder="+254 712 345678"
-            />
-          </div>
-        </div>
-      </section>
+                <div class="space-y-2">
+                  <label for="isoCode" class="block text-sm font-semibold text-slate-700">ISO Alpha-2 Code <span class="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    id="isoCode"
+                    formControlName="isoCode"
+                    class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none cursor-default"
+                    readonly
+                  />
+                </div>
+              </div>
 
-      <!-- Section C: Verification Documents Upload -->
-      <section class="space-y-6">
-        <div class="border-b border-slate-200 pb-3">
-          <h2 class="text-lg font-bold text-slate-900">Verification Documents Upload</h2>
-          <p class="text-sm text-slate-600 mt-1">Please upload the following required documents:</p>
-        </div>
+              <div class="space-y-2">
+                <label for="nsbOfficialName" class="block text-sm font-semibold text-slate-700">National Standards Body Official Name <span class="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  id="nsbOfficialName"
+                  formControlName="nsbOfficialName"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                  placeholder="Enter official NSB name"
+                />
+              </div>
 
-        <div class="grid gap-6 md:grid-cols-2">
-          <div *ngFor="let docType of documentTypes" class="bg-slate-50 rounded-lg border border-slate-200 p-5 hover:border-blue-300 transition-colors">
-            <div class="flex flex-col h-full justify-between gap-4">
-              <div>
-                <label class="block text-sm font-bold text-slate-900 mb-1">{{ docType.label }}</label>
-                <p class="text-xs text-slate-500 mb-3">Accepted formats: PDF, DOC, DOCX (Max 10MB)</p>
+              <div class="space-y-2">
+                <label for="nsbAcronym" class="block text-sm font-semibold text-slate-700">NSB Acronym (Optional)</label>
+                <input
+                  type="text"
+                  id="nsbAcronym"
+                  formControlName="nsbAcronym"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                  placeholder="e.g., KEBS"
+                />
+              </div>
 
-                <!-- Uploaded State -->
-                <div *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)" class="bg-white border border-emerald-200 rounded p-3 mb-2 flex items-center gap-2">
-                  <div class="h-6 w-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">✓</div>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-xs font-semibold text-emerald-800 truncate">Uploaded</p>
-                    <p class="text-xs text-slate-600 truncate" [title]="getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName">
-                      {{ getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName }}
-                    </p>
+              <h3 class="text-base font-semibold text-slate-900 border-b border-slate-200 pb-2">Legal Identity & Registration</h3>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Legal Status</label>
+                  <input type="text" formControlName="legalStatus" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Year Established</label>
+                  <input type="number" formControlName="yearEstablished" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" min="1900" />
+                </div>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Establishment Act/Charter Name</label>
+                  <input type="text" formControlName="establishmentActName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Establishment Act/Number</label>
+                  <input type="text" formControlName="establishmentActNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Establishment Date</label>
+                  <input type="date" formControlName="establishmentActDate" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Registration Number</label>
+                  <input type="text" formControlName="registrationNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Registration Authority</label>
+                  <input type="text" formControlName="registrationAuthority" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Tax Identification Number</label>
+                  <input type="text" formControlName="taxIdentificationNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">VAT Number</label>
+                  <input type="text" formControlName="vatNumber" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Official Website</label>
+                  <input type="url" formControlName="website" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" placeholder="https://www.example.org" />
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 2: Contacts & Governance -->
+            <section class="space-y-6" *ngIf="activeStep === 1">
+              <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Primary Contact Information</h2>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="contactPersonName" class="block text-sm font-semibold text-slate-700">Contact Person Name <span class="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    id="contactPersonName"
+                    formControlName="contactPersonName"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="Enter contact person name"
+                  />
+                </div>
+
+                <div class="space-y-2">
+                  <label for="contactPersonTitle" class="block text-sm font-semibold text-slate-700">Official Title/Position</label>
+                  <input
+                    type="text"
+                    id="contactPersonTitle"
+                    formControlName="contactPersonTitle"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="e.g., Director General"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label for="contactEmail" class="block text-sm font-semibold text-slate-700">Government Email Address <span class="text-red-500">*</span></label>
+                <input
+                  type="email"
+                  id="contactEmail"
+                  formControlName="contactEmail"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                  placeholder="name@domain.gov.xx"
+                />
+                <p class="text-xs text-slate-500">Must be a .gov/.go.xx domain</p>
+              </div>
+
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="contactPhone" class="block text-sm font-semibold text-slate-700">Office Phone Number</label>
+                  <input
+                    type="tel"
+                    id="contactPhone"
+                    formControlName="contactPhone"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="+254 20 1234567"
+                  />
+                </div>
+
+                <div class="space-y-2">
+                  <label for="contactMobile" class="block text-sm font-semibold text-slate-700">Mobile Phone Number</label>
+                  <input
+                    type="tel"
+                    id="contactMobile"
+                    formControlName="contactMobile"
+                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                    placeholder="+254 712 345678"
+                  />
+                </div>
+              </div>
+
+              <h3 class="text-base font-semibold text-slate-900 border-b border-slate-200 pb-2">Leadership & Governance</h3>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Director General / Head of NSB</label>
+                  <input type="text" formControlName="directorGeneralName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Director General Title</label>
+                  <input type="text" formControlName="directorGeneralTitle" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Director General Email</label>
+                  <input type="email" formControlName="directorGeneralEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Director General Phone</label>
+                  <input type="tel" formControlName="directorGeneralPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Board Chair Name</label>
+                  <input type="text" formControlName="boardChairName" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-semibold text-slate-700">Board Chair Email</label>
+                  <input type="email" formControlName="boardChairEmail" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-slate-700">Board Chair Phone</label>
+                <input type="tel" formControlName="boardChairPhone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="block text-sm font-semibold text-slate-700">Additional Contacts</label>
+                  <div class="flex items-center gap-2">
+                    <button type="button" (click)="addAdditionalContact()" class="px-3 py-1.5 text-xs font-semibold text-blue-600 border border-blue-200 rounded hover:bg-blue-50">Add Contact</button>
+                    <button type="button" (click)="saveAdditionalContacts()" [disabled]="saving" class="px-3 py-1.5 text-xs font-semibold text-slate-700 border border-slate-300 rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
+                  </div>
+                </div>
+                <div formArrayName="additionalContacts" class="space-y-3">
+                  <div *ngFor="let contact of additionalContactsArray.controls; let i = index" [formGroupName]="i" class="rounded-lg border border-slate-200 p-4 space-y-3">
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="text" formControlName="name" placeholder="Name" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="text" formControlName="title" placeholder="Title" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="email" formControlName="email" placeholder="Email" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="tel" formControlName="phone" placeholder="Phone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="tel" formControlName="mobile" placeholder="Mobile" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="text" formControlName="contactType" placeholder="Contact Type (e.g., TECHNICAL)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <button type="button" (click)="removeAdditionalContact(i)" class="text-xs text-red-600 hover:text-red-800">Remove</button>
                   </div>
                 </div>
               </div>
 
-              <!-- Actions -->
-              <div class="flex items-center gap-3">
-                <!-- Upload Input (Hidden) -->
-                <input
-                  type="file"
-                  [id]="docType.value"
-                  class="hidden"
-                  (change)="onFileSelected($event, docType.value)"
-                  accept=".pdf,.doc,.docx"
-                  [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
-                  #fileInput
-                />
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="block text-sm font-semibold text-slate-700">Key Officials</label>
+                  <div class="flex items-center gap-2">
+                    <button type="button" (click)="addKeyOfficial()" class="px-3 py-1.5 text-xs font-semibold text-blue-600 border border-blue-200 rounded hover:bg-blue-50">Add Official</button>
+                    <button type="button" (click)="saveKeyOfficials()" [disabled]="saving" class="px-3 py-1.5 text-xs font-semibold text-slate-700 border border-slate-300 rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
+                  </div>
+                </div>
+                <div formArrayName="keyOfficials" class="space-y-3">
+                  <div *ngFor="let official of keyOfficialsArray.controls; let i = index" [formGroupName]="i" class="rounded-lg border border-slate-200 p-4 space-y-3">
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="text" formControlName="name" placeholder="Name" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="text" formControlName="designation" placeholder="Designation" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="email" formControlName="email" placeholder="Email" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="tel" formControlName="phone" placeholder="Phone" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <button type="button" (click)="removeKeyOfficial(i)" class="text-xs text-red-600 hover:text-red-800">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-                <!-- Upload Button (Shown if nothing uploaded) -->
+            <!-- Step 3: Addresses & Locations -->
+            <section class="space-y-6" *ngIf="activeStep === 2">
+              <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Addresses & Locations</h2>
+              <div formGroupName="headquartersAddress" class="space-y-3 rounded-lg border border-slate-200 p-4">
+                <h3 class="text-sm font-semibold text-slate-700">Headquarters Address</h3>
+                <input type="text" formControlName="addressLine1" placeholder="Address Line 1" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                <input type="text" formControlName="addressLine2" placeholder="Address Line 2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                <div class="grid gap-4 md:grid-cols-2">
+                  <input type="text" formControlName="city" placeholder="City" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                  <input type="text" formControlName="stateProvince" placeholder="State/Province" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="grid gap-4 md:grid-cols-2">
+                  <input type="text" formControlName="postalCode" placeholder="Postal Code" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                  <input type="text" formControlName="country" placeholder="Country" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+
+              <div formGroupName="postalAddress" class="space-y-3 rounded-lg border border-slate-200 p-4">
+                <h3 class="text-sm font-semibold text-slate-700">Postal Address</h3>
+                <input type="text" formControlName="addressLine1" placeholder="Address Line 1" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                <input type="text" formControlName="addressLine2" placeholder="Address Line 2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                <div class="grid gap-4 md:grid-cols-2">
+                  <input type="text" formControlName="city" placeholder="City" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                  <input type="text" formControlName="stateProvince" placeholder="State/Province" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+                <div class="grid gap-4 md:grid-cols-2">
+                  <input type="text" formControlName="postalCode" placeholder="Postal Code" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                  <input type="text" formControlName="country" placeholder="Country" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="block text-sm font-semibold text-slate-700">Additional Locations</label>
+                  <div class="flex items-center gap-2">
+                    <button type="button" (click)="addAdditionalAddress()" class="px-3 py-1.5 text-xs font-semibold text-blue-600 border border-blue-200 rounded hover:bg-blue-50">Add Location</button>
+                    <button type="button" (click)="saveAdditionalLocations()" [disabled]="saving" class="px-3 py-1.5 text-xs font-semibold text-slate-700 border border-slate-300 rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
+                  </div>
+                </div>
+                <div formArrayName="additionalAddresses" class="space-y-3">
+                  <div *ngFor="let address of additionalAddressesArray.controls; let i = index" [formGroupName]="i" class="rounded-lg border border-slate-200 p-4 space-y-3">
+                    <input type="text" formControlName="addressLine1" placeholder="Address Line 1" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    <input type="text" formControlName="addressLine2" placeholder="Address Line 2" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="text" formControlName="city" placeholder="City" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="text" formControlName="stateProvince" placeholder="State/Province" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="text" formControlName="postalCode" placeholder="Postal Code" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="text" formControlName="country" placeholder="Country" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <input type="text" formControlName="type" placeholder="Location Type (e.g., BRANCH)" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    <button type="button" (click)="removeAdditionalAddress(i)" class="text-xs text-red-600 hover:text-red-800">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 4: Sectors & Mandate -->
+            <section class="space-y-6" *ngIf="activeStep === 3">
+              <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">NSB Sectors/Domains</h2>
+              <div class="space-y-3">
+                <label class="block text-sm font-semibold text-slate-700">
+                  Select Sectors/Domains Covered by this NSB
+                  <span class="text-slate-400 font-normal">(Optional - helps distinguish multiple NSBs in the same country)</span>
+                </label>
+                <p class="text-xs text-slate-500 mb-3">
+                  Some countries have multiple NSBs for different sectors (e.g., Tanzania has separate NSBs for Food & Agriculture and other sectors).
+                  Specify the sectors this NSB covers to help distinguish it from other NSBs in your country.
+                </p>
+
+                <div class="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    [(ngModel)]="customSectorInput"
+                    [ngModelOptions]="{standalone: true}"
+                    (keydown)="onSectorInputKeydown($event)"
+                    placeholder="Enter sector/domain name and press Enter"
+                    class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                  />
+                  <button
+                    type="button"
+                    (click)="addCustomSector()"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
+                  >
+                    <i class="fas fa-plus mr-2"></i> Add
+                  </button>
+                </div>
+
+                <div *ngIf="selectedSectors.length > 0" class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="let sector of selectedSectors"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-sm font-medium"
+                  >
+                    {{ sector }}
+                    <button
+                      type="button"
+                      (click)="removeSector(sector)"
+                      class="text-blue-500 hover:text-blue-700 focus:outline-none"
+                    >
+                      <i class="fas fa-times text-xs"></i>
+                    </button>
+                  </span>
+                </div>
+                <p *ngIf="selectedSectors.length === 0" class="text-xs text-slate-400 italic">
+                  No sectors specified yet. Add sectors to help distinguish this NSB from others in your country.
+                </p>
+              </div>
+
+              <div class="space-y-3">
+                <label class="block text-sm font-semibold text-slate-700">Mandate Areas / Standards Scope</label>
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    [(ngModel)]="customMandateInput"
+                    [ngModelOptions]="{standalone: true}"
+                    (keydown)="onMandateInputKeydown($event)"
+                    placeholder="Enter mandate area and press Enter"
+                    class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                  />
+                  <button type="button" (click)="addMandateAreaFromInput()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold">
+                    <i class="fas fa-plus mr-2"></i> Add
+                  </button>
+                </div>
+                <div formArrayName="mandateAreas" class="flex flex-wrap gap-2">
+                  <span *ngFor="let area of mandateAreasArray.controls; let i = index" class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-sm">
+                    {{ area.value }}
+                    <button type="button" (click)="removeMandateArea(i)" class="text-slate-400 hover:text-slate-600">
+                      <i class="fas fa-times text-xs"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="block text-sm font-semibold text-slate-700">International Memberships</label>
+                  <div class="flex items-center gap-2">
+                    <button type="button" (click)="addInternationalMembership()" class="px-3 py-1.5 text-xs font-semibold text-blue-600 border border-blue-200 rounded hover:bg-blue-50">Add Membership</button>
+                    <button type="button" (click)="saveInternationalMemberships()" [disabled]="saving" class="px-3 py-1.5 text-xs font-semibold text-slate-700 border border-slate-300 rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
+                  </div>
+                </div>
+                <div formArrayName="internationalMemberships" class="space-y-3">
+                  <div *ngFor="let membership of internationalMembershipsArray.controls; let i = index" [formGroupName]="i" class="rounded-lg border border-slate-200 p-4 space-y-3">
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <input type="text" formControlName="organization" placeholder="Organization" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                      <input type="text" formControlName="membershipStatus" placeholder="Membership Status" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    </div>
+                    <input type="text" formControlName="yearJoined" placeholder="Year Joined" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
+                    <button type="button" (click)="removeInternationalMembership(i)" class="text-xs text-red-600 hover:text-red-800">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 5: Documents & Roles -->
+            <section class="space-y-6" *ngIf="activeStep === 4">
+              <div class="border-b border-slate-200 pb-3">
+                <h2 class="text-lg font-bold text-slate-900">Verification Documents Upload</h2>
+                <p class="text-sm text-slate-600 mt-1">Please upload the following required documents:</p>
+              </div>
+
+              <div class="grid gap-6 md:grid-cols-2">
+                <div *ngFor="let docType of documentTypes" class="bg-slate-50 rounded-lg border border-slate-200 p-5 hover:border-blue-300 transition-colors">
+                  <div class="flex flex-col h-full justify-between gap-4">
+                    <div>
+                      <label class="block text-sm font-bold text-slate-900 mb-1">{{ docType.label }}</label>
+                      <p class="text-xs text-slate-500 mb-3">Accepted formats: PDF, DOC, DOCX (Max 10MB)</p>
+
+                      <div *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)" class="bg-white border border-emerald-200 rounded p-3 mb-2 flex items-center gap-2">
+                        <div class="h-6 w-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">✓</div>
+                        <div class="min-w-0 flex-1">
+                          <p class="text-xs font-semibold text-emerald-800 truncate">Uploaded</p>
+                          <p class="text-xs text-slate-600 truncate" [title]="getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName">
+                            {{ getFileName(docType.value) || getUploadedDocument(docType.value)?.fileName }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                      <input
+                        type="file"
+                        [id]="docType.value"
+                        class="hidden"
+                        (change)="onFileSelected($event, docType.value)"
+                        accept=".pdf,.doc,.docx"
+                        [disabled]="formMode === 'view' || (existingRequest && existingRequest.status !== 'DRAFT')"
+                        #fileInput
+                      />
+
+                      <button
+                        type="button"
+                        (click)="fileInput.click()"
+                        class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline"
+                        *ngIf="!selectedFiles[docType.value] && !getUploadedDocument(docType.value)"
+                        [disabled]="formMode === 'view' || (existingRequest && existingRequest.status !== 'DRAFT')"
+                      >
+                        Upload Document
+                      </button>
+
+                      <ng-container *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)">
+                        <button
+                          type="button"
+                          class="text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-300 bg-white px-3 py-1.5 rounded hover:bg-slate-50"
+                          (click)="viewDocument(docType.value); $event.stopPropagation()"
+                          *ngIf="getUploadedDocument(docType.value)"
+                        >
+                          View
+                        </button>
+                        <button
+                          type="button"
+                          class="text-xs font-semibold text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1.5 rounded hover:bg-red-100"
+                          (click)="removeFile(docType.value); fileInput.value = ''"
+                          [disabled]="formMode === 'view' || (existingRequest && existingRequest.status !== 'DRAFT')"
+                        >
+                          Remove
+                        </button>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Designation of NSB Roles</h2>
+              <div class="space-y-2">
+                <label for="additionalUserSlotsRequested" class="block text-sm font-semibold text-slate-700">Additional User Slots Requested</label>
+                <input
+                  type="number"
+                  id="additionalUserSlotsRequested"
+                  formControlName="additionalUserSlotsRequested"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
+                  min="0"
+                  placeholder="0"
+                />
+                <p class="text-xs text-slate-500">Number of additional user accounts needed</p>
+              </div>
+
+              <div class="space-y-3">
+                <label class="block text-sm font-semibold text-slate-700">Proposed User Roles Needed</label>
+                <div class="grid sm:grid-cols-2 gap-3">
+                  <label *ngFor="let role of requestedRolesOptions" class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors">
+                    <input
+                      type="checkbox"
+                      [value]="role.value"
+                      [checked]="form.get('requestedRoles')?.value?.includes(role.value)"
+                      (change)="toggleRole(role.value)"
+                      class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span class="text-sm text-slate-700 font-medium">{{ role.label }}</span>
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <!-- Step 6: Review & Submit -->
+            <section class="space-y-4" *ngIf="activeStep === 5">
+              <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Review & Submit</h2>
+              <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 space-y-2">
+                <p>Please review your details and supporting documents before submitting for review.</p>
+                <p>You can return to any category using the navigation above to make corrections.</p>
+              </div>
+            </section>
+
+            <!-- Form Actions -->
+            <div *ngIf="formMode !== 'view'" class="flex flex-col gap-4 pt-6 border-t border-slate-200 md:flex-row md:items-center md:justify-between">
+              <div class="flex gap-3">
                 <button
                   type="button"
-                  (click)="fileInput.click()"
-                  class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline"
-                  *ngIf="!selectedFiles[docType.value] && !getUploadedDocument(docType.value)"
-                  [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
+                  (click)="previousStep()"
+                  [disabled]="activeStep === 0"
+                  class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  Upload Document
+                  Previous
                 </button>
-
-                <!-- View / Remove (Shown if uploaded) -->
-                <ng-container *ngIf="selectedFiles[docType.value] || getUploadedDocument(docType.value)">
-                  <button
-                    type="button"
-                    class="text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-300 bg-white px-3 py-1.5 rounded hover:bg-slate-50"
-                    (click)="viewDocument(docType.value); $event.stopPropagation()"
-                    *ngIf="getUploadedDocument(docType.value)"
-                  >
-                    View
-                  </button>
-                  <button
-                    type="button"
-                    class="text-xs font-semibold text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1.5 rounded hover:bg-red-100"
-                    (click)="removeFile(docType.value); fileInput.value = ''"
-                    [disabled]="existingRequest && existingRequest.status !== 'DRAFT'"
-                  >
-                    Remove
-                  </button>
-                </ng-container>
+                <button
+                  type="button"
+                  (click)="nextStep()"
+                  [disabled]="activeStep === steps.length - 1"
+                  class="px-5 py-2.5 rounded-lg border border-slate-900 bg-slate-900 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  (click)="onSubmit()"
+                  [disabled]="saving"
+                  class="px-6 py-2.5 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span *ngIf="!saving">Save Draft</span>
+                  <span *ngIf="saving">Saving...</span>
+                </button>
+                <button
+                  type="button"
+                  (click)="onSubmitForReview()"
+                  *ngIf="activeStep === steps.length - 1"
+                  [disabled]="saving || (existingRequest?.status !== 'DRAFT' && existingRequest?.status !== undefined)"
+                  class="px-6 py-2.5 rounded-lg border border-emerald-600 bg-emerald-600 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Submit for Review
+                </button>
+                <button
+                  type="button"
+                  (click)="router.navigate(['/portal/nsb/dashboard'])"
+                  class="px-6 py-2.5 rounded-lg font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors border border-gray-300"
+                >
+                  Back to NSB Dashboard
+                </button>
               </div>
             </div>
-          </div>
+          </form>
+          <aside class="lg:sticky lg:top-6 h-fit rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <details class="group" open>
+              <summary class="flex cursor-pointer items-center justify-between text-xs font-semibold text-slate-600">
+                Standard Clauses
+                <span class="text-slate-400 group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <div class="mt-3 space-y-3 text-xs text-slate-600">
+                <p class="text-slate-500 font-semibold">ACAP 1-1:2025</p>
+                <p>“The application shall cover at least the information detailed in this chapter.” (ACAP 1-1:2025, 10.2)</p>
+              <p class="text-slate-500 font-semibold">ACAP 1-3:2025</p>
+              <p>“The applicant CB shall register in the ACAP database as an applicant CB in order to receive all the information and documentation required for the application.” (ACAP 1-3:2025, 4.2.1(a))</p>
+              <p class="text-slate-500 font-semibold">ISO/IEC 17065:2012</p>
+              <p>“For application, the certification body shall obtain all the necessary information to complete the certification process.” (ISO/IEC 17065:2012, 7.2)</p>
+              <p>“The certification body shall conduct a review of the information obtained to ensure that the information about the client and the product is sufficient for the conduct of the certification process.” (ISO/IEC 17065:2012, 7.3.1(a))</p>
+              </div>
+            </details>
+          </aside>
         </div>
-      </section>
-
-      <!-- Section D: Designation of NSB Roles -->
-      <section class="space-y-6">
-        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Designation of NSB Roles</h2>
-        <div class="space-y-2">
-          <label for="additionalUserSlotsRequested" class="block text-sm font-semibold text-slate-700">Additional User Slots Requested</label>
-          <input
-            type="number"
-            id="additionalUserSlotsRequested"
-            formControlName="additionalUserSlotsRequested"
-            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 focus:outline-none transition-colors"
-            min="0"
-            placeholder="0"
-          />
-          <p class="text-xs text-slate-500">Number of additional user accounts needed</p>
-        </div>
-
-        <div class="space-y-3">
-          <label class="block text-sm font-semibold text-slate-700">Proposed User Roles Needed</label>
-          <div class="grid sm:grid-cols-2 gap-3">
-            <label *ngFor="let role of requestedRolesOptions" class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                [value]="role.value"
-                [checked]="form.get('requestedRoles')?.value?.includes(role.value)"
-                (change)="toggleRole(role.value)"
-                class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span class="text-sm text-slate-700 font-medium">{{ role.label }}</span>
-            </label>
-          </div>
-        </div>
-      </section>
-
-      <!-- Form Actions -->
-      <div class="flex flex-wrap gap-4 pt-6 border-t border-slate-200 bg-slate-50 -mx-8 px-8 -mb-8 py-6 rounded-b-xl">
-        <button
-          type="button"
-          (click)="onSubmit()"
-          [disabled]="saving"
-          class="px-6 py-2.5 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm"
-        >
-          {{ saving ? 'Saving...' : existingRequest ? 'Save Changes' : 'Save as Draft' }}
-        </button>
-        <button
-          type="button"
-          (click)="onSubmitForReview()"
-          [disabled]="saving"
-          class="px-6 py-2.5 rounded-lg font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-sm"
-        >
-          Submit for Review
-        </button>
-        <button
-          type="button"
-          (click)="router.navigate(['/dashboard'])"
-          class="ml-auto px-6 py-2.5 rounded-lg font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-        >
-          Cancel
-        </button>
       </div>
-    </form>
+    </div>
 
-    <div *ngIf="success && existingRequest?.status !== 'DRAFT'" class="p-8 space-y-6 text-center">
-      <div class="mx-auto h-16 w-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl">✓</div>
+    <!-- Tab Content: Draft NSBs -->
+    <div *ngIf="activeTab === 'drafts'" class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
+        <h2 class="text-xl font-bold text-gray-900">Draft NSB Registration Requests</h2>
+        <p class="text-sm text-gray-500 mt-1">Manage and continue your draft NSB registration requests</p>
+      </div>
+      <div class="px-6 py-6">
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div>
+            <div *ngIf="loadingDrafts" class="p-8 text-center">
+              <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm text-gray-500">Loading draft requests...</p>
+            </div>
+            <div *ngIf="!loadingDrafts && draftRequests.length === 0" class="p-8 text-center border border-gray-100 rounded-lg">
+              <i class="fas fa-file-alt text-4xl text-gray-300 mb-4"></i>
+              <p class="text-sm text-gray-500 font-medium">No draft requests found</p>
+              <p class="text-xs text-gray-400 mt-1">Draft NSB registration requests will appear here</p>
+            </div>
+            <div *ngIf="!loadingDrafts && draftRequests.length > 0" class="overflow-x-auto border border-gray-100 rounded-lg">
+              <table class="w-full text-left">
+                <thead class="bg-gray-50/50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">NSB Name</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Country</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Last Updated</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr *ngFor="let draft of draftRequests" class="hover:bg-gray-50 transition-colors group">
+                    <td class="px-6 py-4 text-sm font-semibold text-gray-800">{{ draft.nsbOfficialName }}</td>
+                    <td class="px-6 py-4 text-xs text-gray-500">{{ draft.countryName }}</td>
+                    <td class="px-6 py-4">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border bg-yellow-50 text-yellow-600 border-yellow-200">
+                        {{ draft.status }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-xs text-gray-500">{{ draft.updatedAt ? (draft.updatedAt | date:'short') : (draft.createdAt ? (draft.createdAt | date:'short') : 'N/A') }}</td>
+                    <td class="px-6 py-4 text-right">
+                      <div class="flex justify-end gap-2">
+                        <button title="Continue Editing" (click)="loadDraftRequest(draft)" class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors">
+                          <i class="fas fa-edit mr-1"></i> Continue
+                        </button>
+                        <button title="Delete Draft" (click)="deleteDraftRequest(draft)" class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded hover:bg-red-100 transition-colors">
+                          <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <aside class="lg:sticky lg:top-6 h-fit rounded-xl border border-gray-200 bg-gray-50 p-4">
+            <details class="group" open>
+              <summary class="flex cursor-pointer items-center justify-between text-xs font-semibold text-gray-600">
+                Standard Clauses
+                <span class="text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <div class="mt-3 space-y-3 text-xs text-gray-600">
+                <p class="text-gray-500 font-semibold">ACAP 1-1:2025</p>
+                <p>“The application shall cover at least the information detailed in this chapter.” (ACAP 1-1:2025, 10.2)</p>
+                <p class="text-gray-500 font-semibold">ISO/IEC 17065:2012</p>
+                <p>“The certification body shall retain records to demonstrate that all certification process requirements have been effectively fulfilled.” (ISO/IEC 17065:2012, 7.12.1)</p>
+              </div>
+            </details>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Content: Registered NSBs List with CRUD -->
+    <div *ngIf="activeTab === 'list'" class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
+        <h2 class="text-xl font-bold text-gray-900">Registered National Standards Bodies</h2>
+        <p class="text-sm text-gray-500 mt-1">Manage and view all registered NSBs in the system</p>
+      </div>
+      <div class="px-6 py-6">
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div>
+            <div *ngIf="loadingNsbs" class="p-8 text-center">
+              <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm text-gray-500">Loading registered NSBs...</p>
+            </div>
+            <div *ngIf="!loadingNsbs && registeredNsbs.length === 0" class="p-8 text-center border border-gray-100 rounded-lg">
+              <i class="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
+              <p class="text-sm text-gray-500 font-medium">No registered NSBs found</p>
+              <p class="text-xs text-gray-400 mt-1">Registered NSBs will appear here</p>
+            </div>
+            <div *ngIf="!loadingNsbs && registeredNsbs.length > 0" class="overflow-x-auto border border-gray-100 rounded-lg">
+              <table class="w-full text-left">
+                <thead class="bg-gray-50/50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Body Name</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Country</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Approval Status</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr *ngFor="let nsb of registeredNsbs" class="hover:bg-gray-50 transition-colors group">
+                    <td class="px-6 py-4 text-sm font-semibold text-gray-800">{{ nsb.name }}</td>
+                    <td class="px-6 py-4 text-xs text-gray-500">{{ nsb.countryName }}</td>
+                    <td class="px-6 py-4">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border" [ngClass]="nsb.status === 'ACTIVE' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-orange-50 text-orange-600 border-orange-200'">
+                        {{ nsb.status }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border" 
+                        [ngClass]="{
+                          'bg-green-50 text-green-600 border-green-200': nsb.approvalStatus === 'APPROVED',
+                          'bg-yellow-50 text-yellow-600 border-yellow-200': nsb.approvalStatus === 'PENDING_APPROVAL',
+                          'bg-red-50 text-red-600 border-red-200': nsb.approvalStatus === 'SUSPENDED',
+                          'bg-gray-50 text-gray-600 border-gray-200': nsb.approvalStatus === 'UNKNOWN'
+                        }">
+                        {{ nsb.approvalStatus }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                      <div class="flex justify-end gap-2">
+                        <button title="View" (click)="viewRequest(nsb.requestId)" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded hover:text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                          <i class="fas fa-eye text-xs"></i>
+                          <span>View</span>
+                        </button>
+                        <button title="Edit" (click)="editRequest(nsb.requestId)" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded hover:text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                          <i class="fas fa-edit text-xs"></i>
+                          <span>Edit</span>
+                        </button>
+                        <button title="View Notifications" (click)="viewNotifications(nsb.requestId)" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded hover:text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                          <i class="fas fa-bell text-xs"></i>
+                          <span>Notify</span>
+                        </button>
+                        <button title="Suspend" (click)="suspendRequest(nsb.requestId)" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded hover:text-orange-600 hover:bg-orange-50 hover:border-orange-300 transition-colors">
+                          <i class="fas fa-ban text-xs"></i>
+                          <span>Suspend</span>
+                        </button>
+                        <button title="Delete" (click)="deleteRequest(nsb.requestId)" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded hover:text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors">
+                          <i class="fas fa-trash text-xs"></i>
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <aside class="lg:sticky lg:top-6 h-fit rounded-xl border border-gray-200 bg-gray-50 p-4">
+            <details class="group" open>
+              <summary class="flex cursor-pointer items-center justify-between text-xs font-semibold text-gray-600">
+                Standard Clauses
+                <span class="text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <div class="mt-3 space-y-3 text-xs text-gray-600">
+                <p class="text-gray-500 font-semibold">ACAP 1-1:2025</p>
+                <p>“Make a general description of the certification schemes publicly available without request.” (ACAP 1-1:2025, 6.1(h))</p>
+                <p class="text-gray-500 font-semibold">ISO/IEC 17065:2012</p>
+                <p>“The certification body shall maintain information on certified products.” (ISO/IEC 17065:2012, 7.8)</p>
+                <p>“The certification body shall maintain... information about the certification scheme(s), including evaluation procedures.” (ISO/IEC 17065:2012, 4.6(a))</p>
+              </div>
+            </details>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Message (shown after form submission) -->
+    <div *ngIf="success && existingRequest?.status !== 'DRAFT' && activeTab === 'form'" class="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm p-8 space-y-6 text-center">
+      <div class="mx-auto h-16 w-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl border border-emerald-200">✓</div>
       <div>
-        <h3 class="text-xl font-bold text-slate-900">Request Submitted Successfully!</h3>
-        <p class="text-slate-600 mt-2">Your NSB registration request has been submitted for review by ARSO Central Secretariat.</p>
-        <p class="text-slate-500 mt-1">You will be notified once your request has been reviewed.</p>
+        <h3 class="text-xl font-bold text-gray-900">Request Submitted Successfully!</h3>
+        <p class="text-gray-600 mt-2">Your NSB registration request has been submitted for review by ARSO Central Secretariat.</p>
+        <p class="text-gray-500 mt-1">You will be notified once your request has been reviewed.</p>
       </div>
-      <button
-        type="button"
-        (click)="router.navigate(['/dashboard'])"
-        class="inline-flex px-6 py-2.5 rounded-lg font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm"
-      >
-        Return to Dashboard
-      </button>
+      <div class="flex gap-3 justify-center">
+        <button
+          type="button"
+          (click)="router.navigate(['/portal/nsb/dashboard'])"
+          class="inline-flex px-6 py-2.5 rounded-lg font-semibold text-white bg-gray-900 hover:bg-gray-800 transition-colors shadow-sm border border-gray-900"
+        >
+          Go to NSB Dashboard
+        </button>
+        <button
+          type="button"
+          (click)="router.navigate(['/portal/dashboard'])"
+          class="inline-flex px-6 py-2.5 rounded-lg font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors shadow-sm"
+        >
+          Go to Main Dashboard
+        </button>
+      </div>
     </div>
   </div>
 </div>

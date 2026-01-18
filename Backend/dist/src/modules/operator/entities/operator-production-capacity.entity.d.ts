@@ -4,14 +4,14 @@ export declare class OperatorProductionCapacity {
     id: string;
     operatorId: string;
     operator: Operator;
-    productionCapacity: number;
-    capacityUnit: string;
-    capacityUtilization: number;
-    qualityManagement: string;
+    productionCapacity?: number;
+    capacityUnit?: string;
+    capacityUtilization?: number;
+    qualityManagement?: string;
     qmsType?: QMSType;
-    certificationCount: number;
+    certificationCount?: number;
     existingCertifications?: string;
-    technicalStaff: number;
+    technicalStaff?: number;
     createdAt: Date;
     updatedAt: Date;
 }

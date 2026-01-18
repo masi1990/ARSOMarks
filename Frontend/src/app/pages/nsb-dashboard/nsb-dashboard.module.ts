@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { NsbDashboardComponent } from './nsb-dashboard.component';
 
 const routes: Routes = [
@@ -12,7 +13,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [NsbDashboardComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, FormsModule, RouterModule.forChild(routes)],
 })
 export class NsbDashboardModule {}
 

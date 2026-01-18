@@ -15,6 +15,9 @@ const product_certification_application_entity_1 = require("./product-certificat
 const product_technical_spec_entity_1 = require("./product-technical-spec.entity");
 const product_environmental_claim_entity_1 = require("./product-environmental-claim.entity");
 const enums_1 = require("../../../shared/enums");
+const country_entity_1 = require("../../reference-data/entities/country.entity");
+const product_standard_entity_1 = require("../../traceability/entities/product-standard.entity");
+const coc_entity_1 = require("../../traceability/entities/coc.entity");
 let Product = class Product {
 };
 exports.Product = Product;
@@ -88,6 +91,15 @@ __decorate([
     __metadata("design:type", String)
 ], Product.prototype, "primaryTargetMarketId", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'origin_country_id', type: 'uuid', nullable: true }),
+    __metadata("design:type", String)
+], Product.prototype, "originCountryId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => country_entity_1.Country, { onDelete: 'SET NULL' }),
+    (0, typeorm_1.JoinColumn)({ name: 'origin_country_id' }),
+    __metadata("design:type", country_entity_1.Country)
+], Product.prototype, "originCountry", void 0);
+__decorate([
     (0, typeorm_1.Column)({ name: 'target_consumers', type: 'enum', enum: enums_1.TargetConsumerGroup, array: true }),
     __metadata("design:type", Array)
 ], Product.prototype, "targetConsumers", void 0);
@@ -155,6 +167,14 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => product_environmental_claim_entity_1.ProductEnvironmentalClaim, (claim) => claim.product, { cascade: true }),
     __metadata("design:type", product_environmental_claim_entity_1.ProductEnvironmentalClaim)
 ], Product.prototype, "environmentalClaim", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => product_standard_entity_1.ProductStandard, (productStandard) => productStandard.product),
+    __metadata("design:type", Array)
+], Product.prototype, "standards", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => coc_entity_1.Coc, (coc) => coc.product),
+    __metadata("design:type", Array)
+], Product.prototype, "cocs", void 0);
 exports.Product = Product = __decorate([
     (0, typeorm_1.Entity)('products')
 ], Product);

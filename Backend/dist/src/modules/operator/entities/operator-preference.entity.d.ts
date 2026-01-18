@@ -4,11 +4,11 @@ export declare class OperatorPreference {
     id: string;
     operatorId: string;
     operator: Operator;
-    preferredLanguage: PreferredLanguage;
-    communicationPreferences: CommunicationPreference[];
-    notificationFrequency: NotificationFrequency;
-    timezone: string;
-    currency: string;
+    preferredLanguage?: PreferredLanguage;
+    communicationPreferences?: CommunicationPreference[];
+    notificationFrequency?: NotificationFrequency;
+    timezone?: string;
+    currency?: string;
     createdAt: Date;
     updatedAt: Date;
 }

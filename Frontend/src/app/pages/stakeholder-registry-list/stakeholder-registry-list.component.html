@@ -1,80 +1,169 @@
-<div class="w-full max-w-7xl mx-auto">
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <!-- Header -->
-    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-bold text-slate-900">Stakeholder Registry Status</h1>
-          <p class="mt-1 text-sm text-slate-500">View and manage stakeholder registry submissions</p>
-        </div>
-        <div class="flex gap-3">
-          <select
-            [(ngModel)]="filterStatus"
-            (ngModelChange)="loadRegistries()"
-            class="px-4 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+<div class="min-h-screen bg-white p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Breadcrumb & Header -->
+    <nav class="flex mb-4 text-xs font-medium text-gray-400 uppercase tracking-widest">
+      <a routerLink="/portal/dashboard" class="hover:text-blue-500">Dashboard</a>
+      <span class="mx-2">/</span>
+      <a routerLink="/portal/nsb/dashboard" class="hover:text-blue-500">NSB Management</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-800">Stakeholder Registry</span>
+    </nav>
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">National Stakeholders</h1>
+        <p class="text-gray-500 mt-2">Manage stakeholders registered from the stakeholder registry form.</p>
+      </div>
+      <div class="flex gap-2">
+        <div class="relative">
+          <input 
+            type="text" 
+            placeholder="Search stakeholders..." 
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange()"
+            class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm w-64 bg-white"
           >
-            <option value="ALL">All Statuses</option>
-            <option value="DRAFT">Draft</option>
-            <option value="SUBMITTED">Submitted</option>
-          </select>
+          <i class="fas fa-search absolute left-3 top-3 text-gray-400 text-xs"></i>
         </div>
+        <select
+          [(ngModel)]="filterType"
+          (ngModelChange)="onFilterTypeChange()"
+          class="px-4 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+        >
+          <option value="ALL">All Types</option>
+          <option value="MSA">Market Surveillance</option>
+          <option value="CUSTOMS">Customs & Border</option>
+          <option value="REGULATORY">Regulatory Agency</option>
+          <option value="INDUSTRY">Industry Association</option>
+          <option value="LABORATORY">Testing Laboratory</option>
+          <option value="OTHER">Other Stakeholder</option>
+        </select>
+        <button (click)="navigateToRegistryForm()" class="px-4 py-2 bg-blue-600 border border-blue-600 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors">
+          <i class="fas fa-plus mr-2"></i> Add Stakeholder
+        </button>
       </div>
     </div>
 
-    <div *ngIf="error" class="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+    <div *ngIf="error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
       {{ error }}
     </div>
 
-    <div *ngIf="loading" class="text-center py-12">
-      <p class="text-slate-500">Loading...</p>
-    </div>
+    <!-- Stakeholders Data Table -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+      <div *ngIf="loading" class="p-12 text-center">
+        <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mb-2"></i>
+        <p class="text-sm text-gray-500">Loading stakeholders...</p>
+      </div>
 
-    <div *ngIf="!loading && filteredNsbs.length === 0" class="text-center py-12">
-      <p class="text-slate-500">No stakeholder registries found.</p>
-    </div>
+      <div *ngIf="!loading && filteredStakeholders.length === 0" class="p-12 text-center border-t border-gray-100">
+        <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
+        <p class="text-sm text-gray-500 font-medium">No stakeholders found</p>
+        <p class="text-xs text-gray-400 mt-1">Add stakeholders using the stakeholder registry form</p>
+        <button (click)="navigateToRegistryForm()" class="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+          Go to Registry Form
+        </button>
+      </div>
 
-    <div *ngIf="!loading && filteredNsbs.length > 0" class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-slate-50 border-b border-slate-200">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">NSB Name</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Country</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Submitted At</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-slate-200">
-          <tr *ngFor="let nsb of filteredNsbs" class="hover:bg-slate-50">
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm font-medium text-slate-900">{{ nsb.name }}</div>
-              <div *ngIf="nsb.shortName" class="text-sm text-slate-500">{{ nsb.shortName }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-slate-900">{{ nsb.country?.name || '-' }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-2 py-1 text-xs font-semibold rounded-full {{ getStatusBadgeClass(nsb.stakeholderRegistryStatus) }}"
-              >
-                {{ getStatusLabel(nsb.stakeholderRegistryStatus) }}
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-              {{ formatDate(nsb.stakeholderRegistrySubmittedAt) }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <button
-                (click)="viewRegistry(nsb)"
-                class="text-blue-600 hover:text-blue-900 font-semibold"
-              >
-                View
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div *ngIf="!loading && filteredStakeholders.length > 0" class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Stakeholder Name</th>
+              <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Type</th>
+              <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">NSB</th>
+              <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Contact</th>
+              <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr *ngFor="let stakeholder of filteredStakeholders" class="hover:bg-blue-50/30 transition-colors group">
+              <td class="px-6 py-4">
+                <div class="text-sm font-semibold text-gray-800">{{ stakeholder.name }}</div>
+                <div *ngIf="stakeholder.category" class="text-xs text-gray-400">{{ stakeholder.category }}</div>
+              </td>
+              <td class="px-6 py-4">
+                <span 
+                  class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border"
+                  [ngClass]="getTypeBadgeClass(stakeholder.type)"
+                >
+                  {{ getTypeLabel(stakeholder.type) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-600">
+                {{ stakeholder.nsbName }}
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-xs text-gray-600">{{ stakeholder.contactName }}</div>
+                <div class="text-xs text-gray-400">{{ stakeholder.contactEmail }}</div>
+              </td>
+              <td class="px-6 py-4">
+                <span 
+                  class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border"
+                  [ngClass]="getStatusBadgeClass(stakeholder.status)"
+                >
+                  {{ stakeholder.status }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                    title="View Details" 
+                    (click)="viewStakeholder(stakeholder)"
+                    class="p-2 text-gray-400 hover:text-blue-600 transition-colors border border-gray-200 rounded hover:border-blue-300"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button 
+                    title="Edit" 
+                    (click)="editStakeholder(stakeholder)"
+                    class="p-2 text-gray-400 hover:text-blue-600 transition-colors border border-gray-200 rounded hover:border-blue-300"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button 
+                    title="Delete" 
+                    (click)="deleteStakeholder(stakeholder)"
+                    class="p-2 text-gray-400 hover:text-red-600 transition-colors border border-gray-200 rounded hover:border-red-300"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Footer / Pagination -->
+      <div *ngIf="!loading && filteredStakeholders.length > 0" class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500 font-medium">
+        <span>Showing {{ getDisplayRange() }} of {{ getTotalFilteredCount() }} Stakeholders</span>
+        <div class="flex gap-1">
+          <button 
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+            class="px-2 py-1 border border-gray-300 rounded hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+          >
+            Prev
+          </button>
+          <button 
+            *ngFor="let page of getPageNumbers()"
+            (click)="goToPage(page)"
+            [class.bg-blue-600]="page === currentPage"
+            [class.text-white]="page === currentPage"
+            [class.border-blue-600]="page === currentPage"
+            class="px-2 py-1 border border-gray-300 rounded hover:bg-white transition-colors bg-white"
+          >
+            {{ page }}
+          </button>
+          <button 
+            (click)="nextPage()"
+            [disabled]="currentPage >= totalPages"
+            class="px-2 py-1 border border-gray-300 rounded hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-

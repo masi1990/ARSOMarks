@@ -31,15 +31,15 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorLocation.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'location_type', type: 'enum', enum: enums_1.OperatorLocationType, default: enums_1.OperatorLocationType.REGISTERED_ADDRESS }),
+    (0, typeorm_1.Column)({ name: 'location_type', type: 'enum', enum: enums_1.OperatorLocationType, nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "locationType", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'physical_address', type: 'text' }),
+    (0, typeorm_1.Column)({ name: 'physical_address', type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "physicalAddress", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'address_line1', length: 100 }),
+    (0, typeorm_1.Column)({ name: 'address_line1', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "addressLine1", void 0);
 __decorate([
@@ -47,19 +47,19 @@ __decorate([
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "addressLine2", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'postal_code', length: 20 }),
+    (0, typeorm_1.Column)({ name: 'postal_code', length: 20, nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "postalCode", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'city_town', length: 100 }),
+    (0, typeorm_1.Column)({ name: 'city_town', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "cityTown", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'region_state', length: 100 }),
+    (0, typeorm_1.Column)({ name: 'region_state', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "regionState", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'country_id', type: 'uuid' }),
+    (0, typeorm_1.Column)({ name: 'country_id', type: 'uuid', nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "countryId", void 0);
 __decorate([
@@ -71,6 +71,18 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'gps_coordinates', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], OperatorLocation.prototype, "gpsCoordinates", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'geo_lat', type: 'decimal', precision: 10, scale: 7, nullable: true }),
+    __metadata("design:type", Number)
+], OperatorLocation.prototype, "geoLat", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'geo_lng', type: 'decimal', precision: 10, scale: 7, nullable: true }),
+    __metadata("design:type", Number)
+], OperatorLocation.prototype, "geoLng", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'geo_accuracy_m', type: 'decimal', precision: 8, scale: 2, nullable: true }),
+    __metadata("design:type", Number)
+], OperatorLocation.prototype, "geoAccuracyM", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'factory_location_same', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)

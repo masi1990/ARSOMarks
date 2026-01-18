@@ -31,9 +31,18 @@ let NsbRegistrationRequestController = class NsbRegistrationRequestController {
     create(dto, user) {
         return this.requestService.create(dto, user.id);
     }
-    list(query) {
+    list(query, user) {
         const { countryId, status, search, skip = 0, limit = 25 } = query;
-        const filter = { countryId, status, search, skip: Number(skip), limit: Number(limit) };
+        const userRoles = user.roles && user.roles.length > 0 ? user.roles : user.role ? [user.role] : [];
+        const isApprover = userRoles.includes(enums_1.UserRole.SUPER_ADMIN) || userRoles.includes(enums_1.UserRole.ARSO_SECRETARIAT);
+        const filter = {
+            countryId,
+            status,
+            search,
+            skip: Number(skip),
+            limit: Number(limit),
+            createdBy: isApprover ? undefined : user.id,
+        };
         return this.requestService.findAll(filter);
     }
     getMyRequest(user, countryId) {
@@ -77,6 +86,10 @@ let NsbRegistrationRequestController = class NsbRegistrationRequestController {
     async deleteDocument(id, documentId, user) {
         return this.requestService.deleteDocument(id, documentId, user.id);
     }
+    async deleteRequest(id) {
+        await this.requestService.deleteRequest(id);
+        return { message: 'Registration request deleted successfully' };
+    }
     async viewDocument(id, documentId, res, user) {
         const document = await this.requestService.getDocument(id, documentId);
         const fileBuffer = await this.requestService.getDocumentFile(document.filePath);
@@ -97,10 +110,11 @@ __decorate([
 ], NsbRegistrationRequestController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, roles_decorator_1.Roles)(enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT),
+    (0, roles_decorator_1.Roles)(enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT, enums_1.UserRole.NSB_ADMIN, enums_1.UserRole.NSB_USER),
     __param(0, (0, common_1.Query)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, system_user_entity_1.SystemUser]),
     __metadata("design:returntype", void 0)
 ], NsbRegistrationRequestController.prototype, "list", null);
 __decorate([
@@ -182,6 +196,14 @@ __decorate([
     __metadata("design:paramtypes", [String, String, system_user_entity_1.SystemUser]),
     __metadata("design:returntype", Promise)
 ], NsbRegistrationRequestController.prototype, "deleteDocument", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)(enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], NsbRegistrationRequestController.prototype, "deleteRequest", null);
 __decorate([
     (0, common_1.Get)(':id/documents/:documentId/view'),
     (0, roles_decorator_1.Roles)(enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT, enums_1.UserRole.NSB_ADMIN, enums_1.UserRole.NSB_USER, enums_1.UserRole.PUBLIC),

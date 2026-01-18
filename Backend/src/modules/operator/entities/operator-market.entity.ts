@@ -24,8 +24,8 @@ export class OperatorMarket {
   @JoinColumn({ name: 'operator_id' })
   operator: Operator;
 
-  @Column({ name: 'domestic_markets', type: 'enum', enum: DomesticMarketType, array: true })
-  domesticMarkets: DomesticMarketType[];
+  @Column({ name: 'domestic_markets', type: 'enum', enum: DomesticMarketType, array: true, nullable: true })
+  domesticMarkets?: DomesticMarketType[];
 
   @Column({ name: 'export_markets', type: 'uuid', array: true, nullable: true })
   exportMarkets?: string[]; // Array of country IDs
@@ -43,8 +43,8 @@ export class OperatorMarket {
   @Column({ name: 'import_sources', type: 'uuid', array: true, nullable: true })
   importSources?: string[]; // Array of country IDs
 
-  @Column({ name: 'afcfta_awareness', length: 20 })
-  afcftaAwareness: string; // 'HIGH', 'MEDIUM', 'LOW', 'NONE'
+  @Column({ name: 'afcfta_awareness', length: 20, nullable: true })
+  afcftaAwareness?: string; // 'HIGH', 'MEDIUM', 'LOW', 'NONE'
 
   @Column({ name: 'trade_challenges', type: 'text', nullable: true })
   tradeChallenges?: string;

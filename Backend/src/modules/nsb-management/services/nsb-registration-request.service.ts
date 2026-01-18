@@ -8,10 +8,11 @@ import {
   CreateNsbRegistrationRequestDto,
   UpdateNsbRegistrationRequestDto,
 } from '../dtos';
-import { NsbRegistrationRequestStatus, NsbDocumentType, NsbClassification } from '../../../shared/enums';
+import { NsbRegistrationRequestStatus, NsbDocumentType, NsbClassification, NsbContactType, NsbLocationType } from '../../../shared/enums';
 import { NsbService } from './nsb.service';
 import { NsbDocumentUploadService } from './nsb-document-upload.service';
 import { EmailService } from '../../auth/services/email.service';
+import { SystemUser } from '../../system-user/system-user.entity';
 
 @Injectable()
 export class NsbRegistrationRequestService {
@@ -22,6 +23,8 @@ export class NsbRegistrationRequestService {
     private readonly requestRepo: Repository<NsbRegistrationRequest>,
     @InjectRepository(NsbRegistrationRequestDocument)
     private readonly documentRepo: Repository<NsbRegistrationRequestDocument>,
+    @InjectRepository(SystemUser)
+    private readonly userRepo: Repository<SystemUser>,
     private readonly nsbService: NsbService,
     private readonly dataSource: DataSource,
     private readonly uploadService: NsbDocumentUploadService,
@@ -35,6 +38,8 @@ export class NsbRegistrationRequestService {
     await queryRunner.startTransaction();
 
     try {
+      this.sanitizeNsbCollections(dto);
+      this.logRequestArrays('create', dto);
       // Check if there's already a pending/submitted request for this country (only if countryId is provided)
       if (dto.countryId) {
         const existingRequest = await this.requestRepo.findOne({
@@ -79,6 +84,8 @@ export class NsbRegistrationRequestService {
   }
 
   async update(id: string, dto: UpdateNsbRegistrationRequestDto, userId: string, userRole?: string): Promise<NsbRegistrationRequest> {
+    this.sanitizeNsbCollections(dto);
+    this.logRequestArrays('update', dto);
     const request = await this.requestRepo.findOne({ 
       where: { id },
       relations: ['documents'], // Load documents to prevent cascade issues
@@ -187,21 +194,81 @@ export class NsbRegistrationRequestService {
     }
 
     // Create NSB from the request
+    const additionalContacts = (request.additionalContacts || [])
+      .filter((contact) => contact?.name && contact?.email)
+      .map((contact) => ({
+        contactType: (contact.contactType as NsbContactType) || NsbContactType.ALTERNATIVE,
+        name: contact.name,
+        designation: contact.title,
+        email: contact.email,
+        phone: contact.phone,
+        mobile: contact.mobile,
+        isActive: true,
+      }));
+
+    const locations = [];
+    if (request.headquartersAddress?.addressLine1 && request.headquartersAddress?.city) {
+      locations.push({
+        locationType: NsbLocationType.HEADQUARTERS,
+        addressLine1: request.headquartersAddress.addressLine1,
+        addressLine2: request.headquartersAddress.addressLine2,
+        city: request.headquartersAddress.city,
+        stateProvince: request.headquartersAddress.stateProvince,
+        postalCode: request.headquartersAddress.postalCode,
+        countryId: request.countryId,
+        isPrimary: true,
+      });
+    }
+
+    if (request.postalAddress?.addressLine1 && request.postalAddress?.city) {
+      locations.push({
+        locationType: NsbLocationType.BRANCH,
+        addressLine1: request.postalAddress.addressLine1,
+        addressLine2: request.postalAddress.addressLine2,
+        city: request.postalAddress.city,
+        stateProvince: request.postalAddress.stateProvince,
+        postalCode: request.postalAddress.postalCode,
+        countryId: request.countryId,
+        isPrimary: false,
+      });
+    }
+
+    (request.additionalAddresses || []).forEach((address) => {
+      if (!address?.addressLine1 || !address?.city) {
+        return;
+      }
+      locations.push({
+        locationType: (address.addressType as NsbLocationType) || NsbLocationType.BRANCH,
+        addressLine1: address.addressLine1,
+        addressLine2: address.addressLine2,
+        city: address.city,
+        stateProvince: address.stateProvince,
+        postalCode: address.postalCode,
+        countryId: request.countryId,
+        isPrimary: false,
+      });
+    });
+
     const createNsbDto = {
       name: request.nsbOfficialName,
       shortName: request.nsbAcronym,
       countryId: request.countryId,
       classification: NsbClassification.GOVERNMENT_AGENCY, // Default, can be updated later
+      registrationNumber: request.registrationNumber,
+      websiteUrl: request.website,
+      sectors: request.sectors || [], // Pass sectors from registration request
       contacts: [
         {
-          contactType: 'PRIMARY' as any,
+          contactType: NsbContactType.PRIMARY,
           name: request.contactPersonName,
           designation: request.contactPersonTitle,
           email: request.contactEmail,
           phone: request.contactPhone,
           mobile: request.contactMobile,
         },
+        ...additionalContacts,
       ],
+      locations: locations.length > 0 ? locations : undefined,
     };
 
     const nsb = await this.nsbService.createNsb(createNsbDto as any, reviewerId);
@@ -214,6 +281,22 @@ export class NsbRegistrationRequestService {
     request.nsbId = nsb.id;
 
     const savedRequest = await this.requestRepo.save(request);
+
+    // Update the user who created the request to link them to the NSB
+    if (request.createdBy) {
+      try {
+        const user = await this.userRepo.findOne({ where: { id: request.createdBy } });
+        if (user) {
+          user.organizationId = nsb.id;
+          user.organizationType = 'NSB';
+          await this.userRepo.save(user);
+          this.logger.log(`Updated user ${user.id} organizationId to ${nsb.id}`);
+        }
+      } catch (error) {
+        // Log error but don't fail the approval
+        this.logger.error(`Failed to update user organizationId: ${error.message}`);
+      }
+    }
 
     // Send email notification
     try {
@@ -281,6 +364,10 @@ export class NsbRegistrationRequestService {
 
     if (filter.countryId) {
       query.andWhere('request.countryId = :countryId', { countryId: filter.countryId });
+    }
+
+    if (filter.createdBy) {
+      query.andWhere('request.createdBy = :createdBy', { createdBy: filter.createdBy });
     }
 
     if (filter.status) {
@@ -392,6 +479,115 @@ export class NsbRegistrationRequestService {
 
   async getDocumentFile(filePath: string): Promise<Buffer> {
     return this.uploadService.getFile(filePath);
+  }
+
+  async deleteRequest(id: string): Promise<void> {
+    const request = await this.requestRepo.findOne({
+      where: { id },
+      relations: ['documents'],
+    });
+
+    if (!request) {
+      throw new NotFoundException(`Registration request with ID ${id} not found`);
+    }
+
+    if (request.documents && request.documents.length > 0) {
+      for (const document of request.documents) {
+        if (document.filePath) {
+          await this.uploadService.deleteFile(document.filePath);
+        }
+      }
+      await this.documentRepo.remove(request.documents);
+    }
+
+    await this.requestRepo.remove(request);
+  }
+
+  private logRequestArrays(context: string, dto: Partial<CreateNsbRegistrationRequestDto>): void {
+    const collections: Array<[string, unknown]> = [
+      ['additionalAddresses', dto.additionalAddresses],
+      ['additionalContacts', dto.additionalContacts],
+      ['keyOfficials', dto.keyOfficials],
+      ['internationalMemberships', dto.internationalMemberships],
+      ['mandateAreas', dto.mandateAreas],
+      ['sectors', dto.sectors],
+    ];
+
+    collections.forEach(([name, value]) => {
+      if (!Array.isArray(value)) {
+        this.logger.debug(`[NSB Registration] ${context} ${name}: not an array`);
+        return;
+      }
+      const sample = value[0];
+      const sampleType = Array.isArray(sample) ? 'array' : typeof sample;
+      const sampleKeys = sample && typeof sample === 'object' && !Array.isArray(sample) ? Object.keys(sample) : [];
+      this.logger.debug(
+        `[NSB Registration] ${context} ${name}: length=${value.length} sampleType=${sampleType} sampleKeys=${sampleKeys.join(',')}`,
+      );
+    });
+  }
+
+  private sanitizeNsbCollections(dto: Partial<CreateNsbRegistrationRequestDto>): void {
+    const collections = [
+      'additionalAddresses',
+      'additionalContacts',
+      'keyOfficials',
+      'internationalMemberships',
+    ] as const;
+
+    collections.forEach((key) => {
+      const value = dto[key];
+      if (value && Array.isArray(value)) {
+        dto[key] = value
+          .map((item) => this.normalizeCollection(item, key))
+          .filter((item) => item !== null) as any;
+      }
+    });
+  }
+
+  private normalizeCollection(
+    item: any,
+    collectionName: 'additionalAddresses' | 'additionalContacts' | 'keyOfficials' | 'internationalMemberships',
+  ): Record<string, any> | null {
+    if (!item || typeof item !== 'object') {
+      return null;
+    }
+
+    const schema: Record<string, string[]> = {
+      additionalAddresses: ['addressLine1', 'addressLine2', 'city', 'country', 'postalCode', 'type', 'stateProvince'],
+      additionalContacts: ['name', 'title', 'email', 'phone', 'mobile', 'contactType'],
+      keyOfficials: ['name', 'designation', 'email', 'phone'],
+      internationalMemberships: ['organization', 'membershipStatus', 'yearJoined'],
+    };
+
+    const allowedKeys = schema[collectionName] || [];
+    const normalized: Record<string, any> = {};
+    let hasData = false;
+
+    allowedKeys.forEach((key) => {
+      let value = item[key];
+      if (collectionName === 'additionalAddresses' && key === 'type') {
+        value = value ?? item.addressType;
+      }
+      if (collectionName === 'keyOfficials' && key === 'designation') {
+        value = value ?? item.title ?? item.department;
+      }
+      if (collectionName === 'internationalMemberships') {
+        if (key === 'membershipStatus') {
+          value = value ?? item.status;
+        }
+        if (key === 'yearJoined') {
+          value = value ?? item.memberSince;
+        }
+      }
+
+      if (value !== undefined && value !== null && value !== '') {
+        normalized[key] = value;
+        hasData = true;
+      }
+    });
+
+    return hasData ? normalized : null;
   }
 }
 

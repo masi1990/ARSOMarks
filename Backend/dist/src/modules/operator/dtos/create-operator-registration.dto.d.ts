@@ -1,9 +1,11 @@
-import { OperatorType, LegalStructure, EmployeeCountRange, AnnualTurnoverRange, OwnershipType, OwnershipStatus } from '../../../shared/enums';
+import { OperatorType, LegalStructure, EmployeeCountRange, AnnualTurnoverRange, OwnershipType, OwnershipStatus, LegalRegistrationNumberType } from '../../../shared/enums';
 export declare class CompanyInfoDto {
     operatorType: OperatorType;
     companyLegalName?: string;
     tradingName?: string;
     registrationNumberBusiness: string;
+    legalRegistrationNumberType?: LegalRegistrationNumberType;
+    legalRegistrationNumber?: string;
     taxId?: string;
     vatNumber?: string;
     yearEstablished?: number;
@@ -49,6 +51,9 @@ export declare class OperatorLocationDto {
     regionState: string;
     countryId: string;
     gpsCoordinates?: string;
+    geoLat?: number;
+    geoLng?: number;
+    geoAccuracyM?: number;
     factoryLocationSame?: boolean;
     factoryName?: string;
     factoryType?: string;
@@ -107,6 +112,11 @@ export declare class ConsentDto {
     termsAcceptance?: boolean;
     declarationSignature: string;
 }
+export declare class GroupMemberDto {
+    memberName: string;
+    registrationNumberBusiness?: string;
+    countryId?: string;
+}
 export declare class CreateOperatorRegistrationDto {
     companyInfo?: CompanyInfoDto;
     companySize?: CompanySizeDto;
@@ -119,6 +129,11 @@ export declare class CreateOperatorRegistrationDto {
     preferences?: PreferencesDto;
     accessibility?: AccessibilityDto;
     consents?: ConsentDto;
+    isGroup?: boolean;
+    groupManagerId?: string;
+    groupMembers?: GroupMemberDto[];
+    schemeType?: string;
+    schemePayload?: Record<string, any>;
     userId?: string;
     countryId: string;
 }

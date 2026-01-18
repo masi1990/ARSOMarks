@@ -29,5 +29,6 @@ export declare class CreateNsbDto {
     description?: string;
     contacts: NsbContactDto[];
     locations?: NsbLocationDto[];
+    sectors?: string[];
     additionalInfo?: Record<string, any>;
 }

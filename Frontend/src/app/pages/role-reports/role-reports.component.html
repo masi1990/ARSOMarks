@@ -1,0 +1,136 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-wide text-slate-500">Role Reporting</p>
+        <h1 class="text-3xl font-bold text-slate-900">{{ selectedRole | titlecase }}</h1>
+        <p class="text-sm text-slate-600 mt-1">Filtered, exportable reports by role, region, and scheme.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="roleSelect">Role</label>
+          <select
+            id="roleSelect"
+            [value]="selectedRole"
+            (change)="onRoleChange($event.target?.value)"
+            class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          >
+            <option *ngFor="let role of roleOptions" [value]="role" [disabled]="!canView(role)">
+              {{ role | titlecase }}
+            </option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="regionFilter">Region</label>
+          <input
+            id="regionFilter"
+            [(ngModel)]="filters.region"
+            placeholder="All"
+            class="w-32 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-slate-700" for="schemeFilter">Scheme</label>
+          <input
+            id="schemeFilter"
+            [(ngModel)]="filters.scheme"
+            placeholder="All"
+            class="w-32 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+          />
+        </div>
+        <button
+          (click)="applyFilters()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Refresh
+        </button>
+        <button
+          (click)="exportCsv()"
+          class="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-700"
+        >
+          Export CSV
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="mt-4 p-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="mt-8 bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" role="status" aria-label="Loading reports"></div>
+      <p class="mt-4 text-sm text-slate-600">Loading reporting data...</p>
+    </div>
+
+    <ng-container *ngIf="!loading && data">
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div *ngFor="let kpi of data.summary" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <p class="text-sm font-semibold text-slate-600">{{ kpi.label }}</p>
+          <p class="text-3xl font-bold text-slate-900 mt-2">{{ kpi.value }}</p>
+          <div class="mt-1 text-xs text-slate-500" *ngIf="kpi.trend">
+            {{ kpi.trend.change }}% vs {{ kpi.trend.period }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-slate-900">Report Table</h2>
+            <p class="text-sm text-slate-600">Breakdowns by role/region/scheme.</p>
+          </div>
+          <span class="text-xs text-slate-500">Rows: {{ data.rows.length }}</span>
+        </div>
+        <div *ngIf="!data.rows.length" class="p-8 text-sm text-slate-600">No report data for this filter set.</div>
+        <div *ngIf="data.rows.length" class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200">
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700">Label</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700">Value</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700">Secondary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let row of data.rows"
+                class="border-b border-slate-100 hover:bg-slate-50 transition-colors"
+              >
+                <td class="px-6 py-4 text-sm text-slate-800">{{ row.label }}</td>
+                <td class="px-6 py-4 text-sm text-slate-900 font-semibold">{{ row.value }}</td>
+                <td class="px-6 py-4">
+                  <span *ngIf="row.status" class="px-2 py-1 text-xs rounded-full"
+                    [ngClass]="{
+                      'bg-emerald-50 text-emerald-700': row.status === 'done',
+                      'bg-amber-50 text-amber-700': row.status === 'in_progress',
+                      'bg-rose-50 text-rose-700': row.status === 'pending'
+                    }">
+                    {{ row.status | titlecase }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-slate-600">{{ row.secondary || '—' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="mt-8 bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+        <h2 class="text-lg font-semibold text-slate-900">Trend Snapshot</h2>
+        <p class="text-sm text-slate-600 mb-4">Throughput and completion trends.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div *ngFor="let trend of data.trends" class="border border-slate-100 rounded-lg p-4">
+            <p class="text-sm font-semibold text-slate-700">{{ trend.label }}</p>
+            <div class="mt-3 flex items-end gap-2">
+              <div *ngFor="let point of trend.points" class="flex flex-col items-center flex-1">
+                <div class="w-full bg-blue-100 rounded" [style.height]="(point.value || 1) + 'px'"></div>
+                <span class="text-[11px] text-slate-500 mt-1">{{ point.label }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

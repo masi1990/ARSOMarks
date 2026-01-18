@@ -93,5 +93,9 @@ export class NsbRegistrationRequestService {
       responseType: 'blob',
     });
   }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }
 

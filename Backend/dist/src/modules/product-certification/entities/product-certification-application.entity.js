@@ -17,6 +17,8 @@ const system_user_entity_1 = require("../../system-user/system-user.entity");
 const product_entity_1 = require("./product.entity");
 const product_certification_cb_selection_entity_1 = require("./product-certification-cb-selection.entity");
 const product_certification_declaration_entity_1 = require("./product-certification-declaration.entity");
+const product_certification_agreement_entity_1 = require("./product-certification-agreement.entity");
+const product_certification_cb_change_request_entity_1 = require("./product-certification-cb-change-request.entity");
 let ProductCertificationApplication = class ProductCertificationApplication {
 };
 exports.ProductCertificationApplication = ProductCertificationApplication;
@@ -61,6 +63,10 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'scheme_description', type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], ProductCertificationApplication.prototype, "schemeDescription", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'scheme_payload', type: 'jsonb', nullable: true }),
+    __metadata("design:type", Object)
+], ProductCertificationApplication.prototype, "schemePayload", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'application_scope', type: 'enum', enum: enums_1.ApplicationScope }),
     __metadata("design:type", String)
@@ -159,6 +165,14 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => product_certification_declaration_entity_1.ProductCertificationDeclaration, (declaration) => declaration.application, { cascade: true }),
     __metadata("design:type", product_certification_declaration_entity_1.ProductCertificationDeclaration)
 ], ProductCertificationApplication.prototype, "declaration", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => product_certification_agreement_entity_1.ProductCertificationAgreement, (agreement) => agreement.application, { cascade: true }),
+    __metadata("design:type", Array)
+], ProductCertificationApplication.prototype, "agreements", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => product_certification_cb_change_request_entity_1.ProductCertificationCbChangeRequest, (request) => request.application, { cascade: true }),
+    __metadata("design:type", Array)
+], ProductCertificationApplication.prototype, "cbChangeRequests", void 0);
 exports.ProductCertificationApplication = ProductCertificationApplication = __decorate([
     (0, typeorm_1.Entity)('product_certification_applications')
 ], ProductCertificationApplication);

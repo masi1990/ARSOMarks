@@ -1,0 +1,98 @@
+<div class="page">
+  <h2>Mark Misuse Incidents</h2>
+
+  <div class="card">
+    <h3>Report Misuse</h3>
+    <form [formGroup]="reportForm" (ngSubmit)="submitReport()">
+      <div class="form-row">
+        <label>License ID (optional)</label>
+        <input type="text" formControlName="licenseId" placeholder="License agreement ID" />
+      </div>
+      <div class="form-row">
+        <label>Description</label>
+        <textarea rows="4" formControlName="description"></textarea>
+      </div>
+      <button type="submit">Submit Report</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Review & Sanctions</h3>
+    <div class="form-row">
+      <label>Selected Incident</label>
+      <input type="text" [value]="selectedIncidentId" readonly />
+    </div>
+    <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+      <div class="form-row">
+        <label>Status</label>
+        <select formControlName="status">
+          <option value="">Select status</option>
+          <option *ngFor="let status of misuseStatuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Decision Notes</label>
+        <textarea rows="3" formControlName="decisionNotes"></textarea>
+      </div>
+      <button type="submit">Save Review</button>
+    </form>
+
+    <form [formGroup]="sanctionForm" (ngSubmit)="submitSanction()">
+      <div class="form-row">
+        <label>Sanction Type</label>
+        <select formControlName="sanctionType">
+          <option value="">Select sanction</option>
+          <option *ngFor="let type of sanctionTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Start Date</label>
+        <input type="date" formControlName="startDate" />
+      </div>
+      <div class="form-row">
+        <label>End Date</label>
+        <input type="date" formControlName="endDate" />
+      </div>
+      <div class="form-row">
+        <label>Notes</label>
+        <textarea rows="3" formControlName="notes"></textarea>
+      </div>
+      <button type="submit">Add Sanction</button>
+    </form>
+
+    <div class="form-row">
+      <label>Evidence File</label>
+      <input type="file" (change)="onEvidenceSelected($event)" />
+    </div>
+    <button type="button" (click)="uploadEvidence()">Upload Evidence</button>
+  </div>
+
+  <div class="card">
+    <h3>Incident List</h3>
+    <div *ngIf="loading">Loading...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <table *ngIf="!loading && incidents.length > 0">
+      <thead>
+        <tr>
+          <th>Incident</th>
+          <th>License</th>
+          <th>Status</th>
+          <th>Reported</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let incident of incidents">
+          <td>{{ incident.id }}</td>
+          <td>{{ incident.licenseId || 'N/A' }}</td>
+          <td>{{ incident.status }}</td>
+          <td>{{ incident.reportedAt | date: 'medium' }}</td>
+          <td>
+            <button type="button" (click)="selectIncident(incident.id)">Select</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loading && incidents.length === 0">No incidents reported yet.</div>
+  </div>
+</div>

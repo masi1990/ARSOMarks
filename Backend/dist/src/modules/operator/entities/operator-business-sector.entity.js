@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorBusinessSector.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'main_sector', type: 'enum', enum: enums_1.MainBusinessSector }),
+    (0, typeorm_1.Column)({ name: 'main_sector', type: 'enum', enum: enums_1.MainBusinessSector, nullable: true }),
     __metadata("design:type", String)
 ], OperatorBusinessSector.prototype, "mainSector", void 0);
 __decorate([
@@ -46,7 +46,7 @@ __decorate([
     __metadata("design:type", Array)
 ], OperatorBusinessSector.prototype, "productCategories", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'percentage_revenue', type: 'decimal', precision: 5, scale: 2 }),
+    (0, typeorm_1.Column)({ name: 'percentage_revenue', type: 'decimal', precision: 5, scale: 2, nullable: true }),
     __metadata("design:type", Number)
 ], OperatorBusinessSector.prototype, "percentageRevenue", void 0);
 __decorate([

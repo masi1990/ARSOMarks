@@ -41,10 +41,19 @@ export class NsbRegistrationRequestController {
   }
 
   @Get()
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
-  list(@Query() query: any) {
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.NSB_ADMIN, UserRole.NSB_USER)
+  list(@Query() query: any, @CurrentUser() user: SystemUser) {
     const { countryId, status, search, skip = 0, limit = 25 } = query;
-    const filter = { countryId, status, search, skip: Number(skip), limit: Number(limit) };
+    const userRoles = user.roles && user.roles.length > 0 ? user.roles : user.role ? [user.role] : [];
+    const isApprover = userRoles.includes(UserRole.SUPER_ADMIN) || userRoles.includes(UserRole.ARSO_SECRETARIAT);
+    const filter = {
+      countryId,
+      status,
+      search,
+      skip: Number(skip),
+      limit: Number(limit),
+      createdBy: isApprover ? undefined : user.id,
+    };
     return this.requestService.findAll(filter);
   }
 
@@ -118,6 +127,13 @@ export class NsbRegistrationRequestController {
   @Roles(UserRole.PUBLIC, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.NSB_ADMIN, UserRole.NSB_USER)
   async deleteDocument(@Param('id') id: string, @Param('documentId') documentId: string, @CurrentUser() user: SystemUser) {
     return this.requestService.deleteDocument(id, documentId, user.id);
+  }
+
+  @Delete(':id')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)
+  async deleteRequest(@Param('id') id: string) {
+    await this.requestService.deleteRequest(id);
+    return { message: 'Registration request deleted successfully' };
   }
 
   @Get(':id/documents/:documentId/view')

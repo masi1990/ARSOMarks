@@ -20,4 +20,6 @@ __exportStar(require("./product-technical-spec.entity"), exports);
 __exportStar(require("./product-environmental-claim.entity"), exports);
 __exportStar(require("./product-certification-cb-selection.entity"), exports);
 __exportStar(require("./product-certification-declaration.entity"), exports);
+__exportStar(require("./product-certification-agreement.entity"), exports);
+__exportStar(require("./product-certification-cb-change-request.entity"), exports);
 //# sourceMappingURL=index.js.map

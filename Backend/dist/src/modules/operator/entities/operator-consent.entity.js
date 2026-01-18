@@ -29,39 +29,39 @@ __decorate([
     __metadata("design:type", operator_entity_1.Operator)
 ], OperatorConsent.prototype, "operator", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'data_consent', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'data_consent', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "dataConsent", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'data_sharing_consent', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'data_sharing_consent', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "dataSharingConsent", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'cross_border_data', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'cross_border_data', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "crossBorderData", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'terms_acceptance', type: 'boolean', default: false }),
+    (0, typeorm_1.Column)({ name: 'terms_acceptance', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "termsAcceptance", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'marketing_consent', type: 'boolean', default: false, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'marketing_consent', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "marketingConsent", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'sms_consent', type: 'boolean', default: false, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'sms_consent', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "smsConsent", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'whatsapp_consent', type: 'boolean', default: false, nullable: true }),
+    (0, typeorm_1.Column)({ name: 'whatsapp_consent', type: 'boolean', nullable: true }),
     __metadata("design:type", Boolean)
 ], OperatorConsent.prototype, "whatsappConsent", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'declaration_signature', length: 100 }),
+    (0, typeorm_1.Column)({ name: 'declaration_signature', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], OperatorConsent.prototype, "declarationSignature", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'declaration_date', type: 'date', default: () => 'CURRENT_DATE' }),
+    (0, typeorm_1.Column)({ name: 'declaration_date', type: 'date', nullable: true }),
     __metadata("design:type", Date)
 ], OperatorConsent.prototype, "declarationDate", void 0);
 __decorate([

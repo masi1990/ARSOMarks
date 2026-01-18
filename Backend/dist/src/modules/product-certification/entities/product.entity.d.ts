@@ -2,6 +2,9 @@ import { ProductCertificationApplication } from './product-certification-applica
 import { ProductTechnicalSpec } from './product-technical-spec.entity';
 import { ProductEnvironmentalClaim } from './product-environmental-claim.entity';
 import { ProductCategory, TargetConsumerGroup, PackagingType } from '../../../shared/enums';
+import { Country } from '../../reference-data/entities/country.entity';
+import { ProductStandard } from '../../traceability/entities/product-standard.entity';
+import { Coc } from '../../traceability/entities/coc.entity';
 export declare class Product {
     id: string;
     applicationId: string;
@@ -20,6 +23,8 @@ export declare class Product {
     uniqueSellingPoint?: string;
     intendedMarkets?: string[];
     primaryTargetMarketId?: string;
+    originCountryId?: string;
+    originCountry?: Country;
     targetConsumers: TargetConsumerGroup[];
     consumerWarnings?: string;
     shelfLife?: string;
@@ -37,4 +42,6 @@ export declare class Product {
     updatedAt: Date;
     technicalSpec?: ProductTechnicalSpec;
     environmentalClaim?: ProductEnvironmentalClaim;
+    standards?: ProductStandard[];
+    cocs?: Coc[];
 }

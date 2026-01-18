@@ -1,93 +1,52 @@
 .application-registration-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  @apply mx-auto max-w-5xl px-4 py-8;
 }
 
 .registration-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  @apply rounded-2xl border border-slate-200 bg-white p-8 shadow-sm;
 }
 
 .registration-header {
-  text-align: center;
-  margin-bottom: 2rem;
+  @apply mb-8 text-center;
 
   h1 {
-    color: #333;
-    margin-bottom: 0.5rem;
+    @apply mb-2 text-2xl font-semibold text-slate-900;
   }
 
   p {
-    color: #666;
-    font-size: 0.95rem;
+    @apply text-sm text-slate-600;
   }
 }
 
 .registration-form {
   .form-section {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid #e0e0e0;
+    @apply border-b border-slate-200 pb-8 mb-8;
 
     &:last-child {
-      border-bottom: none;
+      @apply border-b-0;
     }
 
     h2 {
-      color: #333;
-      font-size: 1.25rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid #007bff;
+      @apply mb-4 border-b-2 border-slate-900 pb-2 text-xl font-semibold text-slate-900;
     }
   }
 
   .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
+    @apply grid gap-4 md:grid-cols-2;
   }
 
   .form-group {
-    margin-bottom: 1.5rem;
+    @apply mb-6 space-y-1;
 
     label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #333;
-      font-weight: 500;
+      @apply text-sm font-medium text-slate-800;
 
       .required {
-        color: #dc3545;
-        margin-left: 2px;
+        @apply ml-0.5 text-rose-600;
       }
     }
 
     .form-control {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-
-      &:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-      }
-
-      &.invalid {
-        border-color: #dc3545;
-      }
-
       &[type='number'] {
         -moz-appearance: textfield;
 
@@ -100,89 +59,44 @@
     }
 
     textarea.form-control {
-      resize: vertical;
-      min-height: 100px;
+      @apply min-h-[100px] resize-y;
     }
 
     .error-message {
-      color: #dc3545;
-      font-size: 0.875rem;
-      margin-top: 0.25rem;
+      @apply text-xs font-semibold text-rose-600;
     }
   }
 }
 
 .form-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  @apply mt-8 flex gap-4 justify-end border-t border-slate-200 pt-6;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    @apply flex-col;
 
     button {
-      width: 100%;
+      @apply w-full;
     }
   }
 }
 
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  &.btn-primary {
-    background-color: #007bff;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background-color: #0056b3;
-    }
-  }
-
-  &.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background-color: #545b62;
-    }
-  }
+.form-actions .btn {
+  @apply px-5 py-3 text-base;
 }
 
 .alert {
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 1.5rem;
+  @apply mb-6 rounded-lg border px-4 py-3 text-sm;
 
   &.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    @apply border-emerald-200 bg-emerald-50 text-emerald-700;
   }
 
   &.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    @apply border-rose-200 bg-rose-50 text-rose-700;
   }
 
   &.alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
+    @apply border-slate-200 bg-slate-50 text-slate-800;
   }
 }
 

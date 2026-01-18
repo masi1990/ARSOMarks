@@ -72,13 +72,13 @@
                       class="group flex items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-slate-100 hover:text-slate-900"
                       [routerLink]="item.route"
                       routerLinkActive="bg-slate-900 text-white shadow-md hover:bg-slate-800 hover:text-white"
-                      [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+                      [routerLinkActiveOptions]="{ exact: item.route === '/portal/dashboard' }"
                     >
                       <svg 
                         *ngIf="item.icon"
                         class="h-4 w-4 shrink-0 transition-colors"
-                        [class.text-slate-400]="!router.isActive(item.route, item.route === '/dashboard')"
-                        [class.group-hover:text-slate-600]="!router.isActive(item.route, item.route === '/dashboard')"
+                        [class.text-slate-400]="!router.isActive(item.route, item.route === '/portal/dashboard')"
+                        [class.group-hover:text-slate-600]="!router.isActive(item.route, item.route === '/portal/dashboard')"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

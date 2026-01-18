@@ -22,20 +22,20 @@ export class OperatorContact {
   @JoinColumn({ name: 'operator_id' })
   operator: Operator;
 
-  @Column({ name: 'contact_type', type: 'enum', enum: OperatorContactType, default: OperatorContactType.PRIMARY })
-  contactType: OperatorContactType;
+  @Column({ name: 'contact_type', type: 'enum', enum: OperatorContactType, nullable: true })
+  contactType?: OperatorContactType;
 
-  @Column({ name: 'primary_contact', length: 100 })
-  primaryContact: string;
+  @Column({ name: 'primary_contact', length: 100, nullable: true })
+  primaryContact?: string;
 
-  @Column({ name: 'contact_position', length: 100 })
-  contactPosition: string;
+  @Column({ name: 'contact_position', length: 100, nullable: true })
+  contactPosition?: string;
 
-  @Column({ name: 'contact_email', length: 150 })
-  contactEmail: string;
+  @Column({ name: 'contact_email', length: 150, nullable: true })
+  contactEmail?: string;
 
-  @Column({ name: 'contact_email_verified', type: 'boolean', default: false })
-  contactEmailVerified: boolean;
+  @Column({ name: 'contact_email_verified', type: 'boolean', nullable: true })
+  contactEmailVerified?: boolean;
 
   @Column({ name: 'contact_email_verification_token', length: 255, nullable: true })
   contactEmailVerificationToken?: string;
@@ -43,11 +43,11 @@ export class OperatorContact {
   @Column({ name: 'contact_email_verified_at', type: 'timestamp', nullable: true })
   contactEmailVerifiedAt?: Date;
 
-  @Column({ name: 'contact_phone', length: 20 })
-  contactPhone: string;
+  @Column({ name: 'contact_phone', length: 20, nullable: true })
+  contactPhone?: string;
 
-  @Column({ name: 'contact_phone_verified', type: 'boolean', default: false })
-  contactPhoneVerified: boolean;
+  @Column({ name: 'contact_phone_verified', type: 'boolean', nullable: true })
+  contactPhoneVerified?: boolean;
 
   @Column({ name: 'contact_phone_verification_code', length: 10, nullable: true })
   contactPhoneVerificationCode?: string;

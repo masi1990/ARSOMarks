@@ -269,7 +269,7 @@ export class MarkLicenseAgreementComponent implements OnInit {
   }
 
   navigateToDashboard(): void {
-    this.router.navigate(['/mark-licenses/dashboard']);
+    this.router.navigate(['/portal/mark-licenses/dashboard']);
   }
 }
 

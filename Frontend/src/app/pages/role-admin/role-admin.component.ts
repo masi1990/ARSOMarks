@@ -27,9 +27,14 @@ export class RoleAdminComponent implements OnInit {
   // Role Assignment
   assigningRolesUserId: string | null = null;
   selectedRolesToAssign: UserRole[] = [];
+  selectedRolesToRevoke: UserRole[] = [];
   assignRolesNote = '';
   assignRolesError = '';
   assignRolesSuccess = '';
+  revokingRoles = false;
+  revokeRolesError = '';
+  revokeRolesSuccess = '';
+  roleModalTab: 'assign' | 'revoke' = 'assign';
   
   readonly allRoleOptions: { value: UserRole; label: string }[] = Object.values(UserRole).map((r) => ({
     value: r,
@@ -141,17 +146,25 @@ export class RoleAdminComponent implements OnInit {
   openAssignRolesModal(user: User): void {
     this.assigningRolesUserId = user.id;
     this.selectedRolesToAssign = [];
+    this.selectedRolesToRevoke = [];
     this.assignRolesNote = '';
     this.assignRolesError = '';
     this.assignRolesSuccess = '';
+    this.revokeRolesError = '';
+    this.revokeRolesSuccess = '';
+    this.roleModalTab = 'assign';
   }
 
   closeAssignRolesModal(): void {
     this.assigningRolesUserId = null;
     this.selectedRolesToAssign = [];
+    this.selectedRolesToRevoke = [];
     this.assignRolesNote = '';
     this.assignRolesError = '';
     this.assignRolesSuccess = '';
+    this.revokeRolesError = '';
+    this.revokeRolesSuccess = '';
+    this.roleModalTab = 'assign';
   }
 
   toggleRoleSelection(role: UserRole): void {
@@ -224,6 +237,69 @@ export class RoleAdminComponent implements OnInit {
       return 'None';
     }
     return this.formatRolesList(this.getUserCurrentRoles(user));
+  }
+
+  getCurrentEditingUserRolesList(): UserRole[] {
+    const user = this.getCurrentEditingUser();
+    if (!user) {
+      return [];
+    }
+    return this.getUserCurrentRoles(user);
+  }
+
+  toggleRevokeRoleSelection(role: UserRole): void {
+    if (this.selectedRolesToRevoke.includes(role)) {
+      this.selectedRolesToRevoke = this.selectedRolesToRevoke.filter((r) => r !== role);
+    } else {
+      this.selectedRolesToRevoke = [...this.selectedRolesToRevoke, role];
+    }
+  }
+
+  isRevokeRoleSelected(role: UserRole): boolean {
+    return this.selectedRolesToRevoke.includes(role);
+  }
+
+  revokeRoles(): void {
+    if (!this.assigningRolesUserId) {
+      return;
+    }
+
+    if (this.selectedRolesToRevoke.length === 0) {
+      this.revokeRolesError = 'Select at least one role to revoke.';
+      return;
+    }
+
+    this.revokeRolesError = '';
+    this.revokeRolesSuccess = '';
+    this.revokingRoles = true;
+
+    const payload = {
+      roles: this.selectedRolesToRevoke,
+    };
+
+    this.authService
+      .removeRolesFromUser(this.assigningRolesUserId, payload)
+      .pipe(
+        finalize(() => {
+          this.revokingRoles = false;
+        }),
+      )
+      .subscribe({
+        next: (updatedUser) => {
+          this.revokeRolesSuccess = 'Roles revoked successfully.';
+          // Update user in the list
+          this.users = this.users.map((u) => (u.id === updatedUser.id ? updatedUser : u));
+          // Clear selected roles
+          this.selectedRolesToRevoke = [];
+          // Reload users to get fresh data
+          setTimeout(() => {
+            this.loadUsers();
+          }, 1000);
+        },
+        error: (err) => {
+          this.revokeRolesError = err?.error?.message || 'Failed to revoke roles.';
+        },
+      });
   }
 }
 

@@ -196,7 +196,7 @@
 
         <div class="mb-4">
           <p class="text-sm text-slate-600 mb-2">
-            Select roles to assign to this user. Selected roles will be added to their existing roles.
+            Manage roles for this user. You can assign new roles or revoke existing ones.
           </p>
           <div class="text-xs text-slate-500 mb-4">
             Current roles: 
@@ -206,8 +206,30 @@
           </div>
         </div>
 
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-slate-700 mb-2">Select Roles</label>
+        <!-- Tabs for Assign/Revoke -->
+        <div class="mb-4 border-b border-slate-200">
+          <div class="flex gap-4">
+            <button
+              class="pb-2 text-sm font-semibold transition border-b-2"
+              [ngClass]="roleModalTab === 'assign' ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'"
+              (click)="roleModalTab = 'assign'"
+            >
+              Assign Roles
+            </button>
+            <button
+              class="pb-2 text-sm font-semibold transition border-b-2"
+              [ngClass]="roleModalTab === 'revoke' ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'"
+              (click)="roleModalTab = 'revoke'"
+            >
+              Revoke Roles
+            </button>
+          </div>
+        </div>
+
+        <!-- Assign Roles Tab -->
+        <div *ngIf="roleModalTab === 'assign'" class="mb-4">
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Select Roles to Assign</label>
+          <p class="text-xs text-slate-500 mb-3">Selected roles will be added to the user's existing roles.</p>
           <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border border-slate-200 rounded-lg p-3">
             <label
               *ngFor="let role of allRoleOptions"
@@ -224,6 +246,29 @@
           </div>
         </div>
 
+        <!-- Revoke Roles Tab -->
+        <div *ngIf="roleModalTab === 'revoke'" class="mb-4">
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Select Roles to Revoke</label>
+          <p class="text-xs text-slate-500 mb-3">Selected roles will be removed from the user's current roles.</p>
+          <div *ngIf="getCurrentEditingUserRolesList().length === 0" class="text-sm text-slate-500 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            This user has no roles assigned to revoke.
+          </div>
+          <div *ngIf="getCurrentEditingUserRolesList().length > 0" class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border border-slate-200 rounded-lg p-3">
+            <label
+              *ngFor="let role of getCurrentEditingUserRolesList()"
+              class="flex items-center space-x-2 p-2 rounded hover:bg-red-50 cursor-pointer border border-transparent hover:border-red-200"
+            >
+              <input
+                type="checkbox"
+                [checked]="isRevokeRoleSelected(role)"
+                (change)="toggleRevokeRoleSelection(role)"
+                class="rounded border-slate-300 text-red-600 focus:ring-red-500"
+              />
+              <span class="text-sm text-slate-700">{{ formatRole(role) }}</span>
+            </label>
+          </div>
+        </div>
+
         <div class="mb-4">
           <label class="block text-sm font-semibold text-slate-700 mb-2">Note (Optional)</label>
           <textarea
@@ -234,11 +279,24 @@
           ></textarea>
         </div>
 
-        <div *ngIf="assignRolesError" class="mb-4 text-sm text-rose-600 bg-rose-50 p-3 rounded-lg">
-          {{ assignRolesError }}
+        <!-- Error/Success Messages for Assign -->
+        <div *ngIf="roleModalTab === 'assign'">
+          <div *ngIf="assignRolesError" class="mb-4 text-sm text-rose-600 bg-rose-50 p-3 rounded-lg">
+            {{ assignRolesError }}
+          </div>
+          <div *ngIf="assignRolesSuccess" class="mb-4 text-sm text-emerald-600 bg-emerald-50 p-3 rounded-lg">
+            {{ assignRolesSuccess }}
+          </div>
         </div>
-        <div *ngIf="assignRolesSuccess" class="mb-4 text-sm text-emerald-600 bg-emerald-50 p-3 rounded-lg">
-          {{ assignRolesSuccess }}
+
+        <!-- Error/Success Messages for Revoke -->
+        <div *ngIf="roleModalTab === 'revoke'">
+          <div *ngIf="revokeRolesError" class="mb-4 text-sm text-rose-600 bg-rose-50 p-3 rounded-lg">
+            {{ revokeRolesError }}
+          </div>
+          <div *ngIf="revokeRolesSuccess" class="mb-4 text-sm text-emerald-600 bg-emerald-50 p-3 rounded-lg">
+            {{ revokeRolesSuccess }}
+          </div>
         </div>
 
         <div class="flex justify-end gap-3">
@@ -248,12 +306,23 @@
           >
             Cancel
           </button>
+          <!-- Assign Roles Button -->
           <button
+            *ngIf="roleModalTab === 'assign'"
             class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition disabled:opacity-60"
             (click)="assignRoles()"
             [disabled]="selectedRolesToAssign.length === 0 || !!assignRolesSuccess"
           >
             Assign Roles
+          </button>
+          <!-- Revoke Roles Button -->
+          <button
+            *ngIf="roleModalTab === 'revoke'"
+            class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-700 transition disabled:opacity-60"
+            (click)="revokeRoles()"
+            [disabled]="selectedRolesToRevoke.length === 0 || revokingRoles || !!revokeRolesSuccess || getCurrentEditingUserRolesList().length === 0"
+          >
+            {{ revokingRoles ? 'Revoking...' : 'Revoke Roles' }}
           </button>
         </div>
       </div>

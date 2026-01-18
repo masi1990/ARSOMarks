@@ -29,6 +29,7 @@ import {
   CbChangeRequestStatus,
 } from '../../../shared/enums';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { Public } from '../../../common/decorators/public.decorator';
 import { SystemUser } from '../../system-user/system-user.entity';
 import { OperatorService } from '../../operator/services/operator.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -41,6 +42,12 @@ export class ProductCertificationController {
     private readonly productCertificationService: ProductCertificationService,
     private readonly operatorService: OperatorService,
   ) {}
+
+  @Get('directory')
+  @Public()
+  async publicDirectory() {
+    return this.productCertificationService.publicDirectory();
+  }
 
   @Post('applications')
   @Roles(UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT)

@@ -29,6 +29,43 @@ export interface NsbRegistrationRequestDocument {
   uploadedAt?: string;
 }
 
+export interface NsbAddress {
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  stateProvince?: string;
+  postalCode?: string;
+  country?: string;
+  type?: string;
+  addressType?: string;
+}
+
+export interface NsbContactInfo {
+  name?: string;
+  title?: string;
+  email?: string;
+  phone?: string;
+  mobile?: string;
+  contactType?: string;
+}
+
+export interface NsbOfficialInfo {
+  name?: string;
+  designation?: string;
+  title?: string;
+  department?: string;
+  email?: string;
+  phone?: string;
+}
+
+export interface NsbMembershipInfo {
+  organization?: string;
+  membershipStatus?: string;
+  yearJoined?: string;
+  memberSince?: string;
+  status?: string;
+}
+
 export interface NsbRegistrationRequest {
   id?: string;
   countryId: string;
@@ -36,13 +73,38 @@ export interface NsbRegistrationRequest {
   nsbOfficialName: string;
   nsbAcronym?: string;
   isoCode: string;
+  legalStatus?: string;
+  establishmentActName?: string;
+  establishmentActNumber?: string;
+  establishmentActDate?: string;
+  registrationNumber?: string;
+  registrationAuthority?: string;
+  taxIdentificationNumber?: string;
+  vatNumber?: string;
+  yearEstablished?: number | null;
+  website?: string;
   contactPersonName: string;
   contactPersonTitle?: string;
   contactEmail: string;
   contactPhone?: string;
   contactMobile?: string;
+  directorGeneralName?: string;
+  directorGeneralTitle?: string;
+  directorGeneralEmail?: string;
+  directorGeneralPhone?: string;
+  boardChairName?: string;
+  boardChairEmail?: string;
+  boardChairPhone?: string;
+  headquartersAddress?: NsbAddress;
+  postalAddress?: NsbAddress;
+  additionalAddresses?: NsbAddress[];
+  additionalContacts?: NsbContactInfo[];
+  keyOfficials?: NsbOfficialInfo[];
+  internationalMemberships?: NsbMembershipInfo[];
+  mandateAreas?: string[];
   additionalUserSlotsRequested?: number;
   requestedRoles?: string[];
+  sectors?: string[]; // Sectors/Domains covered by this NSB (e.g., Food & Agriculture, Telecommunications, etc.)
   status: NsbRegistrationRequestStatus;
   remarks?: string;
   reviewedBy?: string;
@@ -61,13 +123,38 @@ export interface CreateNsbRegistrationRequestDto {
   nsbOfficialName: string;
   nsbAcronym?: string;
   isoCode: string;
+  legalStatus?: string;
+  establishmentActName?: string;
+  establishmentActNumber?: string;
+  establishmentActDate?: string;
+  registrationNumber?: string;
+  registrationAuthority?: string;
+  taxIdentificationNumber?: string;
+  vatNumber?: string;
+  yearEstablished?: number | null;
+  website?: string;
   contactPersonName: string;
   contactPersonTitle?: string;
   contactEmail: string;
   contactPhone?: string;
   contactMobile?: string;
+  directorGeneralName?: string;
+  directorGeneralTitle?: string;
+  directorGeneralEmail?: string;
+  directorGeneralPhone?: string;
+  boardChairName?: string;
+  boardChairEmail?: string;
+  boardChairPhone?: string;
+  headquartersAddress?: NsbAddress;
+  postalAddress?: NsbAddress;
+  additionalAddresses?: NsbAddress[];
+  additionalContacts?: NsbContactInfo[];
+  keyOfficials?: NsbOfficialInfo[];
+  internationalMemberships?: NsbMembershipInfo[];
+  mandateAreas?: string[];
   additionalUserSlotsRequested?: number;
   requestedRoles?: string[];
+  sectors?: string[]; // Sectors/Domains covered by this NSB
   documents?: NsbRegistrationRequestDocument[];
 }
 

@@ -34,12 +34,6 @@ let NsbService = class NsbService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            const existingNsb = await this.nsbRepository.findOne({
-                where: { countryId: createDto.countryId, status: enums_1.NsbStatus.ACTIVE },
-            });
-            if (existingNsb) {
-                throw new common_1.ConflictException('An active NSB already exists for this country');
-            }
             const nsb = this.nsbRepository.create(Object.assign(Object.assign({}, createDto), { createdBy: userId, updatedBy: userId }));
             const savedNsb = await queryRunner.manager.save(nsb);
             const contacts = createDto.contacts.map((contact) => this.contactRepository.create(Object.assign(Object.assign({}, contact), { nsbId: savedNsb.id })));

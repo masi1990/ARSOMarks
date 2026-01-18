@@ -13,6 +13,9 @@ import { ProductCertificationApplication } from './product-certification-applica
 import { ProductTechnicalSpec } from './product-technical-spec.entity';
 import { ProductEnvironmentalClaim } from './product-environmental-claim.entity';
 import { ProductCategory, TargetConsumerGroup, PackagingType } from '../../../shared/enums';
+import { Country } from '../../reference-data/entities/country.entity';
+import { ProductStandard } from '../../traceability/entities/product-standard.entity';
+import { Coc } from '../../traceability/entities/coc.entity';
 
 @Entity('products')
 export class Product {
@@ -71,6 +74,13 @@ export class Product {
   @Column({ name: 'primary_target_market', type: 'uuid', nullable: true })
   primaryTargetMarketId?: string;
 
+  @Column({ name: 'origin_country_id', type: 'uuid', nullable: true })
+  originCountryId?: string;
+
+  @ManyToOne(() => Country, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'origin_country_id' })
+  originCountry?: Country;
+
   @Column({ name: 'target_consumers', type: 'enum', enum: TargetConsumerGroup, array: true })
   targetConsumers: TargetConsumerGroup[];
 
@@ -123,5 +133,11 @@ export class Product {
 
   @OneToOne(() => ProductEnvironmentalClaim, (claim) => claim.product, { cascade: true })
   environmentalClaim?: ProductEnvironmentalClaim;
+
+  @OneToMany(() => ProductStandard, (productStandard) => productStandard.product)
+  standards?: ProductStandard[];
+
+  @OneToMany(() => Coc, (coc) => coc.product)
+  cocs?: Coc[];
 }
 

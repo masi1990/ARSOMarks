@@ -117,6 +117,11 @@ export class CreateNsbDto {
   @IsOptional()
   locations?: NsbLocationDto[];
 
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  sectors?: string[];
+
   @IsObject()
   @IsOptional()
   additionalInfo?: Record<string, any>;

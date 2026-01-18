@@ -17,6 +17,7 @@ import { PublicCertifiedProductsController } from './controllers/public-certifie
 import { OperatorModule } from '../operator/operator.module';
 import { AuthModule } from '../auth/auth.module';
 import { Operator } from '../operator/entities/operator.entity';
+import { TraceabilityModule } from '../traceability/traceability.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { Operator } from '../operator/entities/operator.entity';
     ]),
     OperatorModule,
     AuthModule,
+    TraceabilityModule,
   ],
   controllers: [ProductCertificationController, PublicCertifiedProductsController],
   providers: [ProductCertificationService, ProductCertificationAgreementUploadService],

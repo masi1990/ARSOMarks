@@ -21,10 +21,14 @@ export class ConsumerComponent implements OnInit {
   searchTerm = '';
   categoryFilter = '';
   countryFilter = '';
+  statusFilter = '';
+  sectorFilter = '';
   
   // Filter options
   categories: string[] = [];
   countries: string[] = [];
+  statuses: string[] = [];
+  sectors: string[] = [];
 
   constructor(private consumerService: ConsumerService) {}
 
@@ -64,6 +68,8 @@ export class ConsumerComponent implements OnInit {
     // Extract unique categories and countries for filters
     this.categories = [...new Set(this.products.map((p) => p.category).filter(Boolean))];
     this.countries = [...new Set(this.products.map((p) => p.countryOfOrigin).filter(Boolean))];
+    this.statuses = [...new Set(this.products.map((p) => p.certificationStatus).filter(Boolean) as string[])];
+    this.sectors = [...new Set(this.products.map((p) => p.sector).filter(Boolean) as string[])];
   }
 
   applyFilters(): void {
@@ -92,6 +98,16 @@ export class ConsumerComponent implements OnInit {
       filtered = filtered.filter((p) => p.countryOfOrigin === this.countryFilter);
     }
 
+    // Status filter
+    if (this.statusFilter) {
+      filtered = filtered.filter((p) => (p.certificationStatus || '').toLowerCase() === this.statusFilter.toLowerCase());
+    }
+
+    // Sector filter
+    if (this.sectorFilter) {
+      filtered = filtered.filter((p) => (p.sector || '').toLowerCase() === this.sectorFilter.toLowerCase());
+    }
+
     this.filteredProducts = filtered;
   }
 
@@ -108,6 +124,8 @@ export class ConsumerComponent implements OnInit {
     this.searchTerm = '';
     this.categoryFilter = '';
     this.countryFilter = '';
+    this.statusFilter = '';
+    this.sectorFilter = '';
     this.applyFilters();
   }
 
@@ -120,6 +138,11 @@ export class ConsumerComponent implements OnInit {
   isExpired(expiryDate: string | null | undefined): boolean {
     if (!expiryDate) return false;
     return new Date(expiryDate) < new Date();
+  }
+
+  formatStatus(status?: string | null): string {
+    if (!status) return 'Unknown';
+    return status.replace(/_/g, ' ').toUpperCase();
   }
 }
 

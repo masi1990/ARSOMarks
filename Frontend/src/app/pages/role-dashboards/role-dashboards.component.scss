@@ -1,0 +1,9 @@
+.spark-bar {
+  background: linear-gradient(180deg, #dbeafe 0%, #1d4ed8 100%);
+  border-radius: 0.5rem;
+}
+
+:host ::ng-deep select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

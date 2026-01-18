@@ -132,6 +132,12 @@ export class Operator {
   @Column({ name: 'group_members', type: 'jsonb', nullable: true })
   groupMembers?: Record<string, any>[];
 
+  @Column({ name: 'scheme_type', type: 'text', nullable: true })
+  schemeType?: string;
+
+  @Column({ name: 'scheme_payload', type: 'jsonb', nullable: true })
+  schemePayload?: Record<string, any>;
+
   // Status & Workflow
   @Column({ type: 'enum', enum: OperatorStatus, default: OperatorStatus.DRAFT })
   status: OperatorStatus;

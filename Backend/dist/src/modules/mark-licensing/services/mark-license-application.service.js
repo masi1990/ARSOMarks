@@ -20,35 +20,37 @@ const mark_license_application_entity_1 = require("../entities/mark-license-appl
 const mark_license_placement_entity_1 = require("../entities/mark-license-placement.entity");
 const enums_1 = require("../../../shared/enums");
 const nsb_entity_1 = require("../../nsb-management/entities/nsb.entity");
+const mark_misuse_incident_entity_1 = require("../entities/mark-misuse-incident.entity");
+const mark_sanction_entity_1 = require("../entities/mark-sanction.entity");
+const mark_misuse_upload_service_1 = require("./mark-misuse-upload.service");
 let MarkLicenseApplicationService = class MarkLicenseApplicationService {
-    constructor(applicationRepository, placementRepository, nsbRepository, dataSource) {
+    constructor(applicationRepository, placementRepository, nsbRepository, misuseRepository, sanctionRepository, misuseUploadService, dataSource) {
         this.applicationRepository = applicationRepository;
         this.placementRepository = placementRepository;
         this.nsbRepository = nsbRepository;
+        this.misuseRepository = misuseRepository;
+        this.sanctionRepository = sanctionRepository;
+        this.misuseUploadService = misuseUploadService;
         this.dataSource = dataSource;
     }
     async createApplication(createDto, userId) {
+        var _a;
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            const nsb = await this.nsbRepository.findOne({ where: { id: createDto.nsbId } });
-            if (!nsb) {
-                throw new common_1.NotFoundException(`NSB with ID ${createDto.nsbId} not found`);
+            const nsbId = (_a = createDto.nsbId) === null || _a === void 0 ? void 0 : _a.trim();
+            if (!nsbId) {
+                throw new common_1.BadRequestException('NSB is required');
             }
-            const existingDraft = await this.applicationRepository.findOne({
-                where: {
-                    nsbId: createDto.nsbId,
-                    status: enums_1.MarkLicenseStatus.DRAFT,
-                },
-            });
-            if (existingDraft) {
-                throw new common_1.BadRequestException('A draft application already exists. Please update or delete it first.');
+            const nsb = await this.nsbRepository.findOne({ where: { id: nsbId } });
+            if (!nsb) {
+                throw new common_1.NotFoundException(`NSB with ID ${nsbId} not found`);
             }
             const applicationNumber = await this.generateApplicationNumber();
             const applicationData = {
                 applicationNumber,
-                nsbId: createDto.nsbId,
+                nsbId,
                 nsbApplicantName: nsb.name,
                 applicationDate: new Date(),
                 applicationReference: createDto.applicationReference,
@@ -110,6 +112,17 @@ let MarkLicenseApplicationService = class MarkLicenseApplicationService {
         });
         if (!application) {
             throw new common_1.NotFoundException('Draft application not found or already submitted');
+        }
+        if (updateDto.nsbId !== undefined) {
+            const nsb = await this.nsbRepository.findOne({ where: { id: updateDto.nsbId } });
+            if (!nsb) {
+                throw new common_1.NotFoundException(`NSB with ID ${updateDto.nsbId} not found`);
+            }
+            application.nsbId = updateDto.nsbId;
+            application.nsbApplicantName = nsb.name;
+        }
+        if (updateDto.applicationReference !== undefined) {
+            application.applicationReference = updateDto.applicationReference;
         }
         if (updateDto.licenseTypes !== undefined) {
             application.licenseTypes = updateDto.licenseTypes;
@@ -282,6 +295,17 @@ let MarkLicenseApplicationService = class MarkLicenseApplicationService {
             order: { createdAt: 'DESC' },
         });
     }
+    async getAllApplications(includeDrafts = true) {
+        const where = {};
+        if (!includeDrafts) {
+            where.status = enums_1.MarkLicenseStatus.SUBMITTED;
+        }
+        return this.applicationRepository.find({
+            where,
+            relations: ['placements', 'nsb'],
+            order: { createdAt: 'DESC' },
+        });
+    }
     async deleteDraft(id, userId) {
         const application = await this.applicationRepository.findOne({
             where: { id, status: enums_1.MarkLicenseStatus.DRAFT },
@@ -290,6 +314,131 @@ let MarkLicenseApplicationService = class MarkLicenseApplicationService {
             throw new common_1.NotFoundException('Draft application not found');
         }
         await this.applicationRepository.remove(application);
+    }
+    async addSupportingDocument(id, document, userId) {
+        const application = await this.applicationRepository.findOne({
+            where: { id, status: enums_1.MarkLicenseStatus.DRAFT },
+        });
+        if (!application) {
+            throw new common_1.NotFoundException('Draft application not found');
+        }
+        const documentEntry = {
+            id: `doc-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+            documentType: document.documentType,
+            fileName: document.fileName,
+            filePath: document.filePath,
+            otherDocumentName: document.otherDocumentName,
+        };
+        const existing = (application.supportingDocuments || []);
+        application.supportingDocuments = [...existing, documentEntry];
+        application.updatedBy = userId;
+        application.updatedAt = new Date();
+        await this.applicationRepository.save(application);
+        return documentEntry;
+    }
+    async listSupportingDocuments(id) {
+        const application = await this.applicationRepository.findOne({
+            where: { id },
+        });
+        if (!application) {
+            throw new common_1.NotFoundException('Application not found');
+        }
+        return application.supportingDocuments || [];
+    }
+    async removeSupportingDocument(id, documentId, userId) {
+        const application = await this.applicationRepository.findOne({
+            where: { id, status: enums_1.MarkLicenseStatus.DRAFT },
+        });
+        if (!application) {
+            throw new common_1.NotFoundException('Draft application not found');
+        }
+        const existing = (application.supportingDocuments || []);
+        application.supportingDocuments = existing.filter((doc) => (doc === null || doc === void 0 ? void 0 : doc.id) !== documentId);
+        application.updatedBy = userId;
+        application.updatedAt = new Date();
+        await this.applicationRepository.save(application);
+    }
+    async approveApplication(id, userId) {
+        const application = await this.applicationRepository.findOne({ where: { id } });
+        if (!application) {
+            throw new common_1.NotFoundException('Application not found');
+        }
+        if (![enums_1.MarkLicenseStatus.SUBMITTED, enums_1.MarkLicenseStatus.UNDER_REVIEW].includes(application.status)) {
+            throw new common_1.BadRequestException('Only submitted applications can be approved');
+        }
+        application.status = enums_1.MarkLicenseStatus.APPROVED_PENDING_AGREEMENT;
+        application.reviewedAt = new Date();
+        application.approvedAt = new Date();
+        application.updatedBy = userId;
+        return this.applicationRepository.save(application);
+    }
+    async reportMisuse(payload, userId) {
+        const incident = this.misuseRepository.create({
+            licenseId: payload.licenseId,
+            description: payload.description,
+            status: enums_1.MarkMisuseStatus.OPEN,
+            reportedBy: userId,
+        });
+        return this.misuseRepository.save(incident);
+    }
+    async listMisuseIncidents() {
+        return this.misuseRepository.find({
+            relations: ['license', 'sanctions'],
+            order: { reportedAt: 'DESC' },
+        });
+    }
+    async reviewMisuseIncident(id, status, decisionNotes, userId) {
+        const incident = await this.misuseRepository.findOne({ where: { id } });
+        if (!incident) {
+            throw new common_1.NotFoundException('Misuse incident not found');
+        }
+        incident.status = status;
+        incident.reviewedBy = userId;
+        incident.decisionNotes = decisionNotes;
+        return this.misuseRepository.save(incident);
+    }
+    async addSanction(incidentId, payload, userId) {
+        const incident = await this.misuseRepository.findOne({ where: { id: incidentId } });
+        if (!incident) {
+            throw new common_1.NotFoundException('Misuse incident not found');
+        }
+        const sanction = this.sanctionRepository.create({
+            incidentId,
+            sanctionType: payload.sanctionType,
+            startDate: payload.startDate,
+            endDate: payload.endDate,
+            notes: payload.notes,
+            status: enums_1.MarkSanctionStatus.ACTIVE,
+            createdBy: userId,
+        });
+        return this.sanctionRepository.save(sanction);
+    }
+    async addMisuseEvidence(incidentId, file) {
+        const incident = await this.misuseRepository.findOne({ where: { id: incidentId } });
+        if (!incident) {
+            throw new common_1.NotFoundException('Misuse incident not found');
+        }
+        const upload = await this.misuseUploadService.uploadFile(file, incidentId);
+        const evidenceEntry = Object.assign(Object.assign({ id: `evidence-${Date.now()}-${Math.random().toString(36).slice(2, 9)}` }, upload), { uploadedAt: new Date().toISOString() });
+        const existing = (incident.evidenceFiles || []);
+        incident.evidenceFiles = [...existing, evidenceEntry];
+        await this.misuseRepository.save(incident);
+        return evidenceEntry;
+    }
+    async rejectApplication(id, reason, userId) {
+        const application = await this.applicationRepository.findOne({ where: { id } });
+        if (!application) {
+            throw new common_1.NotFoundException('Application not found');
+        }
+        if (![enums_1.MarkLicenseStatus.SUBMITTED, enums_1.MarkLicenseStatus.UNDER_REVIEW].includes(application.status)) {
+            throw new common_1.BadRequestException('Only submitted applications can be rejected');
+        }
+        application.status = enums_1.MarkLicenseStatus.REJECTED;
+        application.reviewedAt = new Date();
+        application.rejectedAt = new Date();
+        application.rejectionReason = reason || null;
+        application.updatedBy = userId;
+        return this.applicationRepository.save(application);
     }
     async generateApplicationNumber() {
         const year = new Date().getFullYear();
@@ -308,9 +457,14 @@ exports.MarkLicenseApplicationService = MarkLicenseApplicationService = __decora
     __param(0, (0, typeorm_1.InjectRepository)(mark_license_application_entity_1.MarkLicenseApplication)),
     __param(1, (0, typeorm_1.InjectRepository)(mark_license_placement_entity_1.MarkLicensePlacement)),
     __param(2, (0, typeorm_1.InjectRepository)(nsb_entity_1.Nsb)),
+    __param(3, (0, typeorm_1.InjectRepository)(mark_misuse_incident_entity_1.MarkMisuseIncident)),
+    __param(4, (0, typeorm_1.InjectRepository)(mark_sanction_entity_1.MarkSanction)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        mark_misuse_upload_service_1.MarkMisuseUploadService,
         typeorm_2.DataSource])
 ], MarkLicenseApplicationService);
 //# sourceMappingURL=mark-license-application.service.js.map

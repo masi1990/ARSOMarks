@@ -3,3 +3,4 @@ export { MarkLicenseAgreementService } from './mark-license-agreement.service';
 export { MarkUsageReportService } from './mark-usage-report.service';
 export { MarkLicenseModificationService } from './mark-license-modification.service';
 export { MarkAssetService } from './mark-asset.service';
+export { MarkMisuseUploadService } from './mark-misuse-upload.service';

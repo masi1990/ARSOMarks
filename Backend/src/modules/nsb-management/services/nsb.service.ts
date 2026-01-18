@@ -29,13 +29,9 @@ export class NsbService {
     await queryRunner.startTransaction();
 
     try {
-      const existingNsb = await this.nsbRepository.findOne({
-        where: { countryId: createDto.countryId, status: NsbStatus.ACTIVE },
-      });
-
-      if (existingNsb) {
-        throw new ConflictException('An active NSB already exists for this country');
-      }
+      // Allow multiple NSBs per country to support sector-specific NSBs
+      // (e.g., food/agriculture, telecommunications, etc.)
+      // No longer checking for existing NSBs as countries may have multiple NSBs
 
       const nsb = this.nsbRepository.create({
         ...createDto,
