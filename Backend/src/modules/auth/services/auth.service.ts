@@ -36,9 +36,9 @@ export class AuthService {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(registerDto.password, saltRounds);
 
-    // Default role to PUBLIC if not provided
-    const role = registerDto.role || UserRole.PUBLIC;
-    const roles = [role];
+    // Public-first hybrid: always start with Public + Operator
+    const role = UserRole.PUBLIC;
+    const roles = [UserRole.PUBLIC, UserRole.OPERATOR];
 
     // Generate email verification token
     const emailVerificationToken = randomBytes(32).toString('hex');

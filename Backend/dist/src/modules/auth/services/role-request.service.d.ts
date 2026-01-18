@@ -8,8 +8,10 @@ export declare class RoleRequestService {
     private readonly userRepo;
     private readonly emailService;
     constructor(roleRequestRepo: Repository<RoleRequest>, userRepo: Repository<SystemUser>, emailService: EmailService);
-    create(user: SystemUser, dto: CreateRoleRequestDto): Promise<RoleRequest>;
+    create(user: SystemUser, dto: CreateRoleRequestDto): Promise<RoleRequest[]>;
     listMine(user: SystemUser): Promise<RoleRequest[]>;
     listAll(): Promise<RoleRequest[]>;
     decide(id: string, reviewer: SystemUser, dto: DecideRoleRequestDto): Promise<RoleRequest>;
+    private extractRequestType;
+    private attachRequestType;
 }

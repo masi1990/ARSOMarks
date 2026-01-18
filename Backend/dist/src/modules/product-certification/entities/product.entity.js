@@ -91,7 +91,7 @@ __decorate([
     __metadata("design:type", String)
 ], Product.prototype, "primaryTargetMarketId", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'origin_country_id', type: 'uuid', nullable: true }),
+    (0, typeorm_1.Column)({ name: 'origin_country_id', type: 'uuid', nullable: true, select: false, insert: false, update: false }),
     __metadata("design:type", String)
 ], Product.prototype, "originCountryId", void 0);
 __decorate([

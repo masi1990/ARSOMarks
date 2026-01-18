@@ -108,8 +108,8 @@ export class AuthService {
     return userRoles.some((r) => roles.includes(r as string));
   }
 
-  requestRoles(payload: CreateRoleRequest): Observable<RoleRequest> {
-    return this.http.post<RoleRequest>(`${this.apiUrl}/role-requests`, payload);
+  requestRoles(payload: CreateRoleRequest): Observable<RoleRequest[]> {
+    return this.http.post<RoleRequest[]>(`${this.apiUrl}/role-requests`, payload);
   }
 
   getMyRoleRequests(): Observable<RoleRequest[]> {

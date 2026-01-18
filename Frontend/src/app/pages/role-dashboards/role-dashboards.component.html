@@ -1,182 +1,192 @@
 <div class="min-h-screen bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div>
-        <p class="text-sm uppercase tracking-wide text-slate-500">Role Dashboard</p>
-        <h1 class="text-3xl font-bold text-slate-900">{{ selectedRole | titlecase }}</h1>
-        <p class="text-sm text-slate-600 mt-1">High-level KPIs, trends, alerts, and pending actions.</p>
-      </div>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid gap-6 lg:grid-cols-[320px,1fr]">
+      <aside class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col gap-6">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-blue-600 font-semibold">Public-first</p>
+          <h1 class="text-2xl font-bold text-slate-900 mt-1">Public Dashboard</h1>
+          <p class="text-sm text-slate-600 mt-2">Verify products, submit complaints, and step up to advanced roles from a single, consistent home.</p>
+        </div>
 
-      <div class="flex flex-wrap gap-3 items-center">
-        <div *ngIf="canView(UserRole.SUPER_ADMIN) || roleOptions.length > 1" class="flex items-center gap-2">
-          <label class="text-sm font-semibold text-slate-700" for="roleSelect">Role</label>
-          <select
-            id="roleSelect"
-            [value]="selectedRole"
-            (change)="onRoleChange($event.target?.value)"
-            class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+        <div class="rounded-xl bg-slate-900 text-white p-4">
+          <p class="text-sm font-semibold">Universal Access</p>
+          <p class="text-xs text-slate-200 mt-1">Everything you can do as a guest stays available when you log in as Public.</p>
+          <ul class="mt-3 space-y-1 text-xs text-slate-100">
+            <li>• Traceability & CoC lookup</li>
+            <li>• Public complaints & misuse reports</li>
+            <li>• Certified product registry search</li>
+          </ul>
+        </div>
+
+        <div class="space-y-3">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Public tools</p>
+          <a
+            *ngFor="let link of sidebarLinks"
+            [routerLink]="link.route"
+            class="group flex items-start gap-3 rounded-xl border border-slate-200 px-4 py-3 hover:border-blue-500 hover:bg-blue-50 transition"
           >
-            <option *ngFor="let role of roleOptions" [value]="role" [disabled]="!canView(role)">
-              {{ role | titlecase }}
-            </option>
-          </select>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <label class="text-sm font-semibold text-slate-700" for="regionFilter">Region</label>
-          <input
-            id="regionFilter"
-            [(ngModel)]="region"
-            placeholder="All"
-            class="w-32 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
-          />
-        </div>
-
-        <div class="flex items-center gap-2">
-          <label class="text-sm font-semibold text-slate-700" for="schemeFilter">Scheme</label>
-          <input
-            id="schemeFilter"
-            [(ngModel)]="scheme"
-            placeholder="All"
-            class="w-32 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
-          />
-        </div>
-
-        <div class="flex items-center gap-2">
-          <label class="text-sm font-semibold text-slate-700" for="timeframeSelect">Timeframe</label>
-          <select
-            id="timeframeSelect"
-            [(ngModel)]="timeframe"
-            class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
-          >
-            <option *ngFor="let tf of timeframes" [value]="tf">{{ tf }}</option>
-          </select>
-        </div>
-
-        <button
-          (click)="applyFilters()"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Refresh
-        </button>
-      </div>
-    </div>
-
-    <div *ngIf="error" class="mt-4 p-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg">
-      {{ error }}
-    </div>
-
-    <div *ngIf="loading" class="mt-8 bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
-      <div class="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" role="status" aria-label="Loading dashboard"></div>
-      <p class="mt-4 text-sm text-slate-600">Loading dashboard data...</p>
-    </div>
-
-    <ng-container *ngIf="!loading && data">
-      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div *ngFor="let kpi of data.kpis" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-          <p class="text-sm font-semibold text-slate-600">{{ kpi.label }}</p>
-          <p class="text-3xl font-bold text-slate-900 mt-2">{{ kpi.value }}</p>
-          <div class="mt-2 flex items-center gap-2 text-xs">
-            <span
-              *ngIf="kpi.trend"
-              class="inline-flex items-center gap-1 rounded-full px-2 py-1"
-              [ngClass]="{
-                'bg-emerald-50 text-emerald-700': kpi.trend?.direction === 'up',
-                'bg-amber-50 text-amber-700': kpi.trend?.direction === 'flat',
-                'bg-rose-50 text-rose-700': kpi.trend?.direction === 'down'
-              }"
-            >
-              <span>{{ kpi.trend.direction === 'up' ? '▲' : kpi.trend.direction === 'down' ? '▼' : '■' }}</span>
-              <span>{{ kpi.trend.change }}% vs {{ kpi.trend.period }}</span>
-            </span>
-            <span *ngIf="kpi.helperText" class="text-slate-500">{{ kpi.helperText }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-          <div class="flex items-center justify-between mb-4">
+            <div class="mt-1 h-2 w-2 rounded-full bg-blue-500 group-hover:scale-110 transition"></div>
             <div>
-              <h2 class="text-lg font-semibold text-slate-900">Trends</h2>
-              <p class="text-sm text-slate-600">Volume and SLA over the selected timeframe.</p>
+              <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">{{ link.label }}</p>
+              <p class="text-xs text-slate-600">{{ link.description }}</p>
             </div>
-            <span class="text-xs text-slate-500">{{ timeframe }}</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div *ngFor="let trend of data.trends" class="border border-slate-100 rounded-lg p-4">
-              <p class="text-sm font-semibold text-slate-700">{{ trend.label }}</p>
-              <div class="mt-3 flex items-end gap-2">
-                <div *ngFor="let point of trend.points" class="flex flex-col items-center flex-1">
-                  <div class="w-full bg-blue-100 rounded" [style.height]="(point.value || 1) + 'px'"></div>
-                  <span class="text-[11px] text-slate-500 mt-1">{{ point.label }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          </a>
         </div>
+      </aside>
 
-        <div class="space-y-4">
-          <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-slate-900">Alerts</h2>
-            <p class="text-sm text-slate-600 mb-3">Actionable items surfaced by the system.</p>
-            <div *ngIf="!data.alerts.length" class="text-sm text-slate-500">No alerts.</div>
-            <div *ngFor="let alert of data.alerts" class="mt-3 rounded-lg border border-slate-100 p-3">
-              <span
-                class="text-xs font-semibold px-2 py-1 rounded-full"
-                [ngClass]="{
-                  'bg-emerald-50 text-emerald-700': alert.severity === 'info',
-                  'bg-amber-50 text-amber-700': alert.severity === 'warning',
-                  'bg-rose-50 text-rose-700': alert.severity === 'critical'
-                }"
-                >{{ alert.severity | titlecase }}</span
+      <main class="space-y-6">
+        <section class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-blue-600 font-semibold">Role Selection Hub</p>
+              <h2 class="text-xl font-bold text-slate-900 mt-1">Upgrade your access in one go</h2>
+              <p class="text-sm text-slate-600">Select one or more roles and submit them together. Admins can approve each role separately.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                (click)="refreshPending()"
+                class="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-slate-700 border border-slate-200 rounded-lg hover:border-blue-500 hover:text-blue-700"
+                [disabled]="loading"
               >
-              <p class="mt-2 text-sm font-semibold text-slate-800">{{ alert.title }}</p>
-              <p class="text-xs text-slate-600">{{ alert.description }}</p>
+                <span class="h-2 w-2 rounded-full bg-emerald-400" *ngIf="pendingRequests.length === 0"></span>
+                <span class="h-2 w-2 rounded-full bg-amber-400" *ngIf="pendingRequests.length > 0"></span>
+                Refresh status
+              </button>
             </div>
           </div>
 
-          <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold text-slate-900">Steps</h2>
-            <p class="text-sm text-slate-600 mb-3">Suggested next actions for this role.</p>
-            <ol class="space-y-2 list-decimal list-inside text-sm text-slate-700">
-              <li *ngFor="let step of steps">{{ step }}</li>
-            </ol>
+          <div *ngIf="loading" class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+            Checking your pending requests...
           </div>
-        </div>
-      </div>
 
-      <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-slate-900">Pending Actions</h2>
-            <span class="text-xs text-slate-500">Prioritize by due date</span>
-          </div>
-          <div *ngIf="!data.pending.length" class="text-sm text-slate-500">Nothing pending.</div>
-          <div *ngFor="let item of data.pending" class="border border-slate-100 rounded-lg p-4 mb-3 last:mb-0">
-            <div class="flex items-center justify-between">
-              <p class="font-semibold text-slate-800">{{ item.title }}</p>
-              <span class="text-xs text-slate-500" *ngIf="item.dueDate">Due {{ item.dueDate | date: 'mediumDate' }}</span>
-            </div>
-            <p class="text-sm text-slate-600 mt-1">{{ item.description }}</p>
-            <p class="text-xs text-slate-500 mt-1" *ngIf="item.owner">Owner: {{ item.owner }}</p>
-          </div>
-        </div>
-
-        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-          <h2 class="text-lg font-semibold text-slate-900">Breakdowns</h2>
-          <p class="text-sm text-slate-600 mb-3">By role, region, scheme.</p>
-          <div class="space-y-2">
-            <div *ngFor="let b of data.breakdowns" class="flex items-center justify-between border border-slate-100 rounded-lg px-3 py-2">
-              <div>
-                <p class="text-sm font-semibold text-slate-800">{{ b.label }}</p>
-                <p class="text-xs text-slate-500" *ngIf="b.extra">{{ b.extra }}</p>
+          <div *ngIf="pendingRequests.length" class="mt-4 space-y-3">
+            <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <p class="text-sm font-semibold text-amber-800">Pending approval</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <span
+                  *ngFor="let req of pendingRequests"
+                  class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200 shadow-sm"
+                >
+                  <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                  {{ req.requestedRoles.join(', ') | titlecase }}
+                </span>
               </div>
-              <span class="text-lg font-bold text-slate-900">{{ b.value }}</span>
+              <p class="text-xs text-amber-700 mt-2">You can still use all Public tools while we review these.</p>
             </div>
           </div>
-        </div>
-      </div>
-    </ng-container>
+
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div
+              *ngFor="let card of roleCards"
+              class="role-card relative rounded-2xl border border-slate-200 bg-slate-50 p-5 cursor-pointer transition"
+              [class.selected]="isSelected(card.role)"
+              [class.disabled]="disabledRoles.has(card.role)"
+              (click)="toggleRole(card.role)"
+            >
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">{{ card.badge }}</p>
+                <span
+                  class="text-xs font-semibold px-2 py-1 rounded-full"
+                  [ngClass]="{
+                    'bg-emerald-50 text-emerald-700': isSelected(card.role),
+                    'bg-slate-200 text-slate-700': !isSelected(card.role)
+                  }"
+                >
+                  {{ isSelected(card.role) ? 'Selected' : 'Tap to select' }}
+                </span>
+              </div>
+              <h3 class="mt-3 text-lg font-bold text-slate-900">{{ card.title }}</h3>
+              <p class="mt-2 text-sm text-slate-600">{{ card.blurb }}</p>
+
+              <div class="mt-4 flex items-center justify-between text-xs text-slate-500">
+                <div class="flex items-center gap-2">
+                  <span class="h-2 w-2 rounded-full" [ngClass]="hasPendingFor(card.role) ? 'bg-amber-500' : 'bg-emerald-500'"></span>
+                  <span>
+                    {{
+                      disabledRoles.has(card.role)
+                        ? hasPendingFor(card.role)
+                          ? 'Pending approval'
+                          : 'Already granted'
+                        : 'Available to request'
+                    }}
+                  </span>
+                </div>
+                <span class="text-blue-600 font-semibold" *ngIf="isSelected(card.role)">Queued</span>
+              </div>
+
+              <div *ngIf="disabledRoles.has(card.role)" class="absolute inset-0 rounded-2xl bg-white/60 pointer-events-none"></div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="text-sm text-slate-600">
+              Stack roles over time without opening separate accounts. Admins can approve or reject each role independently.
+            </div>
+            <div class="flex gap-3">
+              <button
+                type="button"
+                class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 hover:border-blue-500 hover:text-blue-700"
+                (click)="clearSelection()"
+                [disabled]="!selectedRoles.size"
+              >
+                Clear selection
+              </button>
+              <button
+                type="button"
+                (click)="submitRequests()"
+                class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow-sm hover:bg-blue-700 disabled:opacity-60"
+                [disabled]="submitting || selectedRoles.size === 0"
+              >
+                {{ submitting ? 'Submitting...' : 'Submit request' }} ({{ selectedRoles.size }})
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="submitError" class="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+            {{ submitError }}
+          </div>
+          <div *ngIf="submitSuccess" class="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            {{ submitSuccess }}
+          </div>
+        </section>
+
+        <section class="grid gap-4 lg:grid-cols-3">
+          <div class="col-span-2 space-y-4">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Traceability & Verification</p>
+              <h3 class="text-lg font-bold text-slate-900 mt-2">Instant checks for everyone</h3>
+              <p class="text-sm text-slate-600 mt-1">Scan a QR or paste a token to see authenticity, expiry, and chain of custody.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <span class="chip">Verified</span>
+                <span class="chip">Expired</span>
+                <span class="chip">Counterfeit</span>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Public Complaints</p>
+              <h3 class="text-lg font-bold text-slate-900 mt-2">File quality issues or mark misuse</h3>
+              <p class="text-sm text-slate-600 mt-1">Attach evidence (photos/PDFs) and receive a case ID by email. Mark misuse routes to licensing.</p>
+              <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">General complaint</div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">Mark misuse with mandatory photo</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Certified Product Registry</p>
+              <h3 class="text-lg font-bold text-slate-900 mt-2">Search by brand, category, or standard</h3>
+              <p class="text-sm text-slate-600 mt-1">Filter by country or standard (e.g., ARSO L2) to find compliant products.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              Seamless upgrade: when your role is approved, you will automatically land on the correct dashboard next login.
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
 </div>

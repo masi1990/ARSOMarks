@@ -6,6 +6,7 @@ export declare class RoleRequest {
     userId: string;
     requestedRoles: UserRole[];
     status: RoleRequestStatus;
+    requestType?: import('../types/role-request.type').RoleRequestType;
     decisionNote?: string | null;
     reviewedBy?: string | null;
     reviewedAt?: Date | null;

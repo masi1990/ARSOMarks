@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateRoleRequestDto = void 0;
 const class_validator_1 = require("class-validator");
 const enums_1 = require("../../../shared/enums");
+const role_request_type_1 = require("../types/role-request.type");
 class CreateRoleRequestDto {
 }
 exports.CreateRoleRequestDto = CreateRoleRequestDto;
@@ -20,7 +21,12 @@ __decorate([
     (0, class_validator_1.ArrayNotEmpty)(),
     (0, class_validator_1.IsEnum)(enums_1.UserRole, { each: true }),
     __metadata("design:type", Array)
-], CreateRoleRequestDto.prototype, "roles", void 0);
+], CreateRoleRequestDto.prototype, "requestedRoles", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(role_request_type_1.RoleRequestType),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateRoleRequestDto.prototype, "requestType", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

@@ -1,10 +1,50 @@
-<div class="max-w-6xl mx-auto py-8 px-4">
-  <div class="mb-6">
-    <h1 class="text-3xl font-bold text-slate-900">Product Traceability & Verification</h1>
-    <p class="text-slate-600 mt-1">
-      Public directory of certified products with QR-enabled Certificate of Conformity (COC) checks.
-    </p>
-  </div>
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:grid lg:grid-cols-[320px,1fr] lg:gap-6">
+    <aside class="hidden lg:flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Public tools</p>
+        <h2 class="text-xl font-bold text-slate-900 mt-1">Traceability</h2>
+        <p class="text-sm text-slate-600 mt-1">Browse certified products and verify tokens without logging in.</p>
+      </div>
+      <button routerLink="/" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-700">
+        ← Back to Dashboard
+      </button>
+      <div class="space-y-2">
+        <a routerLink="/traceability" class="sidebar-link">
+          <div>
+            <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">Traceability & Verification</p>
+            <p class="text-xs text-slate-600">Scan QR or paste token</p>
+          </div>
+          <span class="text-blue-500">→</span>
+        </a>
+        <a routerLink="/complaints" class="sidebar-link">
+          <div>
+            <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">Public Complaints</p>
+            <p class="text-xs text-slate-600">Quality issues or mark misuse</p>
+          </div>
+          <span class="text-blue-500">→</span>
+        </a>
+        <a routerLink="/registry" class="sidebar-link">
+          <div>
+            <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">Certified Products Registry</p>
+            <p class="text-xs text-slate-600">Search by brand, standard, country</p>
+          </div>
+          <span class="text-blue-500">→</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="space-y-6">
+      <button routerLink="/" class="inline-flex lg:hidden items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-700">
+        ← Back to Dashboard
+      </button>
+
+      <div class="mb-2">
+        <h1 class="text-3xl font-bold text-slate-900">Product Traceability & Verification</h1>
+        <p class="text-slate-600 mt-1">
+          Public directory of certified products with QR-enabled Certificate of Conformity (COC) checks.
+        </p>
+      </div>
 
   <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4 mb-4">
     <div class="grid gap-3 md:grid-cols-4">
@@ -90,6 +130,8 @@
           </a>
         </div>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 </div>

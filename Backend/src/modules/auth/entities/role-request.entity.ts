@@ -37,6 +37,9 @@ export class RoleRequest {
   })
   status: RoleRequestStatus;
 
+  // Not persisted; inferred from decisionNote prefix.
+  requestType?: import('../types/role-request.type').RoleRequestType;
+
   @Column({ name: 'decision_note', type: 'text', nullable: true })
   decisionNote?: string | null;
 

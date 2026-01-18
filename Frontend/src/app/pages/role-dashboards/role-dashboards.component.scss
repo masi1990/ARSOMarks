@@ -1,9 +1,23 @@
-.spark-bar {
-  background: linear-gradient(180deg, #dbeafe 0%, #1d4ed8 100%);
-  border-radius: 0.5rem;
+.role-card {
+  transition: all 0.2s ease;
 }
 
-:host ::ng-deep select:disabled {
-  opacity: 0.6;
+.role-card.selected {
+  border-color: #2563eb;
+  background: #e0ecff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.12);
+}
+
+.role-card.disabled {
   cursor: not-allowed;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 0.75rem;
+  font-weight: 600;
 }

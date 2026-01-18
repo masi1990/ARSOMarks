@@ -14,11 +14,43 @@ export class RoleRequestController {
   constructor(private readonly roleRequestService: RoleRequestService) {}
 
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(
+    UserRole.PUBLIC,
+    UserRole.OPERATOR,
+    UserRole.CB_ADMIN,
+    UserRole.CB_USER,
+    UserRole.NSB_ADMIN,
+    UserRole.NSB_USER,
+    UserRole.SUPER_ADMIN,
+    UserRole.ARSO_SECRETARIAT,
+    UserRole.ARSO_COUNCIL,
+    UserRole.CACO_MEMBER,
+    UserRole.ADVISORY_COMMITTEE,
+    UserRole.SMC_MEMBER,
+    UserRole.ACCREDITATION_BODY,
+  )
   async create(@CurrentUser() user: SystemUser, @Body() dto: CreateRoleRequestDto) {
     return this.roleRequestService.create(user, dto);
   }
 
   @Get('me')
+  @UseGuards(RolesGuard)
+  @Roles(
+    UserRole.PUBLIC,
+    UserRole.OPERATOR,
+    UserRole.CB_ADMIN,
+    UserRole.CB_USER,
+    UserRole.NSB_ADMIN,
+    UserRole.NSB_USER,
+    UserRole.SUPER_ADMIN,
+    UserRole.ARSO_SECRETARIAT,
+    UserRole.ARSO_COUNCIL,
+    UserRole.CACO_MEMBER,
+    UserRole.ADVISORY_COMMITTEE,
+    UserRole.SMC_MEMBER,
+    UserRole.ACCREDITATION_BODY,
+  )
   async listMine(@CurrentUser() user: SystemUser) {
     return this.roleRequestService.listMine(user);
   }

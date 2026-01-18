@@ -1,284 +1,362 @@
-<div class="space-y-8">
-  <!-- Welcome Header -->
-  <section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-8 text-white shadow-xl">
-    <div class="relative z-10 flex flex-col gap-4">
-      <div class="flex items-start justify-between">
-        <div class="flex-1">
-          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-300 mb-2">Dashboard</p>
-          <h1 class="text-3xl font-bold text-white mb-2">Welcome back, {{ user?.fullName || 'User' }}</h1>
-          <p class="max-w-3xl text-sm text-slate-300">
-            African Organisation for Standardisation (ARSO) — Manage your applications, licenses, and access requests from one central location.
-          </p>
+<div class="space-y-8 lg:grid lg:grid-cols-[320px,1fr] lg:gap-6">
+  <!-- Sidebar -->
+  <aside class="hidden lg:flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">Public tools</p>
+      <h2 class="text-xl font-bold text-slate-900 mt-1">Stay in Public</h2>
+      <p class="text-sm text-slate-600 mt-1">No login needed to verify products, file complaints, or browse certified items.</p>
+    </div>
+    <div class="space-y-2">
+      <a routerLink="/traceability" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-blue-500 hover:bg-blue-50 transition">
+        <div>
+          <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">Traceability & Verification</p>
+          <p class="text-xs text-slate-600">Scan QR or paste token</p>
         </div>
-        <div class="hidden lg:block">
-          <div class="rounded-xl bg-white/10 backdrop-blur-sm px-4 py-3 border border-white/20">
-            <div class="flex items-center gap-2">
-              <div class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></div>
-              <span class="text-sm font-medium">System Active</span>
-            </div>
-          </div>
+        <span class="text-blue-500">→</span>
+      </a>
+      <a routerLink="/complaints" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-blue-500 hover:bg-blue-50 transition">
+        <div>
+          <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">Public Complaints</p>
+          <p class="text-xs text-slate-600">Quality issues or mark misuse</p>
         </div>
+        <span class="text-blue-500">→</span>
+      </a>
+      <a routerLink="/registry" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-blue-500 hover:bg-blue-50 transition">
+        <div>
+          <p class="text-sm font-semibold text-slate-900 group-hover:text-blue-700">Certified Products Registry</p>
+          <p class="text-xs text-slate-600">Search by brand, standard, country</p>
+        </div>
+        <span class="text-blue-500">→</span>
+      </a>
+    </div>
+
+    <div *ngIf="isAuthenticated && isOperatorRole()" class="space-y-3 border-t border-slate-200 pt-3">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-green-600">Operator Services</p>
+        <h3 class="text-sm font-bold text-slate-900">Operator Workflows</h3>
       </div>
+      <div class="space-y-2">
+        <a routerLink="/portal/application-registrations" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-green-500 hover:bg-green-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-green-700">My Applications</span>
+          <span class="text-green-600">→</span>
+        </a>
+        <a routerLink="/portal/application-registration" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-green-500 hover:bg-green-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-green-700">New Application</span>
+          <span class="text-green-600">→</span>
+        </a>
+        <a routerLink="/portal/mark-licenses/dashboard" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-green-500 hover:bg-green-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-green-700">My Licenses</span>
+          <span class="text-green-600">→</span>
+        </a>
+        <a routerLink="/portal/mark-licenses/reports" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-green-500 hover:bg-green-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-green-700">Mark Usage Reports</span>
+          <span class="text-green-600">→</span>
+        </a>
+      </div>
+
+      <div class="space-y-2">
+        <p class="text-xs font-semibold uppercase tracking-[0.14em] text-amber-600">Mark Licenses</p>
+        <a routerLink="/portal/mark-licenses/dashboard" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-amber-500 hover:bg-amber-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-amber-700">Mark License Dashboard</span>
+          <span class="text-amber-600">→</span>
+        </a>
+        <a routerLink="/portal/mark-licenses/apply" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-amber-500 hover:bg-amber-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-amber-700">New License Application</span>
+          <span class="text-amber-600">→</span>
+        </a>
+        <a routerLink="/portal/mark-licenses/modifications" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-amber-500 hover:bg-amber-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-amber-700">Modifications</span>
+          <span class="text-amber-600">→</span>
+        </a>
+        <a routerLink="/portal/mark-licenses/misuse" class="group flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 hover:border-amber-500 hover:bg-amber-50 transition">
+          <span class="text-sm font-semibold text-slate-900 group-hover:text-amber-700">Mark Misuse</span>
+          <span class="text-amber-600">→</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="space-y-8">
+  <section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-10 text-white shadow-xl">
+    <div class="relative z-10 flex flex-col gap-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">Public-first Dashboard</p>
+      <h1 class="text-3xl font-bold">Welcome, {{ user?.fullName || 'Public User' }}</h1>
+      <p class="max-w-3xl text-sm text-slate-200">
+        Start as Public. Keep using traceability, complaints, and the registry. Request one or many roles in a single submission; each is approved independently.
+      </p>
       <div class="flex flex-wrap gap-2 mt-2">
-        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-medium text-emerald-100 border border-emerald-400/30">
-          <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-          </svg>
-          Active Session
-        </span>
-        <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-100 border border-blue-400/30">
-          <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-          </svg>
-          {{ user?.roles?.length || 1 }} Role{{ (user?.roles?.length || 1) > 1 ? 's' : '' }}
-        </span>
-        <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-500/20 px-3 py-1 text-xs font-medium text-purple-100 border border-purple-400/30">
-          <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-          </svg>
-          {{ user?.email || 'Email not available' }}
-        </span>
+        <span class="badge badge-emerald">Public role active</span>
+        <span class="badge badge-blue">{{ user?.roles?.length || 1 }} role(s)</span>
+        <span class="badge badge-purple">{{ user?.email || 'Email not available' }}</span>
       </div>
     </div>
     <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
   </section>
 
-  <!-- Statistics Cards -->
-  <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-    <div class="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
-      <div class="flex items-start justify-between">
-        <div class="flex-1">
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Primary Role</p>
-          <p class="mt-3 text-2xl font-bold text-slate-900">{{ formatRole(user?.role || 'N/A') }}</p>
-          <p class="mt-2 text-xs text-slate-500">Legacy compatibility</p>
-        </div>
-        <div class="rounded-lg bg-blue-50 p-3 group-hover:bg-blue-100 transition-colors">
-          <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-        </div>
+  <section class="grid gap-4 md:grid-cols-3">
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Traceability & Verification</p>
+      <h3 class="text-lg font-bold text-slate-900 mt-2">Check authenticity instantly</h3>
+      <p class="text-sm text-slate-600 mt-1">Scan QR or paste token. Status: Verified, Expired, Counterfeit.</p>
+      <a routerLink="/traceability" class="link-cta">
+        Open traceability
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Public Complaints</p>
+      <h3 class="text-lg font-bold text-slate-900 mt-2">Report issues or mark misuse</h3>
+      <p class="text-sm text-slate-600 mt-1">Attach photos/PDFs. Mark misuse flows to licensing.</p>
+      <a routerLink="/complaints" class="link-cta">
+        File a complaint
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Certified Products</p>
+      <h3 class="text-lg font-bold text-slate-900 mt-2">Search the registry</h3>
+      <p class="text-sm text-slate-600 mt-1">Filter by brand, standard, or country (e.g., ARSO L2).</p>
+      <a routerLink="/registry" class="link-cta">
+        Open registry
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section *ngIf="isAuthenticated && isOperatorRole()" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-green-600">Operator Journey</p>
+        <h2 class="text-xl font-bold text-slate-900">Plan → Apply → Track → License</h2>
+        <p class="text-sm text-slate-600">Quick tabs for your end-to-end operator workflow.</p>
       </div>
     </div>
 
-    <div class="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
-      <div class="flex items-start justify-between">
-        <div class="flex-1">
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">All Roles</p>
-          <p class="mt-3 text-2xl font-bold text-slate-900 break-words">
-            {{ user?.roles?.length || 0 }}
-          </p>
-          <p class="mt-2 text-xs text-slate-500">{{ user?.roles?.length ? formatRolesList(user?.roles) : 'No roles assigned' }}</p>
-        </div>
-        <div class="rounded-lg bg-emerald-50 p-3 group-hover:bg-emerald-100 transition-colors">
-          <svg class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-        </div>
-      </div>
+    <div class="flex flex-wrap gap-2">
+      <span class="badge badge-emerald">Operator Services</span>
+      <span class="badge badge-blue">Mark Licenses</span>
     </div>
 
-    <div class="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
-      <div class="flex items-start justify-between">
-        <div class="flex-1">
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Pending Requests</p>
-          <p class="mt-3 text-2xl font-bold text-slate-900">
-            {{ pendingRequestsCount }}
-          </p>
-          <p class="mt-2 text-xs text-slate-500">Awaiting review</p>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="rounded-xl border border-slate-200 p-5 space-y-3">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700">1</span>
+          Operator Services
         </div>
-        <div class="rounded-lg bg-amber-50 p-3 group-hover:bg-amber-100 transition-colors">
-          <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <div class="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
-      <div class="flex items-start justify-between">
-        <div class="flex-1">
-          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Account Status</p>
-          <div class="mt-3 flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
-              <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-              Active
-            </span>
+        <div class="space-y-2 text-sm text-slate-700">
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>My Applications</span>
+            <a routerLink="/portal/application-registrations" class="text-blue-600 font-semibold text-xs">Open →</a>
           </div>
-          <p class="mt-2 text-xs text-slate-500">Last login: {{ user?.lastLogin ? (user.lastLogin | date: 'short') : 'N/A' }}</p>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>New Application</span>
+            <a routerLink="/portal/application-registration" class="text-blue-600 font-semibold text-xs">Start →</a>
+          </div>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>My Licenses</span>
+            <a routerLink="/portal/mark-licenses/dashboard" class="text-blue-600 font-semibold text-xs">View →</a>
+          </div>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>Mark Usage Reports</span>
+            <a routerLink="/portal/mark-licenses/reports" class="text-blue-600 font-semibold text-xs">Open →</a>
+          </div>
         </div>
-        <div class="rounded-lg bg-purple-50 p-3 group-hover:bg-purple-100 transition-colors">
-          <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
+      </div>
+
+      <div class="rounded-xl border border-slate-200 p-5 space-y-3">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-700">2</span>
+          Mark Licenses
+        </div>
+        <div class="space-y-2 text-sm text-slate-700">
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>Mark License Dashboard</span>
+            <a routerLink="/portal/mark-licenses/dashboard" class="text-blue-600 font-semibold text-xs">Open →</a>
+          </div>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>New License Application</span>
+            <a routerLink="/portal/mark-licenses/apply" class="text-blue-600 font-semibold text-xs">Apply →</a>
+          </div>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>Modifications</span>
+            <a routerLink="/portal/mark-licenses/modifications" class="text-blue-600 font-semibold text-xs">Update →</a>
+          </div>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            <span>Mark Misuse</span>
+            <a routerLink="/portal/mark-licenses/misuse" class="text-blue-600 font-semibold text-xs">Report →</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Role Management Section -->
-  <section class="grid gap-6 lg:grid-cols-[2fr_1.2fr]">
-    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-        <div class="rounded-lg bg-blue-50 p-2">
-          <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-        </div>
-        <div class="flex-1">
-          <h3 class="text-lg font-bold text-slate-900">Request New Roles</h3>
-          <p class="text-sm text-slate-600">
-            Select the roles you need. After submission, an approver will review and you'll receive an email notification.
-          </p>
-        </div>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Role Selection Hub</p>
+        <h2 class="text-xl font-bold text-slate-900">Request multiple roles together</h2>
+        <p class="text-sm text-slate-600">Select one or more roles. Already-owned or pending roles are disabled.</p>
       </div>
+      <button
+        type="button"
+        (click)="loadRequests()"
+        class="btn-ghost"
+        [disabled]="loadingRequests"
+      >
+        <span class="h-2 w-2 rounded-full" [ngClass]="pendingRequests.length ? 'bg-amber-400' : 'bg-emerald-400'"></span>
+        Refresh status
+      </button>
+    </div>
 
-      <div class="space-y-5">
-        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <label
-            *ngFor="let option of roleOptions"
-            class="group flex items-start gap-3 rounded-xl border-2 transition-all cursor-pointer"
+    <div *ngIf="!isAuthenticated" class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+      <p class="text-sm font-semibold text-blue-800">Login required to submit role requests</p>
+      <p class="text-xs text-blue-700 mt-1">You can browse public tools below. Sign in to request roles.</p>
+      <a routerLink="/auth/login" class="link-cta mt-2 inline-flex">Go to login →</a>
+    </div>
+
+    <div *ngIf="pendingRequests.length && isAuthenticated" class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+      <p class="text-sm font-semibold text-amber-800">Pending approval</p>
+      <div class="mt-2 flex flex-wrap gap-2">
+        <span
+          *ngFor="let req of pendingRequests"
+          class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200 shadow-sm"
+        >
+          <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+          {{ formatRolesList(req.requestedRoles) }}
+        </span>
+      </div>
+      <p class="text-xs text-amber-700 mt-2">Public tools remain available while we review these.</p>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div
+        *ngFor="let card of roleCards"
+        class="role-card relative rounded-2xl border border-slate-200 bg-slate-50 p-5 cursor-pointer transition"
+        [class.selected]="isSelected(card.value)"
+        [class.disabled]="!isAuthenticated || disabledRoles.has(card.value)"
+        (click)="toggleRole(card.value)"
+      >
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">{{ card.badge }}</p>
+          <span
+            class="text-xs font-semibold px-2 py-1 rounded-full"
             [ngClass]="{
-              'border-blue-300 bg-blue-50': selectedRoles.includes(option.value),
-              'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50': !selectedRoles.includes(option.value)
+              'bg-emerald-50 text-emerald-700': isSelected(card.value),
+              'bg-slate-200 text-slate-700': !isSelected(card.value)
             }"
           >
-            <input
-              type="checkbox"
-              class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              [checked]="selectedRoles.includes(option.value)"
-              (change)="toggleRole(option.value)"
-            />
-            <div class="flex-1 space-y-1">
-              <p class="font-semibold text-slate-900">{{ formatRole(option.value) }}</p>
-              <p class="text-xs text-slate-500">Request access to this capability</p>
-            </div>
-            <svg *ngIf="selectedRoles.includes(option.value)" class="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-            </svg>
-          </label>
+            {{ isSelected(card.value) ? 'Selected' : 'Tap to select' }}
+          </span>
         </div>
+        <h3 class="mt-3 text-lg font-bold text-slate-900">{{ card.title }}</h3>
+        <p class="mt-2 text-sm text-slate-600">{{ card.blurb }}</p>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 mb-2">Notes (Optional)</label>
-          <textarea
-            [(ngModel)]="note"
-            rows="3"
-            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
-            placeholder="Add context for your request (team, project, justification)..."
-          ></textarea>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-3 pt-2">
-          <button
-            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:bg-slate-300 disabled:hover:bg-slate-300"
-            (click)="submitRoleRequest()"
-            [disabled]="submitting || selectedRoles.length === 0"
-          >
-            <svg *ngIf="!submitting" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <svg *ngIf="submitting" class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            {{ submitting ? 'Submitting...' : 'Submit Request' }}
-          </button>
-          <div *ngIf="submitError || submitSuccess" class="flex-1">
-            <div *ngIf="submitError" class="inline-flex items-center gap-2 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700 border border-rose-200">
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-              </svg>
-              {{ submitError }}
-            </div>
-            <div *ngIf="submitSuccess" class="inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 border border-emerald-200">
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-              {{ submitSuccess }}
-            </div>
+        <div class="mt-4 flex items-center justify-between text-xs text-slate-500">
+          <div class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full" [ngClass]="hasPendingFor(card.value) ? 'bg-amber-500' : 'bg-emerald-500'"></span>
+            <span>
+              {{
+                disabledRoles.has(card.value) || !isAuthenticated
+                  ? hasPendingFor(card.value)
+                    ? 'Pending approval'
+                    : isAuthenticated
+                      ? 'Already granted'
+                      : 'Login required'
+                  : 'Available to request'
+              }}
+            </span>
           </div>
+          <span class="text-blue-600 font-semibold" *ngIf="isSelected(card.value)">Queued</span>
         </div>
+
+        <div *ngIf="disabledRoles.has(card.value)" class="absolute inset-0 rounded-2xl bg-white/60 pointer-events-none"></div>
       </div>
     </div>
 
-    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div class="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
-        <div class="flex items-center gap-3">
-          <div class="rounded-lg bg-purple-50 p-2">
-            <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-bold text-slate-900">Request History</h3>
-            <p class="text-xs text-slate-500">Track your role requests</p>
-          </div>
-        </div>
-        <span *ngIf="loadingRequests" class="text-xs text-slate-500 animate-pulse">Loading…</span>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="text-sm text-slate-600">
+        Stack roles over time without separate accounts. Each role is approved independently.
       </div>
-
-      <div class="space-y-3" *ngIf="roleRequests?.length; else emptyRequests">
-        <div
-          *ngFor="let req of roleRequests"
-          class="group rounded-lg border border-slate-200 bg-white px-4 py-4 text-sm transition-all hover:border-slate-300 hover:shadow-sm"
+      <div class="flex gap-3">
+        <button type="button" class="btn-ghost" (click)="clearSelection()" [disabled]="!selectedRoles.size">Clear selection</button>
+        <button
+          type="button"
+          (click)="submitRoleRequest()"
+          class="btn-primary"
+          [disabled]="!isAuthenticated || submitting || selectedRoles.size === 0"
         >
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex-1 space-y-2">
-              <div class="flex items-center gap-2">
-                <p class="font-semibold text-slate-900">{{ formatRolesList(req.requestedRoles) }}</p>
-              </div>
-              <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                <span class="flex items-center gap-1">
-                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                  </svg>
-                  {{ req.createdAt | date: 'short' }}
-                </span>
-                <span *ngIf="req.reviewedAt" class="flex items-center gap-1">
-                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  Reviewed: {{ req.reviewedAt | date: 'short' }}
-                </span>
-              </div>
-              <p *ngIf="req.decisionNote" class="mt-2 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600 border border-slate-200">
-                <span class="font-medium">Note:</span> {{ req.decisionNote }}
-              </p>
-            </div>
-            <span class="shrink-0 rounded-full px-3 py-1 text-xs font-semibold" [ngClass]="statusBadgeClasses(req.status)">
-              {{ req.status }}
-            </span>
-          </div>
-        </div>
+          {{ submitting ? 'Submitting...' : 'Submit request' }} ({{ selectedRoles.size }})
+        </button>
       </div>
-      <ng-template #emptyRequests>
-        <div class="flex flex-col items-center justify-center py-8 text-center">
-          <div class="rounded-full bg-slate-100 p-4 mb-3">
-            <svg class="h-8 w-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-          </div>
-          <p class="text-sm font-medium text-slate-700">No requests yet</p>
-          <p class="mt-1 text-xs text-slate-500">Submit your first role request to get started</p>
-        </div>
-      </ng-template>
+    </div>
+
+    <div *ngIf="submitError" class="alert alert-rose mt-2">
+      {{ submitError }}
+    </div>
+    <div *ngIf="submitSuccess" class="alert alert-emerald mt-2">
+      {{ submitSuccess }}
     </div>
   </section>
 
-  <!-- Approver Console Section -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isApprover()">
-    <div class="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
-      <div class="flex items-center gap-3">
-        <div class="rounded-lg bg-amber-50 p-2">
-          <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isAuthenticated">
+    <div class="mb-4 flex items-center justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">My Requests</p>
+        <h3 class="text-lg font-bold text-slate-900">History & status</h3>
+      </div>
+      <span *ngIf="loadingRequests" class="text-xs text-slate-500 animate-pulse">Loading…</span>
+    </div>
+
+    <div class="space-y-3" *ngIf="roleRequests?.length; else emptyRequests">
+      <div
+        *ngFor="let req of roleRequests"
+        class="group rounded-lg border border-slate-200 bg-white px-4 py-4 text-sm transition-all hover:border-slate-300 hover:shadow-sm"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1 space-y-2">
+            <p class="font-semibold text-slate-900">{{ formatRolesList(req.requestedRoles) }}</p>
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+              <span class="flex items-center gap-1">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                {{ req.createdAt | date: 'short' }}
+              </span>
+              <span *ngIf="req.reviewedAt" class="flex items-center gap-1">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Reviewed: {{ req.reviewedAt | date: 'short' }}
+              </span>
+            </div>
+            <p *ngIf="req.decisionNote" class="mt-1 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600 border border-slate-200">
+              <span class="font-medium">Note:</span> {{ req.decisionNote }}
+            </p>
+          </div>
+          <span class="shrink-0 rounded-full px-3 py-1 text-xs font-semibold" [ngClass]="statusBadgeClasses(req.status)">
+            {{ req.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <ng-template #emptyRequests>
+      <div class="flex flex-col items-center justify-center py-8 text-center">
+        <div class="rounded-full bg-slate-100 p-4 mb-3">
+          <svg class="h-8 w-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
         </div>
-        <div>
-          <h3 class="text-lg font-bold text-slate-900">Approver Console</h3>
-          <p class="text-sm text-slate-600">Review and manage pending role requests</p>
-        </div>
+        <p class="text-sm font-medium text-slate-700">No requests yet</p>
+        <p class="mt-1 text-xs text-slate-500">Submit your first role request to get started</p>
+      </div>
+    </ng-template>
+  </section>
+
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isAuthenticated && isApprover()">
+    <div class="mb-4 flex items-center justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">Approver Console</p>
+        <h3 class="text-lg font-bold text-slate-900">Pending role requests</h3>
       </div>
       <span *ngIf="loadingAllRequests" class="text-xs text-slate-500 animate-pulse">Loading…</span>
     </div>
@@ -289,14 +367,12 @@
         class="group rounded-lg border border-slate-200 bg-white px-5 py-4 text-sm transition-all hover:border-slate-300 hover:shadow-sm"
       >
         <div class="flex items-start justify-between gap-4">
-          <div class="flex-1 space-y-3">
-            <div>
-              <p class="font-semibold text-slate-900">{{ formatRolesList(req.requestedRoles) }}</p>
-              <p class="mt-1 text-xs text-slate-600">
-                <span class="font-medium">Requested by:</span> {{ req.user?.fullName || req.userId }}
-              </p>
-            </div>
-            <div class="flex flex-wrap items-center gap-4 text-xs text-slate-500">
+          <div class="flex-1 space-y-2">
+            <p class="font-semibold text-slate-900">{{ formatRolesList(req.requestedRoles) }}</p>
+            <p class="text-xs text-slate-600">
+              <span class="font-medium">Requested by:</span> {{ req.user?.fullName || req.userId }}
+            </p>
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500">
               <span class="flex items-center gap-1.5">
                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -309,12 +385,6 @@
                 </svg>
                 Reviewed: {{ req.reviewedAt | date: 'short' }}
               </span>
-              <span *ngIf="req.reviewedBy" class="flex items-center gap-1.5">
-                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-                By: {{ req.reviewedBy }}
-              </span>
             </div>
             <p *ngIf="req.decisionNote" class="rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600 border border-slate-200">
               <span class="font-medium">Decision Note:</span> {{ req.decisionNote }}
@@ -325,87 +395,36 @@
               {{ req.status }}
             </span>
             <div class="flex gap-2" *ngIf="req.status === 'PENDING'">
-              <button
-                class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                (click)="openDecisionModal(req.id, 'approve')"
-                [disabled]="decidingId === req.id"
-              >
-                <svg *ngIf="decidingId !== req.id" class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <svg *ngIf="decidingId === req.id" class="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+              <button class="btn-approve" (click)="openDecisionModal(req.id, 'approve')" [disabled]="decidingId === req.id">
                 {{ decidingId === req.id ? 'Processing...' : 'Approve' }}
               </button>
-              <button
-                class="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-rose-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                (click)="openDecisionModal(req.id, 'reject')"
-                [disabled]="decidingId === req.id"
-              >
-                <svg *ngIf="decidingId !== req.id" class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-                <svg *ngIf="decidingId === req.id" class="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+              <button class="btn-reject" (click)="openDecisionModal(req.id, 'reject')" [disabled]="decidingId === req.id">
                 {{ decidingId === req.id ? 'Processing...' : 'Reject' }}
               </button>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Pagination Controls -->
-      <div class="flex items-center justify-between border-t border-slate-200 pt-4 mt-4" *ngIf="allRequests.length > approvalsPageSize">
+
+      <div class="flex items-center justify-between border-t border-slate-200 pt-4" *ngIf="allRequests.length > approvalsPageSize">
         <div class="text-xs text-slate-600">
-          Showing <span class="font-semibold">{{ (approvalsPage - 1) * approvalsPageSize + 1 }}</span> - 
-          <span class="font-semibold">{{ Math.min(approvalsPage * approvalsPageSize, allRequests.length) }}</span> of 
+          Showing <span class="font-semibold">{{ (approvalsPage - 1) * approvalsPageSize + 1 }}</span> -
+          <span class="font-semibold">{{ Math.min(approvalsPage * approvalsPageSize, allRequests.length) }}</span> of
           <span class="font-semibold">{{ allRequests.length }}</span> requests
         </div>
         <div class="flex gap-2">
-          <button
-            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-all hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed"
-            (click)="prevApprovalPage()"
-            [disabled]="approvalsPage === 1"
-          >
-            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-            Previous
-          </button>
-          <button
-            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-all hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed"
-            (click)="nextApprovalPage()"
-            [disabled]="approvalsPage >= totalApprovalPages"
-          >
-            Next
-            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
+          <button class="btn-ghost" (click)="prevApprovalPage()" [disabled]="approvalsPage === 1">Previous</button>
+          <button class="btn-ghost" (click)="nextApprovalPage()" [disabled]="approvalsPage >= totalApprovalPages">Next</button>
         </div>
       </div>
-      
+
       <div class="mt-4 flex flex-wrap gap-3">
-        <div *ngIf="decisionError" class="inline-flex items-center gap-2 rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-700 border border-rose-200">
-          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-          </svg>
-          {{ decisionError }}
-        </div>
-        <div *ngIf="decisionSuccess" class="inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700 border border-emerald-200">
-          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-          </svg>
-          {{ decisionSuccess }}
-        </div>
+        <div *ngIf="decisionError" class="alert alert-rose">{{ decisionError }}</div>
+        <div *ngIf="decisionSuccess" class="alert alert-emerald">{{ decisionSuccess }}</div>
       </div>
     </div>
     <ng-template #emptyAll>
-      <div class="flex flex-col items-center justify-center py-12 text-center">
+      <div class="flex flex-col items-center justify-center py-10 text-center">
         <div class="rounded-full bg-slate-100 p-4 mb-3">
           <svg class="h-8 w-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -417,768 +436,65 @@
     </ng-template>
   </section>
 
-  <!-- Decision Modal -->
-  <div *ngIf="decidingRequestId" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-in zoom-in-95 duration-200">
+  <div *ngIf="decidingRequestId" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden">
       <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
         <div class="flex items-center gap-3">
           <div class="rounded-lg p-2" [ngClass]="pendingAction === 'approve' ? 'bg-emerald-50' : 'bg-rose-50'">
-            <svg 
-              *ngIf="pendingAction === 'approve'"
-              class="h-5 w-5 text-emerald-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            <svg 
-              *ngIf="pendingAction === 'reject'"
-              class="h-5 w-5 text-rose-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
+            <span class="text-sm font-semibold" [ngClass]="pendingAction === 'approve' ? 'text-emerald-700' : 'text-rose-700'">
+              {{ pendingAction === 'approve' ? 'Approve' : 'Reject' }}
+            </span>
           </div>
           <h3 class="text-lg font-bold text-slate-900">
             {{ pendingAction === 'approve' ? 'Approve Request' : 'Reject Request' }}
           </h3>
         </div>
-        <button 
-          (click)="closeDecisionModal()" 
-          class="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-        >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
+        <button (click)="closeDecisionModal()" class="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+          ✕
         </button>
       </div>
-      
-      <div class="p-6 space-y-5">
-        <div class="bg-gradient-to-br from-slate-50 to-slate-100 p-4 rounded-lg border border-slate-200">
-          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Request Details</p>
+
+      <div class="p-6 space-y-4">
+        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Request Details</p>
           <p class="text-sm font-semibold text-slate-900" *ngIf="decidingRequest">
             {{ formatRolesList(decidingRequest.requestedRoles) }}
           </p>
-          <p class="text-xs text-slate-600 mt-2" *ngIf="decidingRequest?.user">
+          <p class="text-xs text-slate-600 mt-1" *ngIf="decidingRequest?.user">
             Requested by: {{ decidingRequest.user.fullName }}
           </p>
         </div>
 
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">
-            Comments / Reason 
-            <span class="text-slate-400 font-normal text-xs">(Optional)</span>
+            Comments (optional)
           </label>
           <textarea
             [(ngModel)]="decisionNote"
             rows="4"
             class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors resize-none"
-            placeholder="Add a note to the requester (e.g., reason for approval/rejection)..."
+            placeholder="Add a note for the requester..."
           ></textarea>
         </div>
 
-        <div *ngIf="decisionError" class="flex items-center gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
-          <svg class="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-          </svg>
+        <div *ngIf="decisionError" class="alert alert-rose">
           {{ decisionError }}
         </div>
-        <div *ngIf="decisionSuccess" class="flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700">
-          <svg class="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-          </svg>
+        <div *ngIf="decisionSuccess" class="alert alert-emerald">
           {{ decisionSuccess }}
         </div>
       </div>
 
       <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
-        <button
-          (click)="closeDecisionModal()"
-          class="px-4 py-2.5 text-sm font-semibold text-slate-700 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors"
-        >
-          Cancel
-        </button>
+        <button (click)="closeDecisionModal()" class="btn-ghost">Cancel</button>
         <button
           (click)="confirmDecision()"
           [disabled]="decidingId === decidingRequestId"
-          [ngClass]="{
-            'bg-emerald-600': pendingAction === 'approve',
-            'bg-rose-600': pendingAction === 'reject'
-          }"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white rounded-lg transition-all hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-          [class.hover\:bg-emerald-700]="pendingAction === 'approve'"
-          [class.hover\:bg-rose-700]="pendingAction === 'reject'"
+          class="btn-primary"
         >
-          <svg *ngIf="decidingId === decidingRequestId" class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          {{ decidingId === decidingRequestId ? 'Processing...' : (pendingAction === 'approve' ? 'Confirm Approve' : 'Confirm Reject') }}
+          {{ decidingId === decidingRequestId ? 'Processing...' : 'Confirm' }}
         </button>
       </div>
     </div>
   </div>
-
-  <!-- Mark License Management Section -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isNsbAdmin() || isApprover() || isPublic()">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-indigo-50 p-2">
-        <svg class="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">ARSO Mark License System</h3>
-        <p class="text-sm text-slate-600">Apply for, manage, and track ARSO mark licenses</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <a
-        routerLink="/mark-licenses/dashboard"
-        class="group flex items-center justify-between rounded-lg border-2 border-indigo-200 bg-indigo-50 px-4 py-3.5 text-sm font-semibold text-indigo-900 transition-all hover:border-indigo-300 hover:bg-indigo-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-          </svg>
-          Mark License Dashboard
-        </span>
-        <svg class="h-4 w-4 text-indigo-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/mark-licenses/apply"
-        class="group flex items-center justify-between rounded-lg border-2 border-blue-200 bg-blue-50 px-4 py-3.5 text-sm font-semibold text-blue-900 transition-all hover:border-blue-300 hover:bg-blue-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          New License Application
-        </span>
-        <svg class="h-4 w-4 text-blue-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/mark-licenses/reports"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          Usage Reports
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/mark-licenses/modifications"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-          </svg>
-          Modifications
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-      
-      <a
-        routerLink="/mark-licenses/misuse"
-        class="group flex items-center justify-between rounded-lg border-2 border-rose-200 bg-rose-50 px-4 py-3.5 text-sm font-semibold text-rose-900 transition-all hover:border-rose-300 hover:bg-rose-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-          </svg>
-          Mark Misuse
-        </span>
-        <svg class="h-4 w-4 text-rose-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- Operator Registration Section -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isOperator()">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-green-50 p-2">
-        <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">Operator Services</h3>
-        <p class="text-sm text-slate-600">Complete your company profile and apply for ARSO Mark Certification</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <a
-        routerLink="/application-registrations"
-        class="group flex items-center justify-between rounded-lg border-2 border-green-200 bg-green-50 px-4 py-3.5 text-sm font-semibold text-green-900 transition-all hover:border-green-300 hover:bg-green-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          My Applications
-        </span>
-        <svg class="h-4 w-4 text-green-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/application-registration"
-        class="group flex items-center justify-between rounded-lg border-2 border-blue-200 bg-blue-50 px-4 py-3.5 text-sm font-semibold text-blue-900 transition-all hover:border-blue-300 hover:bg-blue-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          New Application
-        </span>
-        <svg class="h-4 w-4 text-blue-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/product-certification/apply"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Product Certification
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/product-certification/audits"
-        class="group flex items-center justify-between rounded-lg border-2 border-indigo-200 bg-indigo-50 px-4 py-3.5 text-sm font-semibold text-indigo-900 transition-all hover:border-indigo-300 hover:bg-indigo-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M9 17h6M9 13h2m2 0h2"/>
-          </svg>
-          Certification Audits
-        </span>
-        <svg class="h-4 w-4 text-indigo-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/documents"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-          </svg>
-          Document Upload
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- Certification Body Workspace -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isCbUser()">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-indigo-50 p-2">
-        <svg class="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">Certification Body Workspace</h3>
-        <p class="text-sm text-slate-600">Manage CB applications, submissions, and compliance</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <a
-        routerLink="/cb/applications"
-        class="group flex items-center justify-between rounded-lg border-2 border-indigo-200 bg-indigo-50 px-4 py-3.5 text-sm font-semibold text-indigo-900 transition-all hover:border-indigo-300 hover:bg-indigo-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          CB Applications
-        </span>
-        <svg class="h-4 w-4 text-indigo-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/cb/apply"
-        class="group flex items-center justify-between rounded-lg border-2 border-blue-200 bg-blue-50 px-4 py-3.5 text-sm font-semibold text-blue-900 transition-all hover:border-blue-300 hover:bg-blue-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          New CB Application
-        </span>
-        <svg class="h-4 w-4 text-blue-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/cb/compliance"
-        class="group flex items-center justify-between rounded-lg border-2 border-emerald-200 bg-emerald-50 px-4 py-3.5 text-sm font-semibold text-emerald-900 transition-all hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          CB Compliance Profile
-        </span>
-        <svg class="h-4 w-4 text-emerald-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/product-certification/audits"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M9 17h6M9 13h2m2 0h2"/>
-          </svg>
-          Certification Audits
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- NSB Admin Section -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isNsbAdmin()">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-purple-50 p-2">
-        <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">NSB Management</h3>
-        <p class="text-sm text-slate-600">Manage National Standards Body information, contacts, and locations</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      <a
-        routerLink="/nsb/dashboard"
-        class="group flex items-center justify-between rounded-lg border-2 border-purple-200 bg-purple-50 px-4 py-3.5 text-sm font-semibold text-purple-900 transition-all hover:border-purple-300 hover:bg-purple-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-          </svg>
-          NSB Dashboard
-        </span>
-        <svg class="h-4 w-4 text-purple-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/nsb"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-          </svg>
-          NSB Information
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/portal/nsb"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-          Profile Setup
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/nsb/communication"
-        class="group flex items-center justify-between rounded-lg border-2 border-blue-200 bg-blue-50 px-4 py-3.5 text-sm font-semibold text-blue-900 transition-all hover:border-blue-300 hover:bg-blue-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-          </svg>
-          Communications History
-        </span>
-        <svg class="h-4 w-4 text-blue-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/nsb/stakeholder-registry"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-          Stakeholder Registry
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/nsb/stakeholder-registry-list"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-          </svg>
-          Stakeholder List
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/application-registrations"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          Applications
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- Dashboards & Tools -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="canSeeTools()">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-slate-50 p-2">
-        <svg class="h-5 w-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16M5 11h3v8H5zM10.5 7h3v12h-3zM16 13h3v6h-3z"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">Dashboards & Tools</h3>
-        <p class="text-sm text-slate-600">Access shared dashboards, reports, and utilities</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <a
-        routerLink="/dashboards"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16M5 11h3v8H5zM10.5 7h3v12h-3zM16 13h3v6h-3z"/>
-          </svg>
-          Role Dashboards
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/reports"
-        class="group flex items-center justify-between rounded-lg border-2 border-blue-200 bg-blue-50 px-4 py-3.5 text-sm font-semibold text-blue-900 transition-all hover:border-blue-300 hover:bg-blue-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h10m-10 5h6M9 7V5a2 2 0 012-2h6a2 2 0 012 2v2"/>
-          </svg>
-          Role Reports
-        </span>
-        <svg class="h-4 w-4 text-blue-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/shared-tools"
-        class="group flex items-center justify-between rounded-lg border-2 border-emerald-200 bg-emerald-50 px-4 py-3.5 text-sm font-semibold text-emerald-900 transition-all hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-          Shared Tools
-        </span>
-        <svg class="h-4 w-4 text-emerald-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/complaints"
-        class="group flex items-center justify-between rounded-lg border-2 border-rose-200 bg-rose-50 px-4 py-3.5 text-sm font-semibold text-rose-900 transition-all hover:border-rose-300 hover:bg-rose-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-          </svg>
-          Complaints & Appeals
-        </span>
-        <svg class="h-4 w-4 text-rose-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- Public & Traceability -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-purple-50 p-2">
-        <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3-1.567 3-3.5S13.657 1 12 1 9 2.567 9 4.5 10.343 8 12 8zm0 0c3.866 0 7 2.91 7 6.5V19a2 2 0 01-2 2h-1a3 3 0 01-6 0H9a2 2 0 01-2-2v-4.5C7 10.91 10.134 8 12 8z"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">Public & Traceability</h3>
-        <p class="text-sm text-slate-600">Quick access to public complaint and traceability tools</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      <a
-        routerLink="/traceability"
-        class="group flex items-center justify-between rounded-lg border-2 border-purple-200 bg-purple-50 px-4 py-3.5 text-sm font-semibold text-purple-900 transition-all hover:border-purple-300 hover:bg-purple-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21l-6-6 6-6M4 15h11a4 4 0 000-8h-1"/>
-          </svg>
-          Traceability Search
-        </span>
-        <svg class="h-4 w-4 text-purple-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/traceability/verify"
-        class="group flex items-center justify-between rounded-lg border-2 border-emerald-200 bg-emerald-50 px-4 py-3.5 text-sm font-semibold text-emerald-900 transition-all hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M9 17h6M9 13h2m2 0h2"/>
-          </svg>
-          Verify Product
-        </span>
-        <svg class="h-4 w-4 text-emerald-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/complaints"
-        class="group flex items-center justify-between rounded-lg border-2 border-rose-200 bg-rose-50 px-4 py-3.5 text-sm font-semibold text-rose-900 transition-all hover:border-rose-300 hover:bg-rose-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-          </svg>
-          Public Complaint Portal
-        </span>
-        <svg class="h-4 w-4 text-rose-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- Super Admin Section -->
-  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" *ngIf="isApprover()">
-    <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-      <div class="rounded-lg bg-red-50 p-2">
-        <svg class="h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-bold text-slate-900">System Administration</h3>
-        <p class="text-sm text-slate-600">Manage reference data, user access, approvals, and system settings</p>
-      </div>
-    </div>
-
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <a
-        routerLink="/approvals"
-        class="group flex items-center justify-between rounded-lg border-2 border-red-200 bg-red-50 px-4 py-3.5 text-sm font-semibold text-red-900 transition-all hover:border-red-300 hover:bg-red-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Approvals
-        </span>
-        <svg class="h-4 w-4 text-red-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/nsb-review"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-          </svg>
-          NSB Review
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/roles"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-          </svg>
-          User Management
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/reference-data/countries"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Countries
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/reference-data/regions"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Regions
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/reference-data/recs"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          RECs
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/application-registrations"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          Applications
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-
-      <a
-        routerLink="/mark-licenses/dashboard"
-        class="group flex items-center justify-between rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md"
-      >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          Mark Licenses
-        </span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-  </section>
 </div>

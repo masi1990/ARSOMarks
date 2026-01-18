@@ -1,30 +1,79 @@
-:host {
-  display: block;
+.role-card {
+  transition: all 0.2s ease;
 }
 
-// Grid pattern background for hero section
-.bg-grid-pattern {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
+.role-card.selected {
+  border-color: #2563eb;
+  background: #e0ecff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.12);
 }
 
-// Smooth transitions for cards
-.card-surface {
-  transition: all 0.2s ease-in-out;
+.role-card.disabled {
+  cursor: not-allowed;
 }
 
-// Animation for loading states
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
 }
 
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.badge-emerald {
+  background: #ecfdf3;
+  color: #047857;
+  border-color: #bbf7d0;
+}
+
+.badge-blue {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.badge-purple {
+  background: #f5f3ff;
+  color: #6b21a8;
+  border-color: #e9d5ff;
+}
+
+.link-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+.btn-primary {
+  @apply px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow-sm hover:bg-blue-700 disabled:opacity-60;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-slate-700 border border-slate-200 rounded-lg hover:border-blue-500 hover:text-blue-700 disabled:opacity-60;
+}
+
+.btn-approve {
+  @apply inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700 disabled:opacity-50;
+}
+
+.btn-reject {
+  @apply inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700 disabled:opacity-50;
+}
+
+.alert {
+  @apply inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm border;
+}
+
+.alert-rose {
+  @apply bg-rose-50 text-rose-700 border-rose-200;
+}
+
+.alert-emerald {
+  @apply bg-emerald-50 text-emerald-700 border-emerald-200;
 }

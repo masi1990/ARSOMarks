@@ -17,7 +17,9 @@ import {
 export class DashboardComponent implements OnInit {
   user: User | null = null;
   roleRequests: RoleRequest[] = [];
+  pendingRequests: RoleRequest[] = [];
   allRequests: RoleRequest[] = [];
+  isAuthenticated = false;
   loadingRequests = false;
   loadingAllRequests = false;
   submitting = false;
@@ -26,7 +28,8 @@ export class DashboardComponent implements OnInit {
   decisionError = '';
   decisionSuccess = '';
   note = '';
-  selectedRoles: UserRole[] = [];
+  selectedRoles: Set<UserRole> = new Set<UserRole>();
+  disabledRoles: Set<UserRole> = new Set<UserRole>();
   decidingId: string | null = null;
   decisionNote: string = '';
   decidingRequestId: string | null = null;
@@ -36,14 +39,26 @@ export class DashboardComponent implements OnInit {
   approvalsPage = 1;
   readonly approvalsPageSize = 4;
 
-  readonly roleOptions: { value: UserRole; label: string }[] = Object.values(UserRole).map((r) => ({
-    value: r,
-    label: r.replace(/_/g, ' '),
-  }));
+  readonly roleCards: Array<{ value: UserRole; title: string; blurb: string; badge: string }> = [
+    { value: UserRole.PUBLIC, title: 'Public', blurb: 'Browse, verify, and submit complaints as a public user.', badge: 'Open Access' },
+    { value: UserRole.SUPER_ADMIN, title: 'Super Admin', blurb: 'Platform-wide administration and oversight.', badge: 'Platform' },
+    { value: UserRole.ARSO_COUNCIL, title: 'ARSO Council', blurb: 'Governance and strategic decisions.', badge: 'Governance' },
+    { value: UserRole.CACO_MEMBER, title: 'CACO Member', blurb: 'Conformity Assessment Committee review.', badge: 'CACO' },
+    { value: UserRole.ARSO_SECRETARIAT, title: 'ARSO Secretariat', blurb: 'Central operations and coordination.', badge: 'Secretariat' },
+    { value: UserRole.ADVISORY_COMMITTEE, title: 'Advisory Committee', blurb: 'Advisory expertise and guidance.', badge: 'Advisory' },
+    { value: UserRole.SMC_MEMBER, title: 'SMC Member', blurb: 'Standards Management Committee tasks.', badge: 'Standards' },
+    { value: UserRole.NSB_ADMIN, title: 'NSB Admin', blurb: 'National Standards Body administration.', badge: 'NSB' },
+    { value: UserRole.NSB_USER, title: 'NSB User', blurb: 'NSB operations and registry actions.', badge: 'NSB' },
+    { value: UserRole.CB_ADMIN, title: 'Certification Body Admin', blurb: 'Manage CB audits and certificates.', badge: 'CB' },
+    { value: UserRole.CB_USER, title: 'Certification Body User', blurb: 'Execute CB reviews and evidence.', badge: 'CB' },
+    { value: UserRole.OPERATOR, title: 'Operator / Manufacturer', blurb: 'Request marks, manage products, track certifications.', badge: 'Operator' },
+    { value: UserRole.ACCREDITATION_BODY, title: 'Accreditation Body', blurb: 'Accreditation oversight and liaison.', badge: 'Accreditation' },
+  ];
 
   constructor(private authService: AuthService) {}
 
   loadRequests(): void {
+    if (!this.isAuthenticated) return;
     this.loadingRequests = true;
     this.authService
       .getMyRoleRequests()
@@ -55,14 +70,22 @@ export class DashboardComponent implements OnInit {
       .subscribe({
         next: (reqs) => {
           this.roleRequests = reqs || [];
+          this.pendingRequests = this.roleRequests.filter((r) => r.status === RoleRequestStatus.PENDING);
+          this.updateDisabledRoles();
         },
         error: () => {
           this.roleRequests = [];
+          this.pendingRequests = [];
+          this.updateDisabledRoles();
         },
       });
   }
 
   loadAllRequests(): void {
+    if (!this.isAuthenticated || !this.isApprover()) {
+      this.allRequests = [];
+      return;
+    }
     this.loadingAllRequests = true;
     this.authService
       .listRoleRequests()
@@ -134,13 +157,18 @@ export class DashboardComponent implements OnInit {
     this.submitError = '';
     this.submitSuccess = '';
 
-    if (!this.selectedRoles.length) {
+    if (!this.isAuthenticated) {
+      this.submitError = 'Please log in to submit role requests.';
+      return;
+    }
+
+    if (!this.selectedRoles.size) {
       this.submitError = 'Select at least one role.';
       return;
     }
 
     const payload: CreateRoleRequest = {
-      roles: this.selectedRoles,
+      requestedRoles: Array.from(this.selectedRoles),
       note: this.note?.trim() || undefined,
     };
 
@@ -154,10 +182,13 @@ export class DashboardComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          const created = Array.isArray(res) ? res : [res];
           this.submitSuccess = 'Request submitted. You will be notified after review.';
-          this.selectedRoles = [];
+          this.selectedRoles = new Set<UserRole>();
           this.note = '';
-          this.roleRequests = [res, ...this.roleRequests];
+          this.roleRequests = [...created, ...this.roleRequests];
+          this.pendingRequests = this.roleRequests.filter((r) => r.status === RoleRequestStatus.PENDING);
+          this.updateDisabledRoles();
         },
         error: (err) => {
           this.submitError = err?.error?.message || 'Failed to submit request.';
@@ -226,11 +257,32 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleRole(role: UserRole): void {
-    if (this.selectedRoles.includes(role)) {
-      this.selectedRoles = this.selectedRoles.filter((r) => r !== role);
-    } else {
-      this.selectedRoles = [...this.selectedRoles, role];
+    if (!this.isAuthenticated) {
+      this.submitError = 'Please log in to submit role requests.';
+      return;
     }
+    if (this.disabledRoles.has(role)) return;
+    if (this.selectedRoles.has(role)) {
+      this.selectedRoles.delete(role);
+    } else {
+      this.selectedRoles.add(role);
+    }
+    // Ensure change detection picks up Set mutation
+    this.selectedRoles = new Set<UserRole>(this.selectedRoles);
+  }
+
+  isSelected(role: UserRole): boolean {
+    return this.selectedRoles.has(role);
+  }
+
+  clearSelection(): void {
+    this.selectedRoles = new Set<UserRole>();
+  }
+
+  hasPendingFor(role: UserRole): boolean {
+    return this.pendingRequests.some(
+      (req) => req.status === RoleRequestStatus.PENDING && req.requestedRoles.includes(role),
+    );
   }
 
   formatRole(role: UserRole | string): string {
@@ -296,16 +348,29 @@ export class DashboardComponent implements OnInit {
     return this.user?.roles || (this.user?.role ? [this.user.role] : []);
   }
 
+  isOperatorRole(): boolean {
+    const roles = this.getUserRoles();
+    return roles.includes(UserRole.OPERATOR) || roles.includes(UserRole.SUPER_ADMIN);
+  }
+
+  private updateDisabledRoles(): void {
+    const owned = this.getUserRoles();
+    const pending = this.pendingRequests.flatMap((r) => r.requestedRoles || []);
+    this.disabledRoles = new Set<UserRole>([...owned, ...pending]);
+  }
+
   ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
     this.user = this.authService.currentUserValue;
-    this.loadRequests();
-    if (this.isApprover()) {
-      this.loadAllRequests();
+
+    if (this.isAuthenticated) {
+      this.loadRequests();
+      if (this.isApprover()) {
+        this.loadAllRequests();
+      }
+      setTimeout(() => {
+        this.refreshProfile();
+      }, 0);
     }
-    // Always refresh the profile to pick up latest roles (e.g., newly granted SUPER_ADMIN).
-    // Use setTimeout to avoid blocking initial render
-    setTimeout(() => {
-      this.refreshProfile();
-    }, 0);
   }
 }

@@ -56,8 +56,13 @@ export interface RoleRequest {
 }
 
 export interface CreateRoleRequest {
-  roles: UserRole[];
+  requestedRoles: UserRole[];
   note?: string;
+  requestType?: RoleRequestType;
+}
+export enum RoleRequestType {
+  ASSIGN = 'ASSIGN',
+  REMOVE = 'REMOVE',
 }
 
 export interface DecideRoleRequest {

@@ -68,7 +68,7 @@ let PublicCertifiedProductsController = class PublicCertifiedProductsController 
                     const cocPayload = {
                         applicationId: application.id,
                         productId: product.id,
-                        originCountryId: product.originCountryId || ((_a = application.operator) === null || _a === void 0 ? void 0 : _a.countryId),
+                        originCountryId: ((_a = application.operator) === null || _a === void 0 ? void 0 : _a.countryId) || null,
                     };
                     await this.traceabilityService.issueCoc(cocPayload);
                     const operator = application.operator || await this.operatorRepository.findOne({ where: { id: application.operatorId } });

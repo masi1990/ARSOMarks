@@ -31,244 +31,55 @@ export class AuthenticatedLayoutComponent {
   collapsedSections: Set<string> = new Set();
   
   navItems: NavItem[] = [
-    { 
-      label: 'Dashboard', 
-      route: '/portal/dashboard', 
-      section: 'main',
-      icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-    },
-    { 
-      label: 'Role Dashboards', 
-      route: '/portal/dashboards', 
-      section: 'main',
-      icon: 'M4 19h16M5 11h3v8H5zM10.5 7h3v12h-3zM16 13h3v6h-3z'
-    },
-    { 
-      label: 'Role Reports', 
-      route: '/portal/reports', 
-      section: 'main',
-      icon: 'M4 7h16M4 12h10m-10 5h6M9 7V5a2 2 0 012-2h6a2 2 0 012 2v2'
-    },
-    { 
-      label: 'Shared Tools', 
-      route: '/portal/shared-tools', 
-      section: 'main',
-      icon: 'M4 6h16M4 12h16M4 18h16'
-    },
-    
-    // Operator Registration (Operator, NSB Admin, Super Admin & Public)
-    {
-      label: 'Operator Registration',
-      route: '/portal/operator/register',
-      roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN, UserRole.PUBLIC],
-      section: 'operator',
-      icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
-    },
-    // Application Registration (Operator, NSB Admin, Super Admin & Public)
-    {
-      label: 'My Applications',
-      route: '/portal/application-registrations',
-      roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN, UserRole.PUBLIC],
-      section: 'operator',
-      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-    },
-    {
-      label: 'New Application',
-      route: '/portal/application-registration',
-      roles: [UserRole.OPERATOR, UserRole.NSB_ADMIN, UserRole.SUPER_ADMIN, UserRole.PUBLIC],
-      section: 'operator',
-      icon: 'M12 4v16m8-8H4'
-    },
-    {
-      label: 'Product Certification',
-      route: '/portal/product-certification/apply',
-      roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'operator',
-      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-    },
-    {
-      label: 'Document Uploads',
-      route: '/portal/documents',
-      roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'operator',
-      icon: 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
-    },
+    { label: 'Dashboard', route: '/portal/dashboard', section: 'main', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+    { label: 'Manage Roles', route: '/portal/manage-roles', section: 'main', icon: 'M4 7h16M4 12h10m-10 5h6' },
+    { label: 'Role Dashboards', route: '/portal/dashboards', section: 'main', roles: [UserRole.SUPER_ADMIN], icon: 'M4 19h16M5 11h3v8H5zM10.5 7h3v12h-3zM16 13h3v6h-3z' },
+    { label: 'Role Reports', route: '/portal/reports', section: 'main', roles: [UserRole.SUPER_ADMIN], icon: 'M4 7h16M4 12h10m-10 5h6M9 7V5a2 2 0 012-2h6a2 2 0 012 2v2' },
+    { label: 'Shared Tools', route: '/portal/shared-tools', section: 'main', roles: [UserRole.SUPER_ADMIN], icon: 'M4 6h16M4 12h16M4 18h16' },
 
-    {
-      label: 'Certification Audits',
-      route: '/portal/product-certification/audits',
-      roles: [UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'operator',
-      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-    },
+    { label: 'My Applications', route: '/portal/application-registrations', section: 'operator', roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN], icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+    { label: 'New Application', route: '/portal/application-registration', section: 'operator', roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN], icon: 'M12 4v16m8-8H4' },
+    { label: 'My Licenses', route: '/portal/mark-licenses/dashboard', section: 'operator', roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN], icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+    { label: 'Mark Usage Reports', route: '/portal/mark-licenses/reports', section: 'operator', roles: [UserRole.OPERATOR, UserRole.SUPER_ADMIN], icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
 
-    // Certification Body Applications
-    {
-      label: 'CB Applications',
-      route: '/portal/cb/applications',
-      roles: [UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC],
-      section: 'cb',
-      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-    },
-    {
-      label: 'New CB Application',
-      route: '/portal/cb/apply',
-      roles: [UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC],
-      section: 'cb',
-      icon: 'M12 4v16m8-8H4'
-    },
-    {
-      label: 'CB Compliance Profile',
-      route: '/portal/cb/compliance',
-      roles: [UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'cb',
-      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-    },
-    
-    // Mark License Management (NSB Admin, Super Admin & Public)
-    {
-      label: 'Mark License Dashboard',
-      route: '/portal/mark-licenses/dashboard',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC],
-      section: 'mark-licenses',
-      icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
-    },
-    {
-      label: 'New License Application',
-      route: '/portal/mark-licenses/apply',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC],
-      section: 'mark-licenses',
-      icon: 'M12 4v16m8-8H4'
-    },
-    {
-      label: 'Usage Reports',
-      route: '/portal/mark-licenses/reports',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC],
-      section: 'mark-licenses',
-      icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-    },
-    {
-      label: 'Modifications',
-      route: '/portal/mark-licenses/modifications',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT, UserRole.PUBLIC],
-      section: 'mark-licenses',
-      icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
-    },
-    {
-      label: 'Mark Misuse',
-      route: '/portal/mark-licenses/misuse',
-      roles: [UserRole.CB_ADMIN, UserRole.CB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'mark-licenses',
-      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-    },
-    
-    // NSB Management - Ordered per requested sidebar flow
-    {
-      label: 'NSB Registration',
-      route: '/portal/nsb-registration/request',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.PUBLIC, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'nsb',
-      icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'
-    },
-    {
-      label: 'Stakeholder Registry Form',
-      route: '/portal/nsb/stakeholder-registry',
-      roles: [UserRole.SUPER_ADMIN, UserRole.NSB_ADMIN, UserRole.NSB_USER],
-      section: 'nsb',
-      icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
-    },
-    {
-      label: 'NSB Dashboard',
-      route: '/portal/nsb/dashboard',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'nsb',
-      icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
-    },
-    {
-      label: 'National Stakeholder Registry',
-      route: '/portal/nsb/stakeholder-registry-list',
-      roles: [UserRole.SUPER_ADMIN, UserRole.NSB_ADMIN, UserRole.NSB_USER],
-      section: 'nsb',
-      icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
-    },
-    {
-      label: 'Communications History',
-      route: '/portal/nsb/communication',
-      roles: [UserRole.NSB_ADMIN, UserRole.NSB_USER, UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'nsb',
-      icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
-    },
-    
-    // Admin & Approvals
-    {
-      label: 'Approvals Console',
-      route: '/portal/approvals',
-      roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'admin',
-      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-    },
-    {
-      label: 'NSB Review',
-      route: '/portal/nsb-review',
-      roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'admin',
-      icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
-    },
-    { 
-      label: 'User Management', 
-      route: '/portal/roles', 
-      roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'admin',
-      icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
-    },
-    {
-      label: 'Complaints & Appeals',
-      route: '/portal/complaints',
-      roles: [
-        UserRole.SUPER_ADMIN,
-        UserRole.ARSO_SECRETARIAT,
-        UserRole.NSB_ADMIN,
-        UserRole.NSB_USER,
-        UserRole.CB_ADMIN,
-        UserRole.CB_USER,
-        UserRole.OPERATOR,
-        UserRole.PUBLIC,
-      ],
-      section: 'admin',
-      icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
-    },
-    
-    // Reference Data (Super Admin & ARSO)
-    {
-      label: 'Countries',
-      route: '/portal/reference-data/countries',
-      roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'reference',
-      icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-    },
-    {
-      label: 'Regions',
-      route: '/portal/reference-data/regions',
-      roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'reference',
-      icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-    },
-    {
-      label: 'RECs',
-      route: '/portal/reference-data/recs',
-      roles: [UserRole.SUPER_ADMIN, UserRole.ARSO_SECRETARIAT],
-      section: 'reference',
-      icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-    },
+    // Mark licensing extended for super admin
+    { label: 'Mark License Dashboard', route: '/portal/mark-licenses/dashboard', section: 'mark-licenses', roles: [UserRole.SUPER_ADMIN], icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+    { label: 'New License Application', route: '/portal/mark-licenses/apply', section: 'mark-licenses', roles: [UserRole.SUPER_ADMIN], icon: 'M12 4v16m8-8H4' },
+    { label: 'Modifications', route: '/portal/mark-licenses/modifications', section: 'mark-licenses', roles: [UserRole.SUPER_ADMIN], icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
+    { label: 'Mark Misuse', route: '/portal/mark-licenses/misuse', section: 'mark-licenses', roles: [UserRole.SUPER_ADMIN], icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+
+    // CB and NSB for super admin
+    { label: 'CB Applications', route: '/portal/cb/applications', section: 'cb', roles: [UserRole.SUPER_ADMIN], icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+    { label: 'New CB Application', route: '/portal/cb/apply', section: 'cb', roles: [UserRole.SUPER_ADMIN], icon: 'M12 4v16m8-8H4' },
+    { label: 'CB Compliance Profile', route: '/portal/cb/compliance', section: 'cb', roles: [UserRole.SUPER_ADMIN], icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+
+    { label: 'NSB Registration', route: '/portal/nsb-registration/request', section: 'nsb', roles: [UserRole.SUPER_ADMIN], icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z' },
+    { label: 'NSB Dashboard', route: '/portal/nsb/dashboard', section: 'nsb', roles: [UserRole.SUPER_ADMIN], icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+    { label: 'Stakeholder Registry', route: '/portal/nsb/stakeholder-registry', section: 'nsb', roles: [UserRole.SUPER_ADMIN], icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+    { label: 'Stakeholder Registry List', route: '/portal/nsb/stakeholder-registry-list', section: 'nsb', roles: [UserRole.SUPER_ADMIN], icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+    { label: 'Communications History', route: '/portal/nsb/communication', section: 'nsb', roles: [UserRole.SUPER_ADMIN], icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
+
+    // Admin and reference for super admin
+    { label: 'Approvals Console', route: '/portal/approvals', section: 'admin', roles: [UserRole.SUPER_ADMIN], icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { label: 'NSB Review', route: '/portal/nsb-review', section: 'admin', roles: [UserRole.SUPER_ADMIN], icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
+    { label: 'User Management', route: '/portal/roles', section: 'admin', roles: [UserRole.SUPER_ADMIN], icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
+
+    { label: 'Countries', route: '/portal/reference-data/countries', section: 'reference', roles: [UserRole.SUPER_ADMIN], icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { label: 'Regions', route: '/portal/reference-data/regions', section: 'reference', roles: [UserRole.SUPER_ADMIN], icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { label: 'RECs', route: '/portal/reference-data/recs', section: 'reference', roles: [UserRole.SUPER_ADMIN], icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+
+    { label: 'Traceability', route: '/traceability/verify', section: 'public', icon: 'M12 8c-1.657 0-3 1.343-3 3 0 3 3 5 3 5s3-2 3-5c0-1.657-1.343-3-3-3z M19.428 15.341A8 8 0 1112 4' },
+    { label: 'Public Complaints', route: '/complaints', section: 'public', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
   ];
 
   getSectionTitle(section: string): string {
     const titles: Record<string, string> = {
       main: 'Main',
       operator: 'Operator Services',
-      cb: 'Certification Bodies',
+      public: 'Public Tools',
       'mark-licenses': 'Mark Licenses',
-      nsb: 'NSB Management',
+      cb: 'Certification Bodies',
+      nsb: 'NSB',
       admin: 'Administration',
       reference: 'Reference Data',
     };

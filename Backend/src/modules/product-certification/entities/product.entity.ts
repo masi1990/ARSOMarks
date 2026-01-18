@@ -74,7 +74,8 @@ export class Product {
   @Column({ name: 'primary_target_market', type: 'uuid', nullable: true })
   primaryTargetMarketId?: string;
 
-  @Column({ name: 'origin_country_id', type: 'uuid', nullable: true })
+  // Optional origin country; set select/insert/update false because legacy DB may lack this column.
+  @Column({ name: 'origin_country_id', type: 'uuid', nullable: true, select: false, insert: false, update: false })
   originCountryId?: string;
 
   @ManyToOne(() => Country, { onDelete: 'SET NULL' })

@@ -20,6 +20,7 @@ const enums_1 = require("../../../shared/enums");
 const role_request_entity_1 = require("../entities/role-request.entity");
 const system_user_entity_1 = require("../../system-user/system-user.entity");
 const email_service_1 = require("./email.service");
+const role_request_type_1 = require("../types/role-request.type");
 let RoleRequestService = class RoleRequestService {
     constructor(roleRequestRepo, userRepo, emailService) {
         this.roleRequestRepo = roleRequestRepo;
@@ -27,40 +28,61 @@ let RoleRequestService = class RoleRequestService {
         this.emailService = emailService;
     }
     async create(user, dto) {
+        var _a, _b;
         if (!user.emailVerified) {
             throw new common_1.BadRequestException('Verify your email before requesting roles.');
         }
-        const uniqueRoles = Array.from(new Set(dto.roles));
-        if (uniqueRoles.length === 0) {
+        const requestType = (_a = dto.requestType) !== null && _a !== void 0 ? _a : role_request_type_1.RoleRequestType.ASSIGN;
+        const normalizedRoles = Array.from(new Set(dto.requestedRoles));
+        if (normalizedRoles.length === 0) {
             throw new common_1.BadRequestException('At least one role is required.');
         }
-        const request = this.roleRequestRepo.create({
-            userId: user.id,
-            requestedRoles: uniqueRoles,
-            status: enums_1.RoleRequestStatus.PENDING,
-            decisionNote: dto.note,
+        const currentRoles = Array.isArray(user.roles) ? user.roles : [];
+        const pendingRequests = await this.roleRequestRepo.find({
+            where: { userId: user.id, status: enums_1.RoleRequestStatus.PENDING },
         });
-        const saved = await this.roleRequestRepo.save(request);
+        const pendingRoles = new Set(pendingRequests.flatMap((r) => r.requestedRoles || []));
+        const rolesToRequest = requestType === role_request_type_1.RoleRequestType.REMOVE
+            ? normalizedRoles.filter((role) => currentRoles.includes(role) && !pendingRoles.has(role))
+            : normalizedRoles.filter((role) => !currentRoles.includes(role) && !pendingRoles.has(role));
+        if (!rolesToRequest.length) {
+            throw new common_1.BadRequestException(requestType === role_request_type_1.RoleRequestType.REMOVE ? 'No roles available to remove.' : 'No new roles to request.');
+        }
+        const createdRequests = [];
+        for (const role of rolesToRequest) {
+            const notePrefix = requestType === role_request_type_1.RoleRequestType.REMOVE ? '[REMOVE] ' : '';
+            const request = this.roleRequestRepo.create({
+                userId: user.id,
+                requestedRoles: [role],
+                status: enums_1.RoleRequestStatus.PENDING,
+                decisionNote: `${notePrefix}${(_b = dto.note) !== null && _b !== void 0 ? _b : ''}`.trim(),
+            });
+            const savedRequest = await this.roleRequestRepo.save(request);
+            savedRequest.requestType = requestType;
+            createdRequests.push(savedRequest);
+        }
         try {
-            await this.emailService.sendRoleRequestSubmitted(user.email, user.fullName, uniqueRoles);
+            await this.emailService.sendRoleRequestSubmitted(user.email, user.fullName, createdRequests.map((req) => req.requestedRoles[0]));
         }
-        catch (_a) {
+        catch (_c) {
         }
-        return saved;
+        return createdRequests;
     }
     async listMine(user) {
-        return this.roleRequestRepo.find({
+        const results = await this.roleRequestRepo.find({
             where: { userId: user.id },
             order: { createdAt: 'DESC' },
         });
+        return results.map((r) => this.attachRequestType(r));
     }
     async listAll() {
-        return this.roleRequestRepo.find({
+        const results = await this.roleRequestRepo.find({
             order: { createdAt: 'DESC' },
         });
+        return results.map((r) => this.attachRequestType(r));
     }
     async decide(id, reviewer, dto) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         const request = await this.roleRequestRepo.findOne({ where: { id } });
         if (!request) {
             throw new common_1.NotFoundException('Role request not found');
@@ -76,22 +98,45 @@ let RoleRequestService = class RoleRequestService {
         if (!user) {
             throw new common_1.NotFoundException('User not found for this request');
         }
+        const reqType = (_b = this.extractRequestType(request)) !== null && _b !== void 0 ? _b : role_request_type_1.RoleRequestType.ASSIGN;
         if (dto.status === enums_1.RoleRequestStatus.APPROVED) {
             const currentRoles = Array.isArray(user.roles) ? user.roles : [];
-            const merged = Array.from(new Set([...currentRoles, ...request.requestedRoles]));
-            user.roles = merged;
-            if (!user.role || user.role === enums_1.UserRole.PUBLIC) {
-                user.role = (_b = request.requestedRoles[0]) !== null && _b !== void 0 ? _b : user.role;
+            if (reqType === role_request_type_1.RoleRequestType.REMOVE) {
+                const updated = currentRoles.filter((r) => !request.requestedRoles.includes(r));
+                user.roles = updated;
+                if (request.requestedRoles.includes(user.role)) {
+                    user.role = updated[0] || enums_1.UserRole.PUBLIC;
+                }
+            }
+            else {
+                const merged = Array.from(new Set([...currentRoles, ...request.requestedRoles]));
+                user.roles = merged;
+                if (!user.role || user.role === enums_1.UserRole.PUBLIC) {
+                    user.role = (_c = request.requestedRoles[0]) !== null && _c !== void 0 ? _c : user.role;
+                }
             }
             await this.userRepo.save(user);
         }
         const saved = await this.roleRequestRepo.save(request);
+        saved.requestType = reqType;
         try {
-            await this.emailService.sendRoleRequestDecision(user.email, user.fullName, request.requestedRoles, saved.status, (_c = saved.decisionNote) !== null && _c !== void 0 ? _c : undefined);
+            await this.emailService.sendRoleRequestDecision(user.email, user.fullName, request.requestedRoles, saved.status, (_d = saved.decisionNote) !== null && _d !== void 0 ? _d : undefined);
         }
-        catch (_d) {
+        catch (_e) {
         }
         return saved;
+    }
+    extractRequestType(request) {
+        if (request.requestType)
+            return request.requestType;
+        const note = request.decisionNote || '';
+        if (note.startsWith('[REMOVE]'))
+            return role_request_type_1.RoleRequestType.REMOVE;
+        return role_request_type_1.RoleRequestType.ASSIGN;
+    }
+    attachRequestType(request) {
+        request.requestType = this.extractRequestType(request);
+        return request;
     }
 };
 exports.RoleRequestService = RoleRequestService;

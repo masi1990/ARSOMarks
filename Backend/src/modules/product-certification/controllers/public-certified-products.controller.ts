@@ -87,7 +87,7 @@ export class PublicCertifiedProductsController {
           const cocPayload: GenerateCocDto = {
             applicationId: application.id,
             productId: product.id,
-            originCountryId: product.originCountryId || application.operator?.countryId,
+            originCountryId: application.operator?.countryId || null,
           };
           await this.traceabilityService.issueCoc(cocPayload);
 

@@ -18,6 +18,10 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: 'registry',
         loadChildren: () => import('./pages/consumer/consumer.module').then((m) => m.ConsumerModule),
       },
           {
@@ -36,6 +40,11 @@ const routes: Routes = [
     component: AuthenticatedLayoutComponent,
     canActivate: [AuthGuard],
     children: [
+      {
+        path: 'manage-roles',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./pages/profile/manage-roles/manage-roles.module').then((m) => m.ManageRolesModule),
+      },
       {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashboardModule),

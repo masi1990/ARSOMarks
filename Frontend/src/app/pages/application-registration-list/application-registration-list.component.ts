@@ -101,13 +101,13 @@ export class ApplicationRegistrationListComponent implements OnInit {
   }
 
   editApplication(application: ApplicationRegistration): void {
-    this.router.navigate(['/application-registration'], {
+    this.router.navigate(['/portal/application-registration'], {
       queryParams: { id: application.id },
     });
   }
 
   createNewApplication(): void {
-    this.router.navigate(['/application-registration']);
+    this.router.navigate(['/portal/application-registration']);
   }
 
   deleteApplication(application: ApplicationRegistration): void {

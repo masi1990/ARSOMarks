@@ -42,6 +42,8 @@ let RoleRequestController = class RoleRequestController {
 exports.RoleRequestController = RoleRequestController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(enums_1.UserRole.PUBLIC, enums_1.UserRole.OPERATOR, enums_1.UserRole.CB_ADMIN, enums_1.UserRole.CB_USER, enums_1.UserRole.NSB_ADMIN, enums_1.UserRole.NSB_USER, enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT, enums_1.UserRole.ARSO_COUNCIL, enums_1.UserRole.CACO_MEMBER, enums_1.UserRole.ADVISORY_COMMITTEE, enums_1.UserRole.SMC_MEMBER, enums_1.UserRole.ACCREDITATION_BODY),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -50,6 +52,8 @@ __decorate([
 ], RoleRequestController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('me'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(enums_1.UserRole.PUBLIC, enums_1.UserRole.OPERATOR, enums_1.UserRole.CB_ADMIN, enums_1.UserRole.CB_USER, enums_1.UserRole.NSB_ADMIN, enums_1.UserRole.NSB_USER, enums_1.UserRole.SUPER_ADMIN, enums_1.UserRole.ARSO_SECRETARIAT, enums_1.UserRole.ARSO_COUNCIL, enums_1.UserRole.CACO_MEMBER, enums_1.UserRole.ADVISORY_COMMITTEE, enums_1.UserRole.SMC_MEMBER, enums_1.UserRole.ACCREDITATION_BODY),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [system_user_entity_1.SystemUser]),

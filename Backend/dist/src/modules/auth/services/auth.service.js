@@ -52,8 +52,8 @@ let AuthService = AuthService_1 = class AuthService {
         }
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(registerDto.password, saltRounds);
-        const role = registerDto.role || enums_1.UserRole.PUBLIC;
-        const roles = [role];
+        const role = enums_1.UserRole.PUBLIC;
+        const roles = [enums_1.UserRole.PUBLIC, enums_1.UserRole.OPERATOR];
         const emailVerificationToken = (0, crypto_1.randomBytes)(32).toString('hex');
         const user = this.userRepository.create({
             email: registerDto.email,

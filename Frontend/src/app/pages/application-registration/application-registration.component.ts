@@ -142,7 +142,7 @@ export class ApplicationRegistrationComponent implements OnInit {
         console.error('Error loading application:', error);
         this.error = 'Failed to load application. Redirecting to list...';
         setTimeout(() => {
-          this.router.navigate(['/application-registrations']);
+          this.router.navigate(['/portal/application-registrations']);
         }, 2000);
       },
     });
@@ -851,7 +851,7 @@ export class ApplicationRegistrationComponent implements OnInit {
         this.loading = false;
         this.success = true;
         setTimeout(() => {
-          this.router.navigate(['/application-registrations']);
+          this.router.navigate(['/portal/application-registrations']);
         }, 2000);
       },
       error: (error) => {

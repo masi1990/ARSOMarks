@@ -1,0 +1,79 @@
+<div class="space-y-6">
+  <section class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+    <h2 class="text-xl font-bold text-slate-900">Manage Roles</h2>
+    <p class="text-sm text-slate-600 mt-1">Request new roles or relinquish ones you no longer need.</p>
+
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
+      <div class="rounded-xl border border-slate-200 p-4">
+        <h3 class="text-lg font-semibold text-slate-900">My Current Roles</h3>
+        <div class="mt-3 space-y-2">
+          <div *ngFor="let role of currentRoles" class="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2">
+            <span class="text-sm font-semibold text-slate-800">{{ role }}</span>
+            <button
+              *ngIf="role !== UserRole.PUBLIC"
+              class="text-sm font-semibold text-rose-600 hover:text-rose-700"
+              (click)="requestRemove(role)"
+              [disabled]="submitting"
+            >
+              Relinquish
+            </button>
+          </div>
+          <div *ngIf="currentRoles.length === 0" class="text-sm text-slate-500">No roles assigned.</div>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-slate-200 p-4">
+        <h3 class="text-lg font-semibold text-slate-900">Request Additional Roles</h3>
+        <p class="text-xs text-slate-600">Select one or more roles to request.</p>
+        <div class="mt-3 space-y-2">
+          <label
+            *ngFor="let role of selectableRoles"
+            class="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2 cursor-pointer"
+          >
+            <div class="flex items-center gap-2">
+              <input type="checkbox" [checked]="selectedAssign.has(role)" (change)="toggleAssign(role)" />
+              <span class="text-sm font-semibold text-slate-800">{{ role }}</span>
+            </div>
+          </label>
+        </div>
+        <button class="btn-primary mt-3" (click)="requestAssign()" [disabled]="submitting">Request Access</button>
+      </div>
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      <div *ngIf="error" class="alert alert-rose">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-emerald">{{ success }}</div>
+    </div>
+  </section>
+
+  <section class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">Request History</h3>
+        <p class="text-xs text-slate-600">Add / remove role requests</p>
+      </div>
+      <span *ngIf="loading" class="text-xs text-slate-500">Loading…</span>
+    </div>
+
+    <div *ngIf="!requests.length" class="text-sm text-slate-500">No requests yet.</div>
+    <div *ngIf="requests.length" class="divide-y divide-slate-200">
+      <div *ngFor="let r of requests" class="py-3 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-semibold text-slate-900">
+            {{ r.requestType || 'ASSIGN' }}: {{ r.requestedRoles.join(', ') }}
+          </p>
+          <p class="text-xs text-slate-600">
+            {{ r.createdAt | date: 'short' }}
+          </p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1 rounded-full" [ngClass]="{
+          'bg-amber-50 text-amber-700': r.status === RoleRequestStatus.PENDING,
+          'bg-emerald-50 text-emerald-700': r.status === RoleRequestStatus.APPROVED,
+          'bg-rose-50 text-rose-700': r.status === RoleRequestStatus.REJECTED
+        }">
+          {{ r.status }}
+        </span>
+      </div>
+    </div>
+  </section>
+</div>

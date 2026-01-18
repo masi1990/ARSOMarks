@@ -1,0 +1,305 @@
+User Stories: Public Role (Consumers & Prospective Applicants)
+
+Overview
+
+The "Public" role encompasses unauthenticated users, consumers, and business representatives who have not yet registered. Their primary goals are to verify product authenticity, report issues, search for certified products, or begin the process of obtaining certification.
+
+1. Traceability & Product Verification
+
+Goal: Empower consumers to verify the authenticity and provenance of products using the ACAP Traceability features.
+
+ID
+
+User Story
+
+Acceptance Criteria
+
+Priority
+
+TRC-01
+
+Scan Product QR Code 
+
+
+
+ As a Public User, I want to scan a product's QR code using the web verification tool so that I can instantly verify if the product is genuine.
+
+1. System accepts QR code input (camera or code string). 
+
+
+
+ 2. System validates the token against the TraceabilityPublicController. 
+
+
+
+ 3. If valid, show "Verified" status. 
+
+
+
+ 4. If invalid/expired, show "Counterfeit/Invalid" warning.
+
+High
+
+TRC-02
+
+View Certificate of Conformity (CoC) 
+
+
+
+ As a Public User, I want to view the digital Certificate of Conformity associated with a product I scanned so that I can see the standards it claims to meet.
+
+1. Display CoC details (Product Name, Batch ID, Expiry). 
+
+
+
+ 2. Display the issuing Certification Body (CB). 
+
+
+
+ 3. Show a download link for the CoC PDF (if public).
+
+High
+
+TRC-03
+
+View Product Provenance 
+
+
+
+ As a Public User, I want to see the "Chain of Custody" or origin details of verified products so that I know where they were manufactured.
+
+1. Display Manufacturer Name and Country of Origin. 
+
+
+
+ 2. Show dates of manufacture and certification.
+
+Medium
+
+TRC-04
+
+Mobile Responsiveness for Scanning 
+
+
+
+ As a Public User, I want the verification page to work seamlessly on my mobile browser so that I can check products while in a store.
+
+1. Layout adapts to mobile screens. 
+
+
+
+ 2. Camera access (if implemented) works on mobile browsers.
+
+High
+
+2. Public Complaints & Feedback
+
+Goal: Allow the public to report non-conforming products or misuse of the Quality Mark without needing a full account.
+
+ID
+
+User Story
+
+Acceptance Criteria
+
+Priority
+
+CMP-01
+
+File a Complaint 
+
+
+
+ As a Public User, I want to submit a complaint about a product or a Certification Body so that regulatory authorities can investigate.
+
+1. Access PublicComplaintComponent without login. 
+
+
+
+ 2. Form captures: Complainant details, Complaint Type (Product/Service/Misuse), Description. 
+
+
+
+ 3. System sends confirmation email upon submission.
+
+High
+
+CMP-02
+
+Report Mark Misuse 
+
+
+
+ As a Public User, I want to specifically report "Mark Misuse" (e.g., fake logo on a product) so that brand integrity is maintained.
+
+1. Select "Mark Misuse" category in the complaint form. 
+
+
+
+ 2. Allow uploading of photo evidence (packaging, fake mark).
+
+High
+
+CMP-03
+
+Upload Evidence 
+
+
+
+ As a Public User, I want to attach photos or documents to my complaint so that the investigators have proof of my claims.
+
+1. File upload support (Images/PDFs). 
+
+
+
+ 2. Validation for file size and type.
+
+Medium
+
+CMP-04
+
+Complaint Reference Tracking 
+
+
+
+ As a Public User, I want to receive a unique reference ID after submitting a complaint so that I can reference it later if contacted.
+
+1. Generate unique Case ID (e.g., CMP-2025-001). 
+
+
+
+ 2. Display ID on the success screen.
+
+Medium
+
+3. Certified Product Registry (Consumer Search)
+
+Goal: Enable consumers to find safe, certified products through a public registry.
+
+ID
+
+User Story
+
+Acceptance Criteria
+
+Priority
+
+REG-01
+
+Search Certified Products 
+
+
+
+ As a Public User, I want to search the database of certified products by name, brand, or category so that I can find safe items to buy.
+
+1. Search bar queries the PublicCertifiedProductsController. 
+
+
+
+ 2. Results list displays matching products with their certification status.
+
+High
+
+REG-02
+
+Filter by Country/Standard 
+
+
+
+ As a Public User, I want to filter products by their Country of Origin or the Standard they meet (e.g., "Made in Africa" criteria) so that I can support specific regions or qualities.
+
+1. Dropdown filters for Country and Standard. 
+
+
+
+ 2. List updates dynamically based on selection.
+
+Medium
+
+REG-03
+
+View Product Details 
+
+
+
+ As a Public User, I want to click on a search result to see full details, including the manufacturer and validity dates of their license.
+
+1. Detail view shows Product Image, Description, Manufacturer, and License Status (Active/Expired).
+
+High
+
+4. Applying for a Mark (Onboarding Journey)
+
+Goal: Convert a Public User into a Registered Operator so they can apply for a Quality Mark.
+
+ID
+
+User Story
+
+Acceptance Criteria
+
+Priority
+
+APP-01
+
+Register as an Operator 
+
+
+
+ As a Public User representing a company, I want to create an account so that I can access the application forms.
+
+1. Registration form captures Name, Email, Password, Company Name. 
+
+
+
+ 2. System assigns "Operator" role role request.
+
+High
+
+APP-02
+
+Verify Email Address 
+
+
+
+ As a new Registrant, I want to verify my email address so that I can activate my account and ensure secure communication.
+
+1. Email with OTP or Link sent to user. 
+
+
+
+ 2. Inputting OTP activates the account.
+
+High
+
+APP-03
+
+Initiate Mark Application 
+
+
+
+ As a newly registered Operator, I want to start a "Product Certification Application" from my dashboard so that I can get my products certified.
+
+1. Access ApplicationRegistrationComponent. 
+
+
+
+ 2. Select "New Application". 
+
+
+
+ 3. Select the type of mark/scheme (e.g., Scheme L2).
+
+High
+
+APP-04
+
+View Application Requirements 
+
+
+
+ As a prospective Applicant, I want to see a list of required documents (e.g., Tax Compliance, Business Permit) before I start so that I can prepare necessary files.
+
+1. Public information page or pre-application modal lists requirements.
+
+Medium

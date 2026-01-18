@@ -41,8 +41,8 @@ export class SharedToolsComponent {
     {
       title: 'Training & Capacity Portal',
       description: 'Access training materials, webinar schedules, and recordings.',
-      cta: 'View Training',
-      link: '/portal/dashboard',
+      cta: 'View Training only',
+      link: '/portal/shared-tools',
     },
   ];
 }
